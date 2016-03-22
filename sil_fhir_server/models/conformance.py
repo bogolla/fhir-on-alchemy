@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Conformance(domainresource.DomainResource):
@@ -17,7 +19,7 @@ class Conformance(domainresource.DomainResource):
 
     __tablename__ = "Conformance"
 
-    acceptUnknown = Column()
+    acceptUnknown = Column(primitives.StringField)
     """ no | extensions | elements | both.
         Type `str`. """
 
@@ -25,15 +27,15 @@ class Conformance(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `ConformanceContact` items (represented as `dict` in JSON). """
 
-    copyright = Column()
+    copyright = Column(primitives.StringField)
     """ Use and/or publishing restrictions.
         Type `str`. """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Publication Date(/time).
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Human description of the conformance statement.
         Type `str`. """
 
@@ -41,23 +43,23 @@ class Conformance(domainresource.DomainResource):
     """ Document definition.
         List of `ConformanceDocument` items (represented as `dict` in JSON). """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
-    fhirVersion = Column()
+    fhirVersion = Column(primitives.StringField)
     """ FHIR Version the system uses.
         Type `str`. """
 
-    format = Column(str)
+    format = Column(primitives.StringField)
     """ formats supported (xml | json | mime type).
         List of `str` items. """
 
-    implementation = Column()
+    implementation = Column(ConformanceImplementation)
     """ If this describes a specific instance.
         Type `ConformanceImplementation` (represented as `dict` in JSON). """
 
-    kind = Column()
+    kind = Column(primitives.StringField)
     """ instance | capability | requirements.
         Type `str`. """
 
@@ -65,7 +67,7 @@ class Conformance(domainresource.DomainResource):
     """ If messaging is supported.
         List of `ConformanceMessaging` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Informal name for this conformance statement.
         Type `str`. """
 
@@ -73,11 +75,11 @@ class Conformance(domainresource.DomainResource):
     """ Profiles for use cases supported.
         List of `FHIRReference` items referencing `StructureDefinition` (represented as `dict` in JSON). """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    requirements = Column()
+    requirements = Column(primitives.StringField)
     """ Why is this needed?.
         Type `str`. """
 
@@ -85,19 +87,19 @@ class Conformance(domainresource.DomainResource):
     """ If the endpoint is a RESTful one.
         List of `ConformanceRest` items (represented as `dict` in JSON). """
 
-    software = Column()
+    software = Column(ConformanceSoftware)
     """ Software that is covered by this conformance statement.
         Type `ConformanceSoftware` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Logical uri to reference this statement.
         Type `str`. """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical id for this version of the statement.
         Type `str`. """
 
@@ -130,6 +132,7 @@ class Conformance(domainresource.DomainResource):
         return '<Conformance %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ConformanceContact(backboneelement.BackboneElement):
@@ -140,7 +143,7 @@ class ConformanceContact(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -158,6 +161,7 @@ class ConformanceContact(backboneelement.BackboneElement):
         return '<ConformanceContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceDocument(backboneelement.BackboneElement):
     """ Document definition.
 
@@ -166,15 +170,15 @@ class ConformanceDocument(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceDocument"
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ Description of document support.
         Type `str`. """
 
-    mode = Column()
+    mode = Column(primitives.StringField)
     """ producer | consumer.
         Type `str`. """
 
-    profile = Column()
+    profile = Column(FHIRReference)
     """ Constraint on a resource used in the document.
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
 
@@ -189,6 +193,7 @@ class ConformanceDocument(backboneelement.BackboneElement):
         return '<ConformanceDocument %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceImplementation(backboneelement.BackboneElement):
     """ If this describes a specific instance.
 
@@ -199,11 +204,11 @@ class ConformanceImplementation(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceImplementation"
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Describes this specific instance.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Base URL for the installation.
         Type `str`. """
 
@@ -217,6 +222,7 @@ class ConformanceImplementation(backboneelement.BackboneElement):
         return '<ConformanceImplementation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceMessaging(backboneelement.BackboneElement):
     """ If messaging is supported.
 
@@ -225,7 +231,7 @@ class ConformanceMessaging(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceMessaging"
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ Messaging interface behavior details.
         Type `str`. """
 
@@ -237,7 +243,7 @@ class ConformanceMessaging(backboneelement.BackboneElement):
     """ Declare support for this event.
         List of `ConformanceMessagingEvent` items (represented as `dict` in JSON). """
 
-    reliableCache = Column()
+    reliableCache = Column(Integer)
     """ Reliable Message Cache Length (min).
         Type `int`. """
 
@@ -253,6 +259,7 @@ class ConformanceMessaging(backboneelement.BackboneElement):
         return '<ConformanceMessaging %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceMessagingEndpoint(backboneelement.BackboneElement):
     """ A messaging service end-point.
 
@@ -262,11 +269,11 @@ class ConformanceMessagingEndpoint(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceMessagingEndpoint"
 
-    address = Column()
+    address = Column(primitives.StringField)
     """ Address of end-point.
         Type `str`. """
 
-    protocol = Column()
+    protocol = Column(Coding)
     """ http | ftp | mllp +.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -280,6 +287,7 @@ class ConformanceMessagingEndpoint(backboneelement.BackboneElement):
         return '<ConformanceMessagingEndpoint %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceMessagingEvent(backboneelement.BackboneElement):
     """ Declare support for this event.
 
@@ -288,31 +296,31 @@ class ConformanceMessagingEvent(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceMessagingEvent"
 
-    category = Column()
+    category = Column(primitives.StringField)
     """ Consequence | Currency | Notification.
         Type `str`. """
 
-    code = Column()
+    code = Column(Coding)
     """ Event type.
         Type `Coding` (represented as `dict` in JSON). """
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ Endpoint-specific event documentation.
         Type `str`. """
 
-    focus = Column()
+    focus = Column(primitives.StringField)
     """ Resource that's focus of message.
         Type `str`. """
 
-    mode = Column()
+    mode = Column(primitives.StringField)
     """ sender | receiver.
         Type `str`. """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ Profile that describes the request.
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
 
-    response = Column()
+    response = Column(FHIRReference)
     """ Profile that describes the response.
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
 
@@ -331,6 +339,7 @@ class ConformanceMessagingEvent(backboneelement.BackboneElement):
         return '<ConformanceMessagingEvent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRest(backboneelement.BackboneElement):
     """ If the endpoint is a RESTful one.
 
@@ -339,11 +348,11 @@ class ConformanceRest(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceRest"
 
-    compartment = Column(str)
+    compartment = Column(primitives.StringField)
     """ Compartments served/used by system.
         List of `str` items. """
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ General description of implementation.
         Type `str`. """
 
@@ -351,7 +360,7 @@ class ConformanceRest(backboneelement.BackboneElement):
     """ What operations are supported?.
         List of `ConformanceRestInteraction` items (represented as `dict` in JSON). """
 
-    mode = Column()
+    mode = Column(primitives.StringField)
     """ client | server.
         Type `str`. """
 
@@ -367,11 +376,11 @@ class ConformanceRest(backboneelement.BackboneElement):
     """ Search params for searching all resources.
         List of `ConformanceRestResourceSearchParam` items (represented as `dict` in JSON). """
 
-    security = Column()
+    security = Column(ConformanceRestSecurity)
     """ Information about security of implementation.
         Type `ConformanceRestSecurity` (represented as `dict` in JSON). """
 
-    transactionMode = Column()
+    transactionMode = Column(primitives.StringField)
     """ not-supported | batch | transaction | both.
         Type `str`. """
 
@@ -392,6 +401,7 @@ class ConformanceRest(backboneelement.BackboneElement):
         return '<ConformanceRest %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRestInteraction(backboneelement.BackboneElement):
     """ What operations are supported?.
 
@@ -400,11 +410,11 @@ class ConformanceRestInteraction(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceRestInteraction"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ transaction | search-system | history-system.
         Type `str`. """
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ Anything special about operation behavior.
         Type `str`. """
 
@@ -418,6 +428,7 @@ class ConformanceRestInteraction(backboneelement.BackboneElement):
         return '<ConformanceRestInteraction %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRestOperation(backboneelement.BackboneElement):
     """ Definition of an operation or a custom query.
 
@@ -427,11 +438,11 @@ class ConformanceRestOperation(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceRestOperation"
 
-    definition = Column()
+    definition = Column(FHIRReference)
     """ The defined operation/query.
         Type `FHIRReference` referencing `OperationDefinition` (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name by which the operation/query is invoked.
         Type `str`. """
 
@@ -445,6 +456,7 @@ class ConformanceRestOperation(backboneelement.BackboneElement):
         return '<ConformanceRestOperation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRestResource(backboneelement.BackboneElement):
     """ Resource served on the REST interface.
 
@@ -454,16 +466,16 @@ class ConformanceRestResource(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceRestResource"
 
-    conditionalCreate = Column()
+    conditionalCreate = Column(bool)
     """ If allows/uses conditional create.
         Type `bool`. """
 
-    conditionalDelete = Column()
+    conditionalDelete = Column(primitives.StringField)
     """ not-supported | single | multiple - how conditional delete is
         supported.
         Type `str`. """
 
-    conditionalUpdate = Column()
+    conditionalUpdate = Column(bool)
     """ If allows/uses conditional update.
         Type `bool`. """
 
@@ -471,15 +483,15 @@ class ConformanceRestResource(backboneelement.BackboneElement):
     """ What operations are supported?.
         List of `ConformanceRestResourceInteraction` items (represented as `dict` in JSON). """
 
-    profile = Column()
+    profile = Column(FHIRReference)
     """ Base System profile for all uses of resource.
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
 
-    readHistory = Column()
+    readHistory = Column(bool)
     """ Whether vRead can return past versions.
         Type `bool`. """
 
-    searchInclude = Column(str)
+    searchInclude = Column(primitives.StringField)
     """ _include values supported by the server.
         List of `str` items. """
 
@@ -487,19 +499,19 @@ class ConformanceRestResource(backboneelement.BackboneElement):
     """ Search params supported by implementation.
         List of `ConformanceRestResourceSearchParam` items (represented as `dict` in JSON). """
 
-    searchRevInclude = Column(str)
+    searchRevInclude = Column(primitives.StringField)
     """ _revinclude values supported by the server.
         List of `str` items. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ A resource type that is supported.
         Type `str`. """
 
-    updateCreate = Column()
+    updateCreate = Column(bool)
     """ If update can commit to a new identity.
         Type `bool`. """
 
-    versioning = Column()
+    versioning = Column(primitives.StringField)
     """ no-version | versioned | versioned-update.
         Type `str`. """
 
@@ -523,6 +535,7 @@ class ConformanceRestResource(backboneelement.BackboneElement):
         return '<ConformanceRestResource %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRestResourceInteraction(backboneelement.BackboneElement):
     """ What operations are supported?.
 
@@ -531,12 +544,12 @@ class ConformanceRestResourceInteraction(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceRestResourceInteraction"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ read | vread | update | delete | history-instance | validate |
         history-type | create | search-type.
         Type `str`. """
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ Anything special about operation behavior.
         Type `str`. """
 
@@ -550,6 +563,7 @@ class ConformanceRestResourceInteraction(backboneelement.BackboneElement):
         return '<ConformanceRestResourceInteraction %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRestResourceSearchParam(backboneelement.BackboneElement):
     """ Search params supported by implementation.
 
@@ -560,32 +574,32 @@ class ConformanceRestResourceSearchParam(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceRestResourceSearchParam"
 
-    chain = Column(str)
+    chain = Column(primitives.StringField)
     """ Chained names supported.
         List of `str` items. """
 
-    definition = Column()
+    definition = Column(primitives.StringField)
     """ Source of definition for parameter.
         Type `str`. """
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ Server-specific usage.
         Type `str`. """
 
-    modifier = Column(str)
+    modifier = Column(primitives.StringField)
     """ missing | exact | contains | not | text | in | not-in | below |
         above | type.
         List of `str` items. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of search parameter.
         Type `str`. """
 
-    target = Column(str)
+    target = Column(primitives.StringField)
     """ Types of resource (if a resource reference).
         List of `str` items. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ number | date | string | token | reference | composite | quantity |
         uri.
         Type `str`. """
@@ -605,6 +619,7 @@ class ConformanceRestResourceSearchParam(backboneelement.BackboneElement):
         return '<ConformanceRestResourceSearchParam %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRestSecurity(backboneelement.BackboneElement):
     """ Information about security of implementation.
 
@@ -618,11 +633,11 @@ class ConformanceRestSecurity(backboneelement.BackboneElement):
     """ Certificates associated with security profiles.
         List of `ConformanceRestSecurityCertificate` items (represented as `dict` in JSON). """
 
-    cors = Column()
+    cors = Column(bool)
     """ Adds CORS Headers (http://enable-cors.org/).
         Type `bool`. """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ General description of how security works.
         Type `str`. """
 
@@ -642,17 +657,18 @@ class ConformanceRestSecurity(backboneelement.BackboneElement):
         return '<ConformanceRestSecurity %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceRestSecurityCertificate(backboneelement.BackboneElement):
     """ Certificates associated with security profiles.
     """
 
     __tablename__ = "ConformanceRestSecurityCertificate"
 
-    blob = Column()
+    blob = Column(primitives.StringField)
     """ Actual certificate.
         Type `str`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ Mime type for certificate.
         Type `str`. """
 
@@ -666,6 +682,7 @@ class ConformanceRestSecurityCertificate(backboneelement.BackboneElement):
         return '<ConformanceRestSecurityCertificate %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConformanceSoftware(backboneelement.BackboneElement):
     """ Software that is covered by this conformance statement.
 
@@ -676,15 +693,15 @@ class ConformanceSoftware(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceSoftware"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ A name the software is known by.
         Type `str`. """
 
-    releaseDate = Column()
+    releaseDate = Column(FHIRDate)
     """ Date this version released.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Version covered by this statement.
         Type `str`. """
 

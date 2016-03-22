@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ProcedureRequest(domainresource.DomainResource):
@@ -15,11 +16,11 @@ class ProcedureRequest(domainresource.DomainResource):
 
     __tablename__ = "ProcedureRequest"
 
-    asNeededBoolean = Column()
+    asNeededBoolean = Column(bool)
     """ Preconditions for procedure.
         Type `bool`. """
 
-    asNeededCodeableConcept = Column()
+    asNeededCodeableConcept = Column(CodeableConcept)
     """ Preconditions for procedure.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -27,11 +28,11 @@ class ProcedureRequest(domainresource.DomainResource):
     """ What part of body to perform on.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ What procedure to perform.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Encounter request created during.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -43,48 +44,48 @@ class ProcedureRequest(domainresource.DomainResource):
     """ Additional information about desired procedure.
         List of `Annotation` items (represented as `dict` in JSON). """
 
-    orderedOn = Column()
+    orderedOn = Column(FHIRDate)
     """ When request was created.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    orderer = Column()
+    orderer = Column(FHIRReference)
     """ Who made request.
         Type `FHIRReference` referencing `Practitioner, Patient, RelatedPerson, Device` (represented as `dict` in JSON). """
 
-    performer = Column()
+    performer = Column(FHIRReference)
     """ Who should perform the procedure.
         Type `FHIRReference` referencing `Practitioner, Organization, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(primitives.StringField)
     """ routine | urgent | stat | asap.
         Type `str`. """
 
-    reasonCodeableConcept = Column()
+    reasonCodeableConcept = Column(CodeableConcept)
     """ Why procedure should occur.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    reasonReference = Column()
+    reasonReference = Column(FHIRReference)
     """ Why procedure should occur.
         Type `FHIRReference` referencing `Condition` (represented as `dict` in JSON). """
 
-    scheduledDateTime = Column()
+    scheduledDateTime = Column(FHIRDate)
     """ When procedure should occur.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    scheduledPeriod = Column()
+    scheduledPeriod = Column(Period)
     """ When procedure should occur.
         Type `Period` (represented as `dict` in JSON). """
 
-    scheduledTiming = Column()
+    scheduledTiming = Column(Timing)
     """ When procedure should occur.
         Type `Timing` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | draft | requested | received | accepted | in-progress |
         completed | suspended | rejected | aborted.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who the procedure should be done to.
         Type `FHIRReference` referencing `Patient, Group` (represented as `dict` in JSON). """
 

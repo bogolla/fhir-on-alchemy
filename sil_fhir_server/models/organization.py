@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Organization(domainresource.DomainResource):
@@ -18,7 +19,7 @@ class Organization(domainresource.DomainResource):
 
     __tablename__ = "Organization"
 
-    active = Column()
+    active = Column(bool)
     """ Whether the organization's record is still in active use.
         Type `bool`. """
 
@@ -34,11 +35,11 @@ class Organization(domainresource.DomainResource):
     """ Identifies this organization  across multiple systems.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name used for the organization.
         Type `str`. """
 
-    partOf = Column()
+    partOf = Column(FHIRReference)
     """ The organization of which this organization forms a part.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
@@ -46,7 +47,7 @@ class Organization(domainresource.DomainResource):
     """ A contact detail for the organization.
         List of `ContactPoint` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Kind of organization.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -66,6 +67,7 @@ class Organization(domainresource.DomainResource):
         return '<Organization %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class OrganizationContact(backboneelement.BackboneElement):
@@ -74,15 +76,15 @@ class OrganizationContact(backboneelement.BackboneElement):
 
     __tablename__ = "OrganizationContact"
 
-    address = Column()
+    address = Column(Address)
     """ Visiting or postal addresses for the contact.
         Type `Address` (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(HumanName)
     """ A name associated with the contact.
         Type `HumanName` (represented as `dict` in JSON). """
 
-    purpose = Column()
+    purpose = Column(CodeableConcept)
     """ The type of contact.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

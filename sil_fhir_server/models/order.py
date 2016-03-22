@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Order(domainresource.DomainResource):
@@ -12,41 +13,41 @@ class Order(domainresource.DomainResource):
     """
 
     __tablename__ = "Order"
-
-    date = Column()
+    
+    date = Column(FHIRDate)
     """ When the order was made.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     detail = Column(FHIRReference)
     """ What action is being ordered.
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
-
+    
     identifier = Column(Identifier)
     """ Identifiers assigned to this order by the orderer or by the
         receiver.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    reasonCodeableConcept = Column()
+    
+    reasonCodeableConcept = Column(CodeableConcept)
     """ Text - why the order was made.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    reasonReference = Column()
+    
+    reasonReference = Column(FHIRReference)
     """ Text - why the order was made.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    source = Column()
+    
+    source = Column(FHIRReference)
     """ Who initiated the order.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
-
-    subject = Column()
+    
+    subject = Column(FHIRReference)
     """ Patient this order is about.
         Type `FHIRReference` referencing `Patient, Group, Device, Substance` (represented as `dict` in JSON). """
-
-    target = Column()
+    
+    target = Column(FHIRReference)
     """ Who is intended to fulfill the order.
         Type `FHIRReference` referencing `Organization, Device, Practitioner` (represented as `dict` in JSON). """
-
-    when = Column()
+    
+    when = Column(OrderWhen)
     """ When order should be fulfilled.
         Type `OrderWhen` (represented as `dict` in JSON). """
 
@@ -67,6 +68,7 @@ class Order(domainresource.DomainResource):
         return '<Order %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class OrderWhen(backboneelement.BackboneElement):
@@ -74,13 +76,13 @@ class OrderWhen(backboneelement.BackboneElement):
     """
 
     __tablename__ = "OrderWhen"
-
-    code = Column()
+    
+    code = Column(CodeableConcept)
     """ Code specifies when request should be done. The code may simply be
         a priority code.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    schedule = Column()
+    
+    schedule = Column(Timing)
     """ A formal schedule.
         Type `Timing` (represented as `dict` in JSON). """
 

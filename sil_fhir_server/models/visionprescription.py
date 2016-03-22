@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class VisionPrescription(domainresource.DomainResource):
@@ -16,7 +18,7 @@ class VisionPrescription(domainresource.DomainResource):
 
     __tablename__ = "VisionPrescription"
 
-    dateWritten = Column()
+    dateWritten = Column(FHIRDate)
     """ When prescription was authorized.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -24,7 +26,7 @@ class VisionPrescription(domainresource.DomainResource):
     """ Vision supply authorization.
         List of `VisionPrescriptionDispense` items (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Created during encounter / admission / stay.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -32,19 +34,19 @@ class VisionPrescription(domainresource.DomainResource):
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who prescription is for.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    prescriber = Column()
+    prescriber = Column(FHIRReference)
     """ Who authorizes the vision product.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    reasonCodeableConcept = Column()
+    reasonCodeableConcept = Column(CodeableConcept)
     """ Reason or indication for writing the prescription.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    reasonReference = Column()
+    reasonReference = Column(FHIRReference)
     """ Reason or indication for writing the prescription.
         Type `FHIRReference` referencing `Condition` (represented as `dict` in JSON). """
 
@@ -64,6 +66,7 @@ class VisionPrescription(domainresource.DomainResource):
         return '<VisionPrescription %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class VisionPrescriptionDispense(backboneelement.BackboneElement):
@@ -74,63 +77,63 @@ class VisionPrescriptionDispense(backboneelement.BackboneElement):
 
     __tablename__ = "VisionPrescriptionDispense"
 
-    add = Column()
+    add = Column(float)
     """ Lens add.
         Type `float`. """
 
-    axis = Column()
+    axis = Column(Integer)
     """ Lens axis.
         Type `int`. """
 
-    backCurve = Column()
+    backCurve = Column(float)
     """ Contact lens back curvature.
         Type `float`. """
 
-    base = Column()
+    base = Column(primitives.StringFieldField)
     """ up | down | in | out.
         Type `str`. """
 
-    brand = Column()
+    brand = Column(primitives.StringFieldField)
     """ Lens add.
         Type `str`. """
 
-    color = Column()
+    color = Column(primitives.StringFieldField)
     """ Lens add.
         Type `str`. """
 
-    cylinder = Column()
+    cylinder = Column(float)
     """ Lens cylinder.
         Type `float`. """
 
-    diameter = Column()
+    diameter = Column(float)
     """ Contact lens diameter.
         Type `float`. """
 
-    duration = Column()
+    duration = Column(Quantity)
     """ Lens wear duration.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    eye = Column()
+    eye = Column(primitives.StringFieldField)
     """ right | left.
         Type `str`. """
 
-    notes = Column()
+    notes = Column(primitives.StringFieldField)
     """ Notes for coatings.
         Type `str`. """
 
-    power = Column()
+    power = Column(float)
     """ Contact lens power.
         Type `float`. """
 
-    prism = Column()
+    prism = Column(float)
     """ Lens prism.
         Type `float`. """
 
-    product = Column()
+    product = Column(Coding)
     """ Product to be supplied.
         Type `Coding` (represented as `dict` in JSON). """
 
-    sphere = Column()
+    sphere = Column(float)
     """ Lens sphere.
         Type `float`. """
 

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import element
 
 class Narrative(element.Element):
@@ -13,11 +14,11 @@ class Narrative(element.Element):
 
     __tablename__ = "Narrative"
 
-    div = Column()
+    div = Column(primitives.StringField)
     """ Limited xhtml content.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ generated | extensions | additional | empty.
         Type `str`. """
 

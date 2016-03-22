@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DiagnosticOrder(domainresource.DomainResource):
@@ -16,7 +17,7 @@ class DiagnosticOrder(domainresource.DomainResource):
 
     __tablename__ = "DiagnosticOrder"
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ The encounter that this diagnostic order is associated with.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -36,11 +37,11 @@ class DiagnosticOrder(domainresource.DomainResource):
     """ Other notes and comments.
         List of `Annotation` items (represented as `dict` in JSON). """
 
-    orderer = Column()
+    orderer = Column(FHIRReference)
     """ Who ordered the test.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(primitives.StringField)
     """ routine | urgent | stat | asap.
         Type `str`. """
 
@@ -52,13 +53,13 @@ class DiagnosticOrder(domainresource.DomainResource):
     """ If the whole order relates to specific specimens.
         List of `FHIRReference` items referencing `Specimen` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | draft | planned | requested | received | accepted | in-
         progress | review | completed | cancelled | suspended | rejected |
         failed.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who and/or what test is about.
         Type `FHIRReference` referencing `Patient, Group, Location, Device` (represented as `dict` in JSON). """
 
@@ -86,6 +87,7 @@ class DiagnosticOrder(domainresource.DomainResource):
         return '<DiagnosticOrder %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DiagnosticOrderEvent(backboneelement.BackboneElement):
@@ -98,19 +100,19 @@ class DiagnosticOrderEvent(backboneelement.BackboneElement):
 
     __tablename__ = "DiagnosticOrderEvent"
 
-    actor = Column()
+    actor = Column(FHIRReference)
     """ Who recorded or did this.
         Type `FHIRReference` referencing `Practitioner, Device` (represented as `dict` in JSON). """
 
-    dateTime = Column()
+    dateTime = Column(FHIRDate)
     """ The date at which the event happened.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(CodeableConcept)
     """ More information about the event and its context.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | draft | planned | requested | received | accepted | in-
         progress | review | completed | cancelled | suspended | rejected |
         failed.
@@ -128,6 +130,7 @@ class DiagnosticOrderEvent(backboneelement.BackboneElement):
         return '<DiagnosticOrderEvent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class DiagnosticOrderItem(backboneelement.BackboneElement):
     """ The items the orderer requested.
 
@@ -138,11 +141,11 @@ class DiagnosticOrderItem(backboneelement.BackboneElement):
 
     __tablename__ = "DiagnosticOrderItem"
 
-    bodySite = Column()
+    bodySite = Column(CodeableConcept)
     """ Location of requested test (if applicable).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Code to indicate the item (test or panel) being ordered.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -154,7 +157,7 @@ class DiagnosticOrderItem(backboneelement.BackboneElement):
     """ If this item relates to specific specimens.
         List of `FHIRReference` items referencing `Specimen` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | draft | planned | requested | received | accepted | in-
         progress | review | completed | cancelled | suspended | rejected |
         failed.

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class PaymentReconciliation(domainresource.DomainResource):
@@ -16,7 +17,7 @@ class PaymentReconciliation(domainresource.DomainResource):
 
     __tablename__ = "PaymentReconciliation"
 
-    created = Column()
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -24,11 +25,11 @@ class PaymentReconciliation(domainresource.DomainResource):
     """ Details.
         List of `PaymentReconciliationDetail` items (represented as `dict` in JSON). """
 
-    disposition = Column()
+    disposition = Column(primitives.StringField)
     """ Disposition Message.
         Type `str`. """
 
-    form = Column()
+    form = Column(Coding)
     """ Printed Form Identifier.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -40,39 +41,39 @@ class PaymentReconciliation(domainresource.DomainResource):
     """ Note text.
         List of `PaymentReconciliationNote` items (represented as `dict` in JSON). """
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Insurer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    outcome = Column()
+    outcome = Column(primitives.StringField)
     """ complete | error.
         Type `str`. """
 
-    period = Column()
+    period = Column(Period)
     """ Period covered.
         Type `Period` (represented as `dict` in JSON). """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ Claim reference.
         Type `FHIRReference` referencing `ProcessRequest` (represented as `dict` in JSON). """
 
-    requestOrganization = Column()
+    requestOrganization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    requestProvider = Column()
+    requestProvider = Column(FHIRReference)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    ruleset = Column()
+    ruleset = Column(Coding)
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    total = Column()
+    total = Column(Quantity)
     """ Total amount of Payment.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
@@ -99,6 +100,7 @@ class PaymentReconciliation(domainresource.DomainResource):
         return '<PaymentReconciliation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class PaymentReconciliationDetail(backboneelement.BackboneElement):
@@ -109,31 +111,31 @@ class PaymentReconciliationDetail(backboneelement.BackboneElement):
 
     __tablename__ = "PaymentReconciliationDetail"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Detail amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Invoice date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    payee = Column()
+    payee = Column(FHIRReference)
     """ Payee.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ Claim.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    responce = Column()
+    responce = Column(FHIRReference)
     """ Claim Response.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    submitter = Column()
+    submitter = Column(FHIRReference)
     """ Submitter.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Type code.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -152,6 +154,7 @@ class PaymentReconciliationDetail(backboneelement.BackboneElement):
         return '<PaymentReconciliationDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class PaymentReconciliationNote(backboneelement.BackboneElement):
     """ Note text.
 
@@ -160,11 +163,11 @@ class PaymentReconciliationNote(backboneelement.BackboneElement):
 
     __tablename__ = "PaymentReconciliationNote"
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Notes text.
         Type `str`. """
 
-    type = Column()
+    type = Column(Coding)
     """ display | print | printoper.
         Type `Coding` (represented as `dict` in JSON). """
 

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DiagnosticReport(domainresource.DomainResource):
@@ -20,11 +21,11 @@ class DiagnosticReport(domainresource.DomainResource):
 
     __tablename__ = "DiagnosticReport"
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ Service category.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Name/Code for this diagnostic report.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -32,19 +33,19 @@ class DiagnosticReport(domainresource.DomainResource):
     """ Codes for the conclusion.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    conclusion = Column()
+    conclusion = Column(primitives.StringField)
     """ Clinical Interpretation of test results.
         Type `str`. """
 
-    effectiveDateTime = Column()
+    effectiveDateTime = Column(FHIRDate)
     """ Clinically Relevant time/time-period for report.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    effectivePeriod = Column()
+    effectivePeriod = Column(Period)
     """ Clinically Relevant time/time-period for report.
         Type `Period` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Health care event when test ordered.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -61,11 +62,11 @@ class DiagnosticReport(domainresource.DomainResource):
         report.
         List of `FHIRReference` items referencing `ImagingStudy, ImagingObjectSelection` (represented as `dict` in JSON). """
 
-    issued = Column()
+    issued = Column(FHIRDate)
     """ DateTime this version was released.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    performer = Column()
+    performer = Column(FHIRReference)
     """ Responsible Diagnostic Service.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
 
@@ -85,12 +86,12 @@ class DiagnosticReport(domainresource.DomainResource):
     """ Specimens this report is based on.
         List of `FHIRReference` items referencing `Specimen` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ registered | partial | final | corrected | appended | cancelled |
         entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ The subject of the report, usually, but not always, the patient.
         Type `FHIRReference` referencing `Patient, Group, Device, Location` (represented as `dict` in JSON). """
 
@@ -120,6 +121,7 @@ class DiagnosticReport(domainresource.DomainResource):
         return '<DiagnosticReport %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DiagnosticReportImage(backboneelement.BackboneElement):
@@ -132,11 +134,11 @@ class DiagnosticReportImage(backboneelement.BackboneElement):
 
     __tablename__ = "DiagnosticReportImage"
 
-    comment = Column()
+    comment = Column(primitives.StringField)
     """ Comment about the image (e.g. explanation).
         Type `str`. """
 
-    link = Column()
+    link = Column(FHIRReference)
     """ Reference to the image source.
         Type `FHIRReference` referencing `Media` (represented as `dict` in JSON). """
 

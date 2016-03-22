@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Group(domainresource.DomainResource):
@@ -18,7 +19,7 @@ class Group(domainresource.DomainResource):
 
     __tablename__ = "Group"
 
-    actual = Column()
+    actual = Column(bool)
     """ Descriptive or actual.
         Type `bool`. """
 
@@ -26,7 +27,7 @@ class Group(domainresource.DomainResource):
     """ Trait of group members.
         List of `GroupCharacteristic` items (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Kind of Group members.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -38,15 +39,15 @@ class Group(domainresource.DomainResource):
     """ Who or what is in group.
         List of `GroupMember` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Label for Group.
         Type `str`. """
 
-    quantity = Column()
+    quantity = Column(Integer)
     """ Number of members.
         Type `int`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ person | animal | practitioner | device | medication | substance.
         Type `str`. """
 
@@ -66,6 +67,7 @@ class Group(domainresource.DomainResource):
         return '<Group %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class GroupCharacteristic(backboneelement.BackboneElement):
@@ -76,31 +78,31 @@ class GroupCharacteristic(backboneelement.BackboneElement):
 
     __tablename__ = "GroupCharacteristic"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Kind of characteristic.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    exclude = Column()
+    exclude = Column(bool)
     """ Group includes or excludes.
         Type `bool`. """
 
-    period = Column()
+    period = Column(Period)
     """ Period over which characteristic is tested.
         Type `Period` (represented as `dict` in JSON). """
 
-    valueBoolean = Column()
+    valueBoolean = Column(bool)
     """ Value held by characteristic.
         Type `bool`. """
 
-    valueCodeableConcept = Column()
+    valueCodeableConcept = Column(CodeableConcept)
     """ Value held by characteristic.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    valueQuantity = Column()
+    valueQuantity = Column(Quantity)
     """ Value held by characteristic.
         Type `Quantity` (represented as `dict` in JSON). """
 
-    valueRange = Column()
+    valueRange = Column(Range)
     """ Value held by characteristic.
         Type `Range` (represented as `dict` in JSON). """
 
@@ -119,6 +121,7 @@ class GroupCharacteristic(backboneelement.BackboneElement):
         return '<GroupCharacteristic %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class GroupMember(backboneelement.BackboneElement):
     """ Who or what is in group.
 
@@ -127,15 +130,15 @@ class GroupMember(backboneelement.BackboneElement):
 
     __tablename__ = "GroupMember"
 
-    entity = Column()
+    entity = Column(FHIRReference)
     """ Reference to the group member.
         Type `FHIRReference` referencing `Patient, Practitioner, Device, Medication, Substance` (represented as `dict` in JSON). """
 
-    inactive = Column()
+    inactive = Column(bool)
     """ If member is no longer in group.
         Type `bool`. """
 
-    period = Column()
+    period = Column(Period)
     """ Period member belonged to the group.
         Type `Period` (represented as `dict` in JSON). """
 

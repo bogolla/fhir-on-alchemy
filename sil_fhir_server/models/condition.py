@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Condition(domainresource.DomainResource):
@@ -18,31 +20,31 @@ class Condition(domainresource.DomainResource):
 
     __tablename__ = "Condition"
 
-    abatementBoolean = Column()
+    abatementBoolean = Column(bool)
     """ If/when in resolution/remission.
         Type `bool`. """
 
-    abatementDateTime = Column()
+    abatementDateTime = Column(FHIRDate)
     """ If/when in resolution/remission.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    abatementPeriod = Column()
+    abatementPeriod = Column(Period)
     """ If/when in resolution/remission.
         Type `Period` (represented as `dict` in JSON). """
 
-    abatementQuantity = Column()
+    abatementQuantity = Column(Quantity)
     """ If/when in resolution/remission.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
 
-    abatementRange = Column()
+    abatementRange = Column(Range)
     """ If/when in resolution/remission.
         Type `Range` (represented as `dict` in JSON). """
 
-    abatementString = Column()
+    abatementString = Column(primitives.StringField)
     """ If/when in resolution/remission.
         Type `str`. """
 
-    asserter = Column()
+    asserter = Column(FHIRReference)
     """ Person who asserts this condition.
         Type `FHIRReference` referencing `Practitioner, Patient` (represented as `dict` in JSON). """
 
@@ -50,23 +52,23 @@ class Condition(domainresource.DomainResource):
     """ Anatomical location, if relevant.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ complaint | symptom | finding | diagnosis.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    clinicalStatus = Column()
+    clinicalStatus = Column(primitives.StringField)
     """ active | relapse | remission | resolved.
         Type `str`. """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Identification of the condition, problem or diagnosis.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    dateRecorded = Column()
+    dateRecorded = Column(FHIRDate)
     """ When first entered.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Encounter when condition first asserted.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -78,43 +80,43 @@ class Condition(domainresource.DomainResource):
     """ External Ids for this condition.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    notes = Column()
+    notes = Column(primitives.StringField)
     """ Additional information about the Condition.
         Type `str`. """
 
-    onsetDateTime = Column()
+    onsetDateTime = Column(FHIRDate)
     """ Estimated or actual date,  date-time, or age.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    onsetPeriod = Column()
+    onsetPeriod = Column(Period)
     """ Estimated or actual date,  date-time, or age.
         Type `Period` (represented as `dict` in JSON). """
 
-    onsetQuantity = Column()
+    onsetQuantity = Column(Quantity)
     """ Estimated or actual date,  date-time, or age.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
 
-    onsetRange = Column()
+    onsetRange = Column(Range)
     """ Estimated or actual date,  date-time, or age.
         Type `Range` (represented as `dict` in JSON). """
 
-    onsetString = Column()
+    onsetString = Column(primitives.StringField)
     """ Estimated or actual date,  date-time, or age.
         Type `str`. """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who has the condition?.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    severity = Column()
+    severity = Column(CodeableConcept)
     """ Subjective severity of condition.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    stage = Column()
+    stage = Column(ConditionStage)
     """ Stage/grade, usually assessed formally.
         Type `ConditionStage` (represented as `dict` in JSON). """
 
-    verificationStatus = Column()
+    verificationStatus = Column(primitives.StringField)
     """ provisional | differential | confirmed | refuted | entered-in-error
         | unknown.
         Type `str`. """
@@ -152,6 +154,7 @@ class Condition(domainresource.DomainResource):
         return '<Condition %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ConditionEvidence(backboneelement.BackboneElement):
@@ -163,7 +166,7 @@ class ConditionEvidence(backboneelement.BackboneElement):
 
     __tablename__ = "ConditionEvidence"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Manifestation/symptom.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -181,6 +184,7 @@ class ConditionEvidence(backboneelement.BackboneElement):
         return '<ConditionEvidence %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConditionStage(backboneelement.BackboneElement):
     """ Stage/grade, usually assessed formally.
 
@@ -194,7 +198,7 @@ class ConditionStage(backboneelement.BackboneElement):
     """ Formal record of assessment.
         List of `FHIRReference` items referencing `ClinicalImpression, DiagnosticReport, Observation` (represented as `dict` in JSON). """
 
-    summary = Column()
+    summary = Column(CodeableConcept)
     """ Simple summary (disease specific).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

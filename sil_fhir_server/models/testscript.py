@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class TestScript(domainresource.DomainResource):
@@ -21,19 +22,19 @@ class TestScript(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `TestScriptContact` items (represented as `dict` in JSON). """
 
-    copyright = Column()
+    copyright = Column(primitives.StringField)
     """ Use and/or publishing restrictions.
         Type `str`. """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date for this version of the TestScript.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Natural language description of the TestScript.
         Type `str`. """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
@@ -41,20 +42,20 @@ class TestScript(domainresource.DomainResource):
     """ Fixture in the test script - by reference (uri).
         List of `TestScriptFixture` items (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ External identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    metadata = Column()
+    metadata = Column(TestScriptMetadata)
     """ Required capability that is assumed to function correctly on the
         FHIR server being tested.
         Type `TestScriptMetadata` (represented as `dict` in JSON). """
 
-    multiserver = Column()
+    multiserver = Column(bool)
     """ Whether or not the tests apply to more than one FHIR server.
         Type `bool`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Informal name for this TestScript.
         Type `str`. """
 
@@ -62,23 +63,23 @@ class TestScript(domainresource.DomainResource):
     """ Reference of the validation profile.
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    requirements = Column()
+    requirements = Column(primitives.StringField)
     """ Scope and Usage this Test Script is for.
         Type `str`. """
 
-    setup = Column()
+    setup = Column(TestScriptSetup)
     """ A series of required setup operations before tests are executed.
         Type `TestScriptSetup` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    teardown = Column()
+    teardown = Column(TestScriptTeardown)
     """ A series of required clean up steps.
         Type `TestScriptTeardown` (represented as `dict` in JSON). """
 
@@ -86,7 +87,7 @@ class TestScript(domainresource.DomainResource):
     """ A test in this script.
         List of `TestScriptTest` items (represented as `dict` in JSON). """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Absolute URL used to reference this TestScript.
         Type `str`. """
 
@@ -98,7 +99,7 @@ class TestScript(domainresource.DomainResource):
     """ Placeholder for evaluated elements.
         List of `TestScriptVariable` items (represented as `dict` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical id for this version of the TestScript.
         Type `str`. """
 
@@ -131,6 +132,7 @@ class TestScript(domainresource.DomainResource):
         return '<TestScript %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class TestScriptContact(backboneelement.BackboneElement):
@@ -141,7 +143,7 @@ class TestScriptContact(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -159,6 +161,7 @@ class TestScriptContact(backboneelement.BackboneElement):
         return '<TestScriptContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptFixture(backboneelement.BackboneElement):
     """ Fixture in the test script - by reference (uri).
 
@@ -168,15 +171,15 @@ class TestScriptFixture(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptFixture"
 
-    autocreate = Column()
+    autocreate = Column(bool)
     """ Whether or not to implicitly create the fixture during setup.
         Type `bool`. """
 
-    autodelete = Column()
+    autodelete = Column(bool)
     """ Whether or not to implicitly delete the fixture during teardown.
         Type `bool`. """
 
-    resource = Column()
+    resource = Column(FHIRReference)
     """ Reference of the resource.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
@@ -191,6 +194,7 @@ class TestScriptFixture(backboneelement.BackboneElement):
         return '<TestScriptFixture %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptMetadata(backboneelement.BackboneElement):
     """ Required capability that is assumed to function correctly on the FHIR
     server being tested.
@@ -220,6 +224,7 @@ class TestScriptMetadata(backboneelement.BackboneElement):
         return '<TestScriptMetadata %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptMetadataCapability(backboneelement.BackboneElement):
     """ Capabilities  that are assumed to function correctly on the FHIR server
     being tested.
@@ -230,27 +235,27 @@ class TestScriptMetadataCapability(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptMetadataCapability"
 
-    conformance = Column()
+    conformance = Column(FHIRReference)
     """ Required Conformance.
         Type `FHIRReference` referencing `Conformance` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ The expected capabilities of the server.
         Type `str`. """
 
-    destination = Column()
+    destination = Column(Integer)
     """ Which server these requirements apply to.
         Type `int`. """
 
-    link = Column(str)
+    link = Column(primitives.StringField)
     """ Links to the FHIR specification.
         List of `str` items. """
 
-    required = Column()
+    required = Column(bool)
     """ Are the capabilities required?.
         Type `bool`. """
 
-    validated = Column()
+    validated = Column(bool)
     """ Are the capabilities validated?.
         Type `bool`. """
 
@@ -268,6 +273,7 @@ class TestScriptMetadataCapability(backboneelement.BackboneElement):
         return '<TestScriptMetadataCapability %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptMetadataLink(backboneelement.BackboneElement):
     """ Links to the FHIR specification.
 
@@ -276,11 +282,11 @@ class TestScriptMetadataLink(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptMetadataLink"
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Short description.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ URL to the specification.
         Type `str`. """
 
@@ -294,6 +300,7 @@ class TestScriptMetadataLink(backboneelement.BackboneElement):
         return '<TestScriptMetadataLink %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptSetup(backboneelement.BackboneElement):
     """ A series of required setup operations before tests are executed.
     """
@@ -304,7 +311,7 @@ class TestScriptSetup(backboneelement.BackboneElement):
     """ A setup operation or assert to perform.
         List of `TestScriptSetupAction` items (represented as `dict` in JSON). """
 
-    metadata = Column()
+    metadata = Column(TestScriptMetadata)
     """ Capabilities  that are assumed to function correctly on the FHIR
         server being tested.
         Type `TestScriptMetadata` (represented as `dict` in JSON). """
@@ -319,6 +326,7 @@ class TestScriptSetup(backboneelement.BackboneElement):
         return '<TestScriptSetup %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptSetupAction(backboneelement.BackboneElement):
     """ A setup operation or assert to perform.
 
@@ -327,11 +335,11 @@ class TestScriptSetupAction(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptSetupAction"
 
-    assert_fhir = Column()
+    assert_fhir = Column(TestScriptSetupActionAssert)
     """ The assertion to perform.
         Type `TestScriptSetupActionAssert` (represented as `dict` in JSON). """
 
-    operation = Column()
+    operation = Column(TestScriptSetupActionOperation)
     """ The setup operation to perform.
         Type `TestScriptSetupActionOperation` (represented as `dict` in JSON). """
 
@@ -345,6 +353,7 @@ class TestScriptSetupAction(backboneelement.BackboneElement):
         return '<TestScriptSetupAction %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptSetupActionAssert(backboneelement.BackboneElement):
     """ The assertion to perform.
 
@@ -354,79 +363,79 @@ class TestScriptSetupActionAssert(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptSetupActionAssert"
 
-    compareToSourceId = Column()
+    compareToSourceId = Column(primitives.StringField)
     """ Id of fixture used to compare the "sourceId/path" evaluations to.
         Type `str`. """
 
-    compareToSourcePath = Column()
+    compareToSourcePath = Column(primitives.StringField)
     """ XPath or JSONPath expression against fixture used to compare the
         "sourceId/path" evaluations to.
         Type `str`. """
 
-    contentType = Column()
+    contentType = Column(primitives.StringField)
     """ xml | json.
         Type `str`. """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Tracking/reporting assertion description.
         Type `str`. """
 
-    direction = Column()
+    direction = Column(primitives.StringField)
     """ response | request.
         Type `str`. """
 
-    headerField = Column()
+    headerField = Column(primitives.StringField)
     """ HTTP header field name.
         Type `str`. """
 
-    label = Column()
+    label = Column(primitives.StringField)
     """ Tracking/logging assertion label.
         Type `str`. """
 
-    minimumId = Column()
+    minimumId = Column(primitives.StringField)
     """ Fixture Id of minimum content resource.
         Type `str`. """
 
-    navigationLinks = Column()
+    navigationLinks = Column(bool)
     """ Perform validation on navigation links?.
         Type `bool`. """
 
-    operator = Column()
+    operator = Column(primitives.StringField)
     """ equals | notEquals | in | notIn | greaterThan | lessThan | empty |
         notEmpty | contains | notContains.
         Type `str`. """
 
-    path = Column()
+    path = Column(primitives.StringField)
     """ XPath or JSONPath expression.
         Type `str`. """
 
-    resource = Column()
+    resource = Column(primitives.StringField)
     """ Resource type.
         Type `str`. """
 
-    response = Column()
+    response = Column(primitives.StringField)
     """ okay | created | noContent | notModified | bad | forbidden |
         notFound | methodNotAllowed | conflict | gone | preconditionFailed
         | unprocessable.
         Type `str`. """
 
-    responseCode = Column()
+    responseCode = Column(primitives.StringField)
     """ HTTP response code to test.
         Type `str`. """
 
-    sourceId = Column()
+    sourceId = Column(primitives.StringField)
     """ Fixture Id of source expression or headerField.
         Type `str`. """
 
-    validateProfileId = Column()
+    validateProfileId = Column(primitives.StringField)
     """ Profile Id of validation profile reference.
         Type `str`. """
 
-    value = Column()
+    value = Column(primitives.StringField)
     """ The value to compare to.
         Type `str`. """
 
-    warningOnly = Column()
+    warningOnly = Column(bool)
     """ Will this assert produce a warning only on error?.
         Type `bool`. """
 
@@ -456,6 +465,7 @@ class TestScriptSetupActionAssert(backboneelement.BackboneElement):
         return '<TestScriptSetupActionAssert %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptSetupActionOperation(backboneelement.BackboneElement):
     """ The setup operation to perform.
 
@@ -464,31 +474,31 @@ class TestScriptSetupActionOperation(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptSetupActionOperation"
 
-    accept = Column()
+    accept = Column(primitives.StringField)
     """ xml | json.
         Type `str`. """
 
-    contentType = Column()
+    contentType = Column(primitives.StringField)
     """ xml | json.
         Type `str`. """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Tracking/reporting operation description.
         Type `str`. """
 
-    destination = Column()
+    destination = Column(Integer)
     """ Which server to perform the operation on.
         Type `int`. """
 
-    encodeRequestUrl = Column()
+    encodeRequestUrl = Column(bool)
     """ Whether or not to send the request url in encoded format.
         Type `bool`. """
 
-    label = Column()
+    label = Column(primitives.StringField)
     """ Tracking/logging operation label.
         Type `str`. """
 
-    params = Column()
+    params = Column(primitives.StringField)
     """ Explicitly defined path parameters.
         Type `str`. """
 
@@ -496,28 +506,28 @@ class TestScriptSetupActionOperation(backboneelement.BackboneElement):
     """ Each operation can have one ore more header elements.
         List of `TestScriptSetupActionOperationRequestHeader` items (represented as `dict` in JSON). """
 
-    resource = Column()
+    resource = Column(primitives.StringField)
     """ Resource type.
         Type `str`. """
 
-    responseId = Column()
+    responseId = Column(primitives.StringField)
     """ Fixture Id of mapped response.
         Type `str`. """
 
-    sourceId = Column()
+    sourceId = Column(primitives.StringField)
     """ Fixture Id of body for PUT and POST requests.
         Type `str`. """
 
-    targetId = Column()
+    targetId = Column(primitives.StringField)
     """ Id of fixture used for extracting the [id],  [type], and [vid] for
         GET requests.
         Type `str`. """
 
-    type = Column()
+    type = Column(Coding)
     """ The setup operation type that will be executed.
         Type `Coding` (represented as `dict` in JSON). """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Request URL.
         Type `str`. """
 
@@ -543,6 +553,7 @@ class TestScriptSetupActionOperation(backboneelement.BackboneElement):
         return '<TestScriptSetupActionOperation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptSetupActionOperationRequestHeader(backboneelement.BackboneElement):
     """ Each operation can have one ore more header elements.
 
@@ -551,11 +562,11 @@ class TestScriptSetupActionOperationRequestHeader(backboneelement.BackboneElemen
 
     __tablename__ = "TestScriptSetupActionOperationRequestHeader"
 
-    field = Column()
+    field = Column(primitives.StringField)
     """ HTTP header field name.
         Type `str`. """
 
-    value = Column()
+    value = Column(primitives.StringField)
     """ HTTP headerfield value.
         Type `str`. """
 
@@ -569,6 +580,7 @@ class TestScriptSetupActionOperationRequestHeader(backboneelement.BackboneElemen
         return '<TestScriptSetupActionOperationRequestHeader %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptTeardown(backboneelement.BackboneElement):
     """ A series of required clean up steps.
 
@@ -591,6 +603,7 @@ class TestScriptTeardown(backboneelement.BackboneElement):
         return '<TestScriptTeardown %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptTeardownAction(backboneelement.BackboneElement):
     """ One or more teardown operations to perform.
 
@@ -599,7 +612,7 @@ class TestScriptTeardownAction(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptTeardownAction"
 
-    operation = Column()
+    operation = Column(TestScriptSetupActionOperation)
     """ The teardown operation to perform.
         Type `TestScriptSetupActionOperation` (represented as `dict` in JSON). """
 
@@ -612,6 +625,7 @@ class TestScriptTeardownAction(backboneelement.BackboneElement):
         return '<TestScriptTeardownAction %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptTest(backboneelement.BackboneElement):
     """ A test in this script.
     """
@@ -622,16 +636,16 @@ class TestScriptTest(backboneelement.BackboneElement):
     """ A test operation or assert to perform.
         List of `TestScriptTestAction` items (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Tracking/reporting short description of the test.
         Type `str`. """
 
-    metadata = Column()
+    metadata = Column(TestScriptMetadata)
     """ Capabilities  that are expected to function correctly on the FHIR
         server being tested.
         Type `TestScriptMetadata` (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Tracking/logging name of this test.
         Type `str`. """
 
@@ -647,6 +661,7 @@ class TestScriptTest(backboneelement.BackboneElement):
         return '<TestScriptTest %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptTestAction(backboneelement.BackboneElement):
     """ A test operation or assert to perform.
 
@@ -655,11 +670,11 @@ class TestScriptTestAction(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptTestAction"
 
-    assert_fhir = Column()
+    assert_fhir = Column(TestScriptSetupActionAssert)
     """ The setup assertion to perform.
         Type `TestScriptSetupActionAssert` (represented as `dict` in JSON). """
 
-    operation = Column()
+    operation = Column(TestScriptSetupActionOperation)
     """ The setup operation to perform.
         Type `TestScriptSetupActionOperation` (represented as `dict` in JSON). """
 
@@ -673,6 +688,7 @@ class TestScriptTestAction(backboneelement.BackboneElement):
         return '<TestScriptTestAction %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class TestScriptVariable(backboneelement.BackboneElement):
     """ Placeholder for evaluated elements.
 
@@ -682,19 +698,19 @@ class TestScriptVariable(backboneelement.BackboneElement):
 
     __tablename__ = "TestScriptVariable"
 
-    headerField = Column()
+    headerField = Column(primitives.StringField)
     """ HTTP header field name for source.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Descriptive name for this variable.
         Type `str`. """
 
-    path = Column()
+    path = Column(primitives.StringField)
     """ XPath or JSONPath against the fixture body.
         Type `str`. """
 
-    sourceId = Column()
+    sourceId = Column(primitives.StringField)
     """ Fixture Id of source expression or headerField within this variable.
         Type `str`. """
 

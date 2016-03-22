@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class PaymentNotice(domainresource.DomainResource):
@@ -15,44 +16,44 @@ class PaymentNotice(domainresource.DomainResource):
     """
 
     __tablename__ = "PaymentNotice"
-
-    created = Column()
+    
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     identifier = Column(Identifier)
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    organization = Column()
+    
+    organization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    originalRuleset = Column()
+    
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    paymentStatus = Column()
+    
+    paymentStatus = Column(Coding)
     """ Status of the payment.
         Type `Coding` (represented as `dict` in JSON). """
-
-    provider = Column()
+    
+    provider = Column(FHIRReference)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    request = Column()
+    
+    request = Column(FHIRReference)
     """ Request reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    response = Column()
+    
+    response = Column(FHIRReference)
     """ Response reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    ruleset = Column()
+    
+    ruleset = Column(Coding)
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    target = Column()
+    
+    target = Column(FHIRReference)
     """ Insurer or Regulatory body.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 

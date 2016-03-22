@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Goal(domainresource.DomainResource):
@@ -22,7 +23,7 @@ class Goal(domainresource.DomainResource):
     """ Issues addressed by this goal.
         List of `FHIRReference` items referencing `Condition, Observation, MedicationStatement, NutritionOrder, ProcedureRequest, RiskAssessment` (represented as `dict` in JSON). """
 
-    author = Column()
+    author = Column(FHIRReference)
     """ Who's responsible for creating Goal?.
         Type `FHIRReference` referencing `Patient, Practitioner, RelatedPerson` (represented as `dict` in JSON). """
 
@@ -30,7 +31,7 @@ class Goal(domainresource.DomainResource):
     """ E.g. Treatment, dietary, behavioral, etc..
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ What's the desired outcome?.
         Type `str`. """
 
@@ -46,40 +47,40 @@ class Goal(domainresource.DomainResource):
     """ What was end result of goal?.
         List of `GoalOutcome` items (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(CodeableConcept)
     """ high | medium |low.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    startCodeableConcept = Column()
+    startCodeableConcept = Column(CodeableConcept)
     """ When goal pursuit begins.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    startDate = Column()
+    startDate = Column(FHIRDate)
     """ When goal pursuit begins.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | planned | accepted | rejected | in-progress | achieved |
         sustaining | on-hold | cancelled.
         Type `str`. """
 
-    statusDate = Column()
+    statusDate = Column(FHIRDate)
     """ When goal status took effect.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    statusReason = Column()
+    statusReason = Column(CodeableConcept)
     """ Reason for current status.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who this goal is intended for.
         Type `FHIRReference` referencing `Patient, Group, Organization` (represented as `dict` in JSON). """
 
-    targetDate = Column()
+    targetDate = Column(FHIRDate)
     """ Reach goal on or before.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    targetQuantity = Column()
+    targetQuantity = Column(Quantity)
     """ Reach goal on or before.
         Type `Quantity` referencing `Duration` (represented as `dict` in JSON). """
 
@@ -107,6 +108,7 @@ class Goal(domainresource.DomainResource):
         return '<Goal %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class GoalOutcome(backboneelement.BackboneElement):
@@ -118,11 +120,11 @@ class GoalOutcome(backboneelement.BackboneElement):
 
     __tablename__ = "GoalOutcome"
 
-    resultCodeableConcept = Column()
+    resultCodeableConcept = Column(CodeableConcept)
     """ Code or observation that resulted from goal.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    resultReference = Column()
+    resultReference = Column(FHIRReference)
     """ Code or observation that resulted from goal.
         Type `FHIRReference` referencing `Observation` (represented as `dict` in JSON). """
 

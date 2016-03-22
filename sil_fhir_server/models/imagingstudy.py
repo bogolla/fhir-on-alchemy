@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ImagingStudy(domainresource.DomainResource):
@@ -20,15 +21,15 @@ class ImagingStudy(domainresource.DomainResource):
 
     __tablename__ = "ImagingStudy"
 
-    accession = Column()
+    accession = Column(Identifier)
     """ Related workflow identifier ("Accession Number").
         Type `Identifier` (represented as `dict` in JSON). """
 
-    availability = Column()
+    availability = Column(primitives.StringField)
     """ ONLINE | OFFLINE | NEARLINE | UNAVAILABLE (0008,0056).
         Type `str`. """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Institution-generated description.
         Type `str`. """
 
@@ -36,7 +37,7 @@ class ImagingStudy(domainresource.DomainResource):
     """ Other identifiers for the study.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    interpreter = Column()
+    interpreter = Column(FHIRReference)
     """ Who interpreted images.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
@@ -44,11 +45,11 @@ class ImagingStudy(domainresource.DomainResource):
     """ All series modality if actual acquisition modalities.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    numberOfInstances = Column()
+    numberOfInstances = Column(Integer)
     """ Number of Study Related Instances.
         Type `int`. """
 
-    numberOfSeries = Column()
+    numberOfSeries = Column(Integer)
     """ Number of Study Related Series.
         Type `int`. """
 
@@ -56,7 +57,7 @@ class ImagingStudy(domainresource.DomainResource):
     """ Order(s) that caused this study to be performed.
         List of `FHIRReference` items referencing `DiagnosticOrder` (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who the images are of.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -64,7 +65,7 @@ class ImagingStudy(domainresource.DomainResource):
     """ Type of procedure performed.
         List of `FHIRReference` items referencing `Procedure` (represented as `dict` in JSON). """
 
-    referrer = Column()
+    referrer = Column(FHIRReference)
     """ Referring physician (0008,0090).
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
@@ -72,15 +73,15 @@ class ImagingStudy(domainresource.DomainResource):
     """ Each study has one or more series of instances.
         List of `ImagingStudySeries` items (represented as `dict` in JSON). """
 
-    started = Column()
+    started = Column(FHIRDate)
     """ When the study was started.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    uid = Column()
+    uid = Column(primitives.StringField)
     """ Formal identifier for the study.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Retrieve URI.
         Type `str`. """
 
@@ -108,6 +109,7 @@ class ImagingStudy(domainresource.DomainResource):
         return '<ImagingStudy %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ImagingStudySeries(backboneelement.BackboneElement):
@@ -118,15 +120,15 @@ class ImagingStudySeries(backboneelement.BackboneElement):
 
     __tablename__ = "ImagingStudySeries"
 
-    availability = Column()
+    availability = Column(primitives.StringField)
     """ ONLINE | OFFLINE | NEARLINE | UNAVAILABLE.
         Type `str`. """
 
-    bodySite = Column()
+    bodySite = Column(Coding)
     """ Body part examined.
         Type `Coding` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ A description of the series.
         Type `str`. """
 
@@ -134,31 +136,31 @@ class ImagingStudySeries(backboneelement.BackboneElement):
     """ A single SOP instance from the series.
         List of `ImagingStudySeriesInstance` items (represented as `dict` in JSON). """
 
-    laterality = Column()
+    laterality = Column(Coding)
     """ Body part laterality.
         Type `Coding` (represented as `dict` in JSON). """
 
-    modality = Column()
+    modality = Column(Coding)
     """ The modality of the instances in the series.
         Type `Coding` (represented as `dict` in JSON). """
 
-    number = Column()
+    number = Column(Integer)
     """ Numeric identifier of this series.
         Type `int`. """
 
-    numberOfInstances = Column()
+    numberOfInstances = Column(Integer)
     """ Number of Series Related Instances.
         Type `int`. """
 
-    started = Column()
+    started = Column(FHIRDate)
     """ When the series started.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    uid = Column()
+    uid = Column(primitives.StringField)
     """ Formal identifier for this series.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Location of the referenced instance(s).
         Type `str`. """
 
@@ -181,6 +183,7 @@ class ImagingStudySeries(backboneelement.BackboneElement):
         return '<ImagingStudySeries %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImagingStudySeriesInstance(backboneelement.BackboneElement):
     """ A single SOP instance from the series.
 
@@ -194,23 +197,23 @@ class ImagingStudySeriesInstance(backboneelement.BackboneElement):
     """ Content of the instance.
         List of `Attachment` items (represented as `dict` in JSON). """
 
-    number = Column()
+    number = Column(Integer)
     """ The number of this instance in the series.
         Type `int`. """
 
-    sopClass = Column()
+    sopClass = Column(primitives.StringField)
     """ DICOM class type.
         Type `str`. """
 
-    title = Column()
+    title = Column(primitives.StringField)
     """ Description of instance.
         Type `str`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ Type of instance (image etc.).
         Type `str`. """
 
-    uid = Column()
+    uid = Column(primitives.StringField)
     """ Formal identifier for this instance.
         Type `str`. """
 

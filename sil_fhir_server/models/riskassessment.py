@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class RiskAssessment(domainresource.DomainResource):
@@ -20,31 +21,31 @@ class RiskAssessment(domainresource.DomainResource):
     """ Information used in assessment.
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
 
-    condition = Column()
+    condition = Column(FHIRReference)
     """ Condition assessed.
         Type `FHIRReference` referencing `Condition` (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When was assessment made?.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Where was assessment performed?.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Unique identifier for the assessment.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    method = Column()
+    method = Column(CodeableConcept)
     """ Evaluation mechanism.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    mitigation = Column()
+    mitigation = Column(primitives.StringField)
     """ How to reduce risk.
         Type `str`. """
 
-    performer = Column()
+    performer = Column(FHIRReference)
     """ Who did assessment?.
         Type `FHIRReference` referencing `Practitioner, Device` (represented as `dict` in JSON). """
 
@@ -52,7 +53,7 @@ class RiskAssessment(domainresource.DomainResource):
     """ Outcome predicted.
         List of `RiskAssessmentPrediction` items (represented as `dict` in JSON). """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who/what does assessment apply to?.
         Type `FHIRReference` referencing `Patient, Group` (represented as `dict` in JSON). """
 
@@ -74,6 +75,7 @@ class RiskAssessment(domainresource.DomainResource):
         return '<RiskAssessment %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class RiskAssessmentPrediction(backboneelement.BackboneElement):
@@ -84,35 +86,35 @@ class RiskAssessmentPrediction(backboneelement.BackboneElement):
 
     __tablename__ = "RiskAssessmentPrediction"
 
-    outcome = Column()
+    outcome = Column(CodeableConcept)
     """ Possible outcome for the subject.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    probabilityCodeableConcept = Column()
+    probabilityCodeableConcept = Column(CodeableConcept)
     """ Likelihood of specified outcome.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    probabilityDecimal = Column()
+    probabilityDecimal = Column(float)
     """ Likelihood of specified outcome.
         Type `float`. """
 
-    probabilityRange = Column()
+    probabilityRange = Column(Range)
     """ Likelihood of specified outcome.
         Type `Range` (represented as `dict` in JSON). """
 
-    rationale = Column()
+    rationale = Column(primitives.StringField)
     """ Explanation of prediction.
         Type `str`. """
 
-    relativeRisk = Column()
+    relativeRisk = Column(float)
     """ Relative likelihood.
         Type `float`. """
 
-    whenPeriod = Column()
+    whenPeriod = Column(Period)
     """ Timeframe or age range.
         Type `Period` (represented as `dict` in JSON). """
 
-    whenRange = Column()
+    whenRange = Column(Range)
     """ Timeframe or age range.
         Type `Range` (represented as `dict` in JSON). """
 

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Person(domainresource.DomainResource):
@@ -16,7 +17,7 @@ class Person(domainresource.DomainResource):
 
     __tablename__ = "Person"
 
-    active = Column()
+    active = Column(bool)
     """ This person's record is in active use.
         Type `bool`. """
 
@@ -24,11 +25,11 @@ class Person(domainresource.DomainResource):
     """ One or more addresses for the person.
         List of `Address` items (represented as `dict` in JSON). """
 
-    birthDate = Column()
+    birthDate = Column(FHIRDate)
     """ The date on which the person was born.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    gender = Column()
+    gender = Column(primitives.StringField)
     """ male | female | other | unknown.
         Type `str`. """
 
@@ -40,7 +41,7 @@ class Person(domainresource.DomainResource):
     """ Link to a resource that concerns the same actual person.
         List of `PersonLink` items (represented as `dict` in JSON). """
 
-    managingOrganization = Column()
+    managingOrganization = Column(FHIRReference)
     """ The organization that is the custodian of the person record.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
@@ -48,7 +49,7 @@ class Person(domainresource.DomainResource):
     """ A name associated with the person.
         List of `HumanName` items (represented as `dict` in JSON). """
 
-    photo = Column()
+    photo = Column(Attachment)
     """ Image of the person.
         Type `Attachment` (represented as `dict` in JSON). """
 
@@ -74,6 +75,7 @@ class Person(domainresource.DomainResource):
         return '<Person %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class PersonLink(backboneelement.BackboneElement):
@@ -82,11 +84,11 @@ class PersonLink(backboneelement.BackboneElement):
 
     __tablename__ = "PersonLink"
 
-    assurance = Column()
+    assurance = Column(primitives.StringField)
     """ level1 | level2 | level3 | level4.
         Type `str`. """
 
-    target = Column()
+    target = Column(FHIRReference)
     """ The resource to which this actual person is associated.
         Type `FHIRReference` referencing `Patient, Practitioner, RelatedPerson, Person` (represented as `dict` in JSON). """
 

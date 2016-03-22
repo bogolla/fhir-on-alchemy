@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class OperationOutcome(domainresource.DomainResource):
@@ -29,6 +30,7 @@ class OperationOutcome(domainresource.DomainResource):
         return '<OperationOutcome %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class OperationOutcomeIssue(backboneelement.BackboneElement):
@@ -39,23 +41,23 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
 
     __tablename__ = "OperationOutcomeIssue"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ Error or warning code.
         Type `str`. """
 
-    details = Column()
+    details = Column(CodeableConcept)
     """ Additional details about the error.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    diagnostics = Column()
+    diagnostics = Column(primitives.StringField)
     """ Additional diagnostic information about the issue.
         Type `str`. """
 
-    location = Column(str)
+    location = Column(primitives.StringField)
     """ XPath of element(s) related to issue.
         List of `str` items. """
 
-    severity = Column()
+    severity = Column(primitives.StringField)
     """ fatal | error | warning | information.
         Type `str`. """
 

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Slot(domainresource.DomainResource):
@@ -13,16 +14,16 @@ class Slot(domainresource.DomainResource):
 
     __tablename__ = "Slot"
 
-    comment = Column()
+    comment = Column(primitives.StringField)
     """ Comments on the slot to describe any extended information. Such as
         custom constraints on the slot.
         Type `str`. """
 
-    end = Column()
+    end = Column(FHIRDate)
     """ Date/Time that the slot is to conclude.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    freeBusyType = Column()
+    freeBusyType = Column(primitives.StringField)
     """ busy | free | busy-unavailable | busy-tentative.
         Type `str`. """
 
@@ -30,21 +31,21 @@ class Slot(domainresource.DomainResource):
     """ External Ids for this item.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    overbooked = Column()
+    overbooked = Column(bool)
     """ This slot has already been overbooked, appointments are unlikely to
         be accepted for this time.
         Type `bool`. """
 
-    schedule = Column()
+    schedule = Column(FHIRReference)
     """ The schedule resource that this slot defines an interval of status
         information.
         Type `FHIRReference` referencing `Schedule` (represented as `dict` in JSON). """
 
-    start = Column()
+    start = Column(FHIRDate)
     """ Date/Time that the slot is to begin.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ The type of appointments that can be booked into this slot (ideally
         this would be an identifiable service - which is at a location,
         rather than the location itself). If provided then this overrides

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Provenance(domainresource.DomainResource):
@@ -24,7 +25,7 @@ class Provenance(domainresource.DomainResource):
 
     __tablename__ = "Provenance"
 
-    activity = Column()
+    activity = Column(CodeableConcept)
     """ Activity that occurred.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -36,15 +37,15 @@ class Provenance(domainresource.DomainResource):
     """ An entity used in this activity.
         List of `ProvenanceEntity` items (represented as `dict` in JSON). """
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Where the activity occurred, if relevant.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ When the activity occurred.
         Type `Period` (represented as `dict` in JSON). """
 
-    policy = Column(str)
+    policy = Column(primitives.StringField)
     """ Policy or plan the activity was defined by.
         List of `str` items. """
 
@@ -52,7 +53,7 @@ class Provenance(domainresource.DomainResource):
     """ Reason the activity is occurring.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    recorded = Column()
+    recorded = Column(FHIRDate)
     """ When the activity was recorded / updated.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -82,6 +83,7 @@ class Provenance(domainresource.DomainResource):
         return '<Provenance %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ProvenanceAgent(backboneelement.BackboneElement):
@@ -95,7 +97,7 @@ class ProvenanceAgent(backboneelement.BackboneElement):
 
     __tablename__ = "ProvenanceAgent"
 
-    actor = Column()
+    actor = Column(FHIRReference)
     """ Individual, device or organization playing role.
         Type `FHIRReference` referencing `Practitioner, RelatedPerson, Patient, Device, Organization` (represented as `dict` in JSON). """
 
@@ -103,11 +105,11 @@ class ProvenanceAgent(backboneelement.BackboneElement):
     """ Track delegation between agents.
         List of `ProvenanceAgentRelatedAgent` items (represented as `dict` in JSON). """
 
-    role = Column()
+    role = Column(Coding)
     """ What the agents involvement was.
         Type `Coding` (represented as `dict` in JSON). """
 
-    userId = Column()
+    userId = Column(Identifier)
     """ Authorization-system identifier for the agent.
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -123,6 +125,7 @@ class ProvenanceAgent(backboneelement.BackboneElement):
         return '<ProvenanceAgent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ProvenanceAgentRelatedAgent(backboneelement.BackboneElement):
     """ Track delegation between agents.
 
@@ -134,11 +137,11 @@ class ProvenanceAgentRelatedAgent(backboneelement.BackboneElement):
 
     __tablename__ = "ProvenanceAgentRelatedAgent"
 
-    target = Column()
+    target = Column(primitives.StringField)
     """ Reference to other agent in this resource by identifier.
         Type `str`. """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Type of relationship between agents.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -152,29 +155,30 @@ class ProvenanceAgentRelatedAgent(backboneelement.BackboneElement):
         return '<ProvenanceAgentRelatedAgent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ProvenanceEntity(backboneelement.BackboneElement):
     """ An entity used in this activity.
     """
 
     __tablename__ = "ProvenanceEntity"
 
-    agent = Column()
+    agent = Column(ProvenanceAgent)
     """ Entity is attributed to this agent.
         Type `ProvenanceAgent` (represented as `dict` in JSON). """
 
-    display = Column()
+    display = Column(primitives.StringField)
     """ Human description of entity.
         Type `str`. """
 
-    reference = Column()
+    reference = Column(primitives.StringField)
     """ Identity of entity.
         Type `str`. """
 
-    role = Column()
+    role = Column(primitives.StringField)
     """ derivation | revision | quotation | source.
         Type `str`. """
 
-    type = Column()
+    type = Column(Coding)
     """ The type of resource in this entity.
         Type `Coding` (represented as `dict` in JSON). """
 

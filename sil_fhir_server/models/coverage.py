@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Coverage(domainresource.DomainResource):
@@ -16,7 +17,7 @@ class Coverage(domainresource.DomainResource):
 
     __tablename__ = "Coverage"
 
-    bin = Column()
+    bin = Column(Identifier)
     """ BIN Number.
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -24,11 +25,11 @@ class Coverage(domainresource.DomainResource):
     """ Contract details.
         List of `FHIRReference` items referencing `Contract` (represented as `dict` in JSON). """
 
-    dependent = Column()
+    dependent = Column(Integer)
     """ The dependent number.
         Type `int`. """
 
-    group = Column()
+    group = Column(primitives.StringField)
     """ An identifier for the group.
         Type `str`. """
 
@@ -36,39 +37,39 @@ class Coverage(domainresource.DomainResource):
     """ The primary coverage ID.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    issuer = Column()
+    issuer = Column(FHIRReference)
     """ An identifier for the plan issuer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    network = Column()
+    network = Column(Identifier)
     """ Insurer network.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Coverage start and end dates.
         Type `Period` (represented as `dict` in JSON). """
 
-    plan = Column()
+    plan = Column(primitives.StringField)
     """ An identifier for the plan.
         Type `str`. """
 
-    sequence = Column()
+    sequence = Column(Integer)
     """ The plan instance or sequence counter.
         Type `int`. """
 
-    subPlan = Column()
+    subPlan = Column(primitives.StringField)
     """ An identifier for the subsection of the plan.
         Type `str`. """
 
-    subscriber = Column()
+    subscriber = Column(FHIRReference)
     """ Plan holder information.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    subscriberId = Column()
+    subscriberId = Column(Identifier)
     """ Subscriber ID.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Type of coverage.
         Type `Coding` (represented as `dict` in JSON). """
 

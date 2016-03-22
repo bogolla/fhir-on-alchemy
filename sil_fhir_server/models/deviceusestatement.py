@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DeviceUseStatement(domainresource.DomainResource):
@@ -16,15 +17,15 @@ class DeviceUseStatement(domainresource.DomainResource):
 
     __tablename__ = "DeviceUseStatement"
 
-    bodySiteCodeableConcept = Column()
+    bodySiteCodeableConcept = Column(CodeableConcept)
     """ Target body site.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    bodySiteReference = Column()
+    bodySiteReference = Column(FHIRReference)
     """ Target body site.
         Type `FHIRReference` referencing `BodySite` (represented as `dict` in JSON). """
 
-    device = Column()
+    device = Column(FHIRReference)
     """ None.
         Type `FHIRReference` referencing `Device` (represented as `dict` in JSON). """
 
@@ -36,31 +37,31 @@ class DeviceUseStatement(domainresource.DomainResource):
     """ None.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    notes = Column(str)
+    notes = Column(primitives.StringField)
     """ None.
         List of `str` items. """
 
-    recordedOn = Column()
+    recordedOn = Column(FHIRDate)
     """ None.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ None.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    timingDateTime = Column()
+    timingDateTime = Column(FHIRDate)
     """ None.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    timingPeriod = Column()
+    timingPeriod = Column(Period)
     """ None.
         Type `Period` (represented as `dict` in JSON). """
 
-    timingTiming = Column()
+    timingTiming = Column(Timing)
     """ None.
         Type `Timing` (represented as `dict` in JSON). """
 
-    whenUsed = Column()
+    whenUsed = Column(Period)
     """ None.
         Type `Period` (represented as `dict` in JSON). """
 

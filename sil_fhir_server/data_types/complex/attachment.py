@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Attachment)
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Attachment)
 #  Date: 2016-03-18.
 
 
-from . import element
+from sqlalchemy import Column
+from sil_fhir_server.data_types import primitives
+from . import complex_dt
 
-class Attachment(element.Element):
+
+class Attachment(complex_dt.ComplexElement):
     """ Content in a format defined elsewhere.
 
     For referring to data content defined in other formats.
@@ -15,41 +18,41 @@ class Attachment(element.Element):
 
     __tablename__ = "Attachment"
 
-    contentType = Column()
+    contentType = Column(primitives.StringField)
     """ Mime type of the content, with charset etc..
         Type `str`. """
 
-    creation = Column()
+    creation = Column(primitives.DateTimeField)
     """ Date attachment was first created.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    data = Column()
+    data = Column(primitives.StringField)
     """ Data inline, base64ed.
         Type `str`. """
 
-    hash = Column()
+    hash = Column(primitives.StringField)
     """ Hash of the data (sha-1, base64ed).
         Type `str`. """
 
-    language = Column()
+    language = Column(primitives.StringField)
     """ Human language of the content (BCP-47).
         Type `str`. """
 
-    size = Column()
+    size = Column(primitives.IntegerField)
     """ Number of bytes of content (if url provided).
         Type `int`. """
 
-    title = Column()
+    title = Column(primitives.StringField)
     """ Label to display in place of the data.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Uri where the data can be found.
         Type `str`. """
 
-    def __init__(self, contentType, creation, data, hash, language, size, title, url,):
-        """ Initialize all valid properties.
-        """
+    def __init__(self, contentType, creation, data, hash, language,
+                 size, title, url):
+        """ Initialize all valid properties. """
         self.contentType = contentType
         self.creation = creation
         self.data = data
@@ -60,7 +63,4 @@ class Attachment(element.Element):
         self.url = url
 
     def __repr__(self):
-        return '<Attachment %r>' % 'self.property'  # replace self.property
-
-
-from . import fhirdate
+        return '<Attachment %r>' % self.title

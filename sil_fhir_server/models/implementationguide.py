@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ImplementationGuide(domainresource.DomainResource):
@@ -17,7 +18,7 @@ class ImplementationGuide(domainresource.DomainResource):
 
     __tablename__ = "ImplementationGuide"
 
-    binary = Column(str)
+    binary = Column(primitives.StringField)
     """ Image, css, script, etc..
         List of `str` items. """
 
@@ -25,11 +26,11 @@ class ImplementationGuide(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `ImplementationGuideContact` items (represented as `dict` in JSON). """
 
-    copyright = Column()
+    copyright = Column(primitives.StringField)
     """ Use and/or publishing restrictions.
         Type `str`. """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date for this version of the Implementation Guide.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -37,15 +38,15 @@ class ImplementationGuide(domainresource.DomainResource):
     """ Another Implementation guide this depends on.
         List of `ImplementationGuideDependency` items (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Natural language description of the Implementation Guide.
         Type `str`. """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
-    fhirVersion = Column()
+    fhirVersion = Column(primitives.StringField)
     """ FHIR Version this Implementation Guide targets.
         Type `str`. """
 
@@ -53,7 +54,7 @@ class ImplementationGuide(domainresource.DomainResource):
     """ Profiles that apply globally.
         List of `ImplementationGuideGlobal` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Informal name for this Implementation Guide.
         Type `str`. """
 
@@ -61,19 +62,19 @@ class ImplementationGuide(domainresource.DomainResource):
     """ Group of resources as used in .page.package.
         List of `ImplementationGuidePackage` items (represented as `dict` in JSON). """
 
-    page = Column()
+    page = Column(ImplementationGuidePage)
     """ Page/Section in the Guide.
         Type `ImplementationGuidePage` (represented as `dict` in JSON). """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Absolute URL used to reference this Implementation Guide.
         Type `str`. """
 
@@ -81,7 +82,7 @@ class ImplementationGuide(domainresource.DomainResource):
     """ The implementation guide is intended to support these contexts.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical id for this version of the Implementation Guide.
         Type `str`. """
 
@@ -110,6 +111,7 @@ class ImplementationGuide(domainresource.DomainResource):
         return '<ImplementationGuide %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ImplementationGuideContact(backboneelement.BackboneElement):
@@ -120,7 +122,7 @@ class ImplementationGuideContact(backboneelement.BackboneElement):
 
     __tablename__ = "ImplementationGuideContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -138,6 +140,7 @@ class ImplementationGuideContact(backboneelement.BackboneElement):
         return '<ImplementationGuideContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImplementationGuideDependency(backboneelement.BackboneElement):
     """ Another Implementation guide this depends on.
 
@@ -148,11 +151,11 @@ class ImplementationGuideDependency(backboneelement.BackboneElement):
 
     __tablename__ = "ImplementationGuideDependency"
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ reference | inclusion.
         Type `str`. """
 
-    uri = Column()
+    uri = Column(primitives.StringField)
     """ Where to find dependency.
         Type `str`. """
 
@@ -166,6 +169,7 @@ class ImplementationGuideDependency(backboneelement.BackboneElement):
         return '<ImplementationGuideDependency %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImplementationGuideGlobal(backboneelement.BackboneElement):
     """ Profiles that apply globally.
 
@@ -175,11 +179,11 @@ class ImplementationGuideGlobal(backboneelement.BackboneElement):
 
     __tablename__ = "ImplementationGuideGlobal"
 
-    profile = Column()
+    profile = Column(FHIRReference)
     """ Profile that all resources must conform to.
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ Type this profiles applies to.
         Type `str`. """
 
@@ -193,6 +197,7 @@ class ImplementationGuideGlobal(backboneelement.BackboneElement):
         return '<ImplementationGuideGlobal %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImplementationGuidePackage(backboneelement.BackboneElement):
     """ Group of resources as used in .page.package.
 
@@ -202,11 +207,11 @@ class ImplementationGuidePackage(backboneelement.BackboneElement):
 
     __tablename__ = "ImplementationGuidePackage"
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Human readable text describing the package.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name used .page.package.
         Type `str`. """
 
@@ -225,6 +230,7 @@ class ImplementationGuidePackage(backboneelement.BackboneElement):
         return '<ImplementationGuidePackage %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImplementationGuidePackageResource(backboneelement.BackboneElement):
     """ Resource in the implementation guide.
 
@@ -236,31 +242,31 @@ class ImplementationGuidePackageResource(backboneelement.BackboneElement):
 
     __tablename__ = "ImplementationGuidePackageResource"
 
-    acronym = Column()
+    acronym = Column(primitives.StringField)
     """ Short code to identify the resource.
         Type `str`. """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Reason why included in guide.
         Type `str`. """
 
-    exampleFor = Column()
+    exampleFor = Column(FHIRReference)
     """ Resource this is an example of (if applicable).
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Human Name for the resource.
         Type `str`. """
 
-    purpose = Column()
+    purpose = Column(primitives.StringField)
     """ example | terminology | profile | extension | dictionary | logical.
         Type `str`. """
 
-    sourceReference = Column()
+    sourceReference = Column(FHIRReference)
     """ Location of the resource.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    sourceUri = Column()
+    sourceUri = Column(primitives.StringField)
     """ Location of the resource.
         Type `str`. """
 
@@ -279,6 +285,7 @@ class ImplementationGuidePackageResource(backboneelement.BackboneElement):
         return '<ImplementationGuidePackageResource %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImplementationGuidePage(backboneelement.BackboneElement):
     """ Page/Section in the Guide.
 
@@ -288,20 +295,20 @@ class ImplementationGuidePage(backboneelement.BackboneElement):
 
     __tablename__ = "ImplementationGuidePage"
 
-    format = Column()
+    format = Column(primitives.StringField)
     """ Format of the page (e.g. html, markdown, etc.).
         Type `str`. """
 
-    kind = Column()
+    kind = Column(primitives.StringField)
     """ page | example | list | include | directory | dictionary | toc |
         resource.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Short name shown for navigational assistance.
         Type `str`. """
 
-    package = Column(str)
+    package = Column(primitives.StringField)
     """ Name of package to include.
         List of `str` items. """
 
@@ -309,11 +316,11 @@ class ImplementationGuidePage(backboneelement.BackboneElement):
     """ Nested Pages / Sections.
         List of `ImplementationGuidePage` items (represented as `dict` in JSON). """
 
-    source = Column()
+    source = Column(primitives.StringField)
     """ Where to find that page.
         Type `str`. """
 
-    type = Column(str)
+    type = Column(primitives.StringField)
     """ Kind of resource to include in the list.
         List of `str` items. """
 

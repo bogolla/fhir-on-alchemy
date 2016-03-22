@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class NutritionOrder(domainresource.DomainResource):
@@ -21,15 +22,15 @@ class NutritionOrder(domainresource.DomainResource):
         intolerances.
         List of `FHIRReference` items referencing `AllergyIntolerance` (represented as `dict` in JSON). """
 
-    dateTime = Column()
+    dateTime = Column(FHIRDate)
     """ Date and time the nutrition order was requested.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ The encounter associated with this nutrition order.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
-    enteralFormula = Column()
+    enteralFormula = Column(NutritionOrderEnteralFormula)
     """ Enteral formula components.
         Type `NutritionOrderEnteralFormula` (represented as `dict` in JSON). """
 
@@ -46,19 +47,19 @@ class NutritionOrder(domainresource.DomainResource):
     """ Identifiers assigned to this order.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    oralDiet = Column()
+    oralDiet = Column(NutritionOrderOralDiet)
     """ Oral diet components.
         Type `NutritionOrderOralDiet` (represented as `dict` in JSON). """
 
-    orderer = Column()
+    orderer = Column(FHIRReference)
     """ Who ordered the diet, formula or nutritional supplement.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ The person who requires the diet, formula or nutritional supplement.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | draft | planned | requested | active | on-hold |
         completed | cancelled.
         Type `str`. """
@@ -87,6 +88,7 @@ class NutritionOrder(domainresource.DomainResource):
         return '<NutritionOrder %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class NutritionOrderEnteralFormula(backboneelement.BackboneElement):
@@ -98,11 +100,11 @@ class NutritionOrderEnteralFormula(backboneelement.BackboneElement):
 
     __tablename__ = "NutritionOrderEnteralFormula"
 
-    additiveProductName = Column()
+    additiveProductName = Column(primitives.StringField)
     """ Product or brand name of the modular additive.
         Type `str`. """
 
-    additiveType = Column()
+    additiveType = Column(CodeableConcept)
     """ Type of modular component to add to the feeding.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -110,27 +112,27 @@ class NutritionOrderEnteralFormula(backboneelement.BackboneElement):
     """ Formula feeding instruction as structured data.
         List of `NutritionOrderEnteralFormulaAdministration` items (represented as `dict` in JSON). """
 
-    administrationInstruction = Column()
+    administrationInstruction = Column(primitives.StringField)
     """ Formula feeding instructions expressed as text.
         Type `str`. """
 
-    baseFormulaProductName = Column()
+    baseFormulaProductName = Column(primitives.StringField)
     """ Product or brand name of the enteral or infant formula.
         Type `str`. """
 
-    baseFormulaType = Column()
+    baseFormulaType = Column(CodeableConcept)
     """ Type of enteral or infant formula.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    caloricDensity = Column()
+    caloricDensity = Column(Quantity)
     """ Amount of energy per specified volume that is required.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    maxVolumeToDeliver = Column()
+    maxVolumeToDeliver = Column(Quantity)
     """ Upper limit on formula volume per unit of time.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    routeofAdministration = Column()
+    routeofAdministration = Column(CodeableConcept)
     """ How the formula should enter the patient's gastrointestinal tract.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -151,6 +153,7 @@ class NutritionOrderEnteralFormula(backboneelement.BackboneElement):
         return '<NutritionOrderEnteralFormula %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class NutritionOrderEnteralFormulaAdministration(backboneelement.BackboneElement):
     """ Formula feeding instruction as structured data.
 
@@ -162,19 +165,19 @@ class NutritionOrderEnteralFormulaAdministration(backboneelement.BackboneElement
 
     __tablename__ = "NutritionOrderEnteralFormulaAdministration"
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ The volume of formula to provide.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    rateQuantity = Column()
+    rateQuantity = Column(Quantity)
     """ Speed with which the formula is provided per period of time.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    rateRatio = Column()
+    rateRatio = Column(Ratio)
     """ Speed with which the formula is provided per period of time.
         Type `Ratio` (represented as `dict` in JSON). """
 
-    schedule = Column()
+    schedule = Column(Timing)
     """ Scheduled frequency of enteral feeding.
         Type `Timing` (represented as `dict` in JSON). """
 
@@ -190,6 +193,7 @@ class NutritionOrderEnteralFormulaAdministration(backboneelement.BackboneElement
         return '<NutritionOrderEnteralFormulaAdministration %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class NutritionOrderOralDiet(backboneelement.BackboneElement):
     """ Oral diet components.
 
@@ -203,7 +207,7 @@ class NutritionOrderOralDiet(backboneelement.BackboneElement):
         patient.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    instruction = Column()
+    instruction = Column(primitives.StringField)
     """ Instructions or additional information about the oral diet.
         Type `str`. """
 
@@ -238,6 +242,7 @@ class NutritionOrderOralDiet(backboneelement.BackboneElement):
         return '<NutritionOrderOralDiet %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class NutritionOrderOralDietNutrient(backboneelement.BackboneElement):
     """ Required  nutrient modifications.
 
@@ -247,11 +252,11 @@ class NutritionOrderOralDietNutrient(backboneelement.BackboneElement):
 
     __tablename__ = "NutritionOrderOralDietNutrient"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Quantity of the specified nutrient.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    modifier = Column()
+    modifier = Column(CodeableConcept)
     """ Type of nutrient that is being modified.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -265,6 +270,7 @@ class NutritionOrderOralDietNutrient(backboneelement.BackboneElement):
         return '<NutritionOrderOralDietNutrient %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class NutritionOrderOralDietTexture(backboneelement.BackboneElement):
     """ Required  texture modifications.
 
@@ -274,12 +280,12 @@ class NutritionOrderOralDietTexture(backboneelement.BackboneElement):
 
     __tablename__ = "NutritionOrderOralDietTexture"
 
-    foodType = Column()
+    foodType = Column(CodeableConcept)
     """ Concepts that are used to identify an entity that is ingested for
         nutritional purposes.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    modifier = Column()
+    modifier = Column(CodeableConcept)
     """ Code to indicate how to alter the texture of the foods, e.g. pureed.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -293,6 +299,7 @@ class NutritionOrderOralDietTexture(backboneelement.BackboneElement):
         return '<NutritionOrderOralDietTexture %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class NutritionOrderSupplement(backboneelement.BackboneElement):
     """ Supplement components.
 
@@ -302,15 +309,15 @@ class NutritionOrderSupplement(backboneelement.BackboneElement):
 
     __tablename__ = "NutritionOrderSupplement"
 
-    instruction = Column()
+    instruction = Column(primitives.StringField)
     """ Instructions or additional information about the oral supplement.
         Type `str`. """
 
-    productName = Column()
+    productName = Column(primitives.StringField)
     """ Product or brand name of the nutritional supplement.
         Type `str`. """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Amount of the nutritional supplement.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
@@ -318,7 +325,7 @@ class NutritionOrderSupplement(backboneelement.BackboneElement):
     """ Scheduled frequency of supplement.
         List of `Timing` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Type of supplement product requested.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

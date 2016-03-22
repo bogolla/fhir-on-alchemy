@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ValueSet(domainresource.DomainResource):
@@ -15,11 +16,11 @@ class ValueSet(domainresource.DomainResource):
 
     __tablename__ = "ValueSet"
 
-    codeSystem = Column()
+    codeSystem = Column(ValueSetCodeSystem)
     """ An inline code system, which is part of this value set.
         Type `ValueSetCodeSystem` (represented as `dict` in JSON). """
 
-    compose = Column()
+    compose = Column(ValueSetCompose)
     """ When value set includes codes from elsewhere.
         Type `ValueSetCompose` (represented as `dict` in JSON). """
 
@@ -27,60 +28,60 @@ class ValueSet(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `ValueSetContact` items (represented as `dict` in JSON). """
 
-    copyright = Column()
+    copyright = Column(primitives.StringFieldField)
     """ Use and/or publishing restrictions.
         Type `str`. """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date for given status.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringFieldField)
     """ Human language description of the value set.
         Type `str`. """
 
-    expansion = Column()
+    expansion = Column(ValueSetExpansion)
     """ Used when the value set is "expanded".
         Type `ValueSetExpansion` (represented as `dict` in JSON). """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
-    extensible = Column()
+    extensible = Column(bool)
     """ Whether this is intended to be used with an extensible binding.
         Type `bool`. """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Additional identifier for the value set (e.g. HL7 v2 / CDA).
         Type `Identifier` (represented as `dict` in JSON). """
 
-    immutable = Column()
+    immutable = Column(bool)
     """ Indicates whether or not any change to the content logical
         definition may occur.
         Type `bool`. """
 
-    lockedDate = Column()
+    lockedDate = Column(FHIRDate)
     """ Fixed date for all referenced code systems and value sets.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringFieldField)
     """ Informal name for this value set.
         Type `str`. """
 
-    publisher = Column()
+    publisher = Column(primitives.StringFieldField)
     """ Name of the publisher (organization or individual).
         Type `str`. """
 
-    requirements = Column()
+    requirements = Column(primitives.StringFieldField)
     """ Why needed.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringFieldField)
     """ draft | active | retired.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringFieldField)
     """ Globally unique logical identifier for  value set.
         Type `str`. """
 
@@ -88,7 +89,7 @@ class ValueSet(domainresource.DomainResource):
     """ Content intends to support these contexts.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringFieldField)
     """ Logical identifier for this version of the value set.
         Type `str`. """
 
@@ -119,6 +120,7 @@ class ValueSet(domainresource.DomainResource):
         return '<ValueSet %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ValueSetCodeSystem(backboneelement.BackboneElement):
@@ -131,7 +133,7 @@ class ValueSetCodeSystem(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetCodeSystem"
 
-    caseSensitive = Column()
+    caseSensitive = Column(bool)
     """ If code comparison is case sensitive.
         Type `bool`. """
 
@@ -139,11 +141,11 @@ class ValueSetCodeSystem(backboneelement.BackboneElement):
     """ Concepts in the code system.
         List of `ValueSetCodeSystemConcept` items (represented as `dict` in JSON). """
 
-    system = Column()
+    system = Column(primitives.StringFieldField)
     """ URI to identify the code system (e.g. in Coding.system).
         Type `str`. """
 
-    version = Column()
+    version = Column(primitives.StringFieldField)
     """ Version (for use in Coding.version).
         Type `str`. """
 
@@ -159,6 +161,7 @@ class ValueSetCodeSystem(backboneelement.BackboneElement):
         return '<ValueSetCodeSystem %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetCodeSystemConcept(backboneelement.BackboneElement):
     """ Concepts in the code system.
 
@@ -169,11 +172,11 @@ class ValueSetCodeSystemConcept(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetCodeSystemConcept"
 
-    abstract = Column()
+    abstract = Column(bool)
     """ If this code is not for use as a real concept.
         Type `bool`. """
 
-    code = Column()
+    code = Column(primitives.StringFieldField)
     """ Code that identifies concept.
         Type `str`. """
 
@@ -181,7 +184,7 @@ class ValueSetCodeSystemConcept(backboneelement.BackboneElement):
     """ Child Concepts (is-a/contains/categorizes).
         List of `ValueSetCodeSystemConcept` items (represented as `dict` in JSON). """
 
-    definition = Column()
+    definition = Column(primitives.StringFieldField)
     """ Formal definition.
         Type `str`. """
 
@@ -189,7 +192,7 @@ class ValueSetCodeSystemConcept(backboneelement.BackboneElement):
     """ Additional representations for the concept.
         List of `ValueSetCodeSystemConceptDesignation` items (represented as `dict` in JSON). """
 
-    display = Column()
+    display = Column(primitives.StringFieldField)
     """ Text to display to the user.
         Type `str`. """
 
@@ -207,6 +210,7 @@ class ValueSetCodeSystemConcept(backboneelement.BackboneElement):
         return '<ValueSetCodeSystemConcept %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetCodeSystemConceptDesignation(backboneelement.BackboneElement):
     """ Additional representations for the concept.
 
@@ -216,15 +220,15 @@ class ValueSetCodeSystemConceptDesignation(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetCodeSystemConceptDesignation"
 
-    language = Column()
+    language = Column(primitives.StringFieldField)
     """ Human language of the designation.
         Type `str`. """
 
-    use = Column()
+    use = Column(Coding)
     """ Details how this designation would be used.
         Type `Coding` (represented as `dict` in JSON). """
 
-    value = Column()
+    value = Column(primitives.StringFieldField)
     """ The text value for this designation.
         Type `str`. """
 
@@ -239,6 +243,7 @@ class ValueSetCodeSystemConceptDesignation(backboneelement.BackboneElement):
         return '<ValueSetCodeSystemConceptDesignation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetCompose(backboneelement.BackboneElement):
     """ When value set includes codes from elsewhere.
 
@@ -252,7 +257,7 @@ class ValueSetCompose(backboneelement.BackboneElement):
     """ Explicitly exclude codes.
         List of `ValueSetComposeInclude` items (represented as `dict` in JSON). """
 
-    import_fhir = Column(str)
+    import_fhir = Column(primitives.StringFieldField)
     """ Import the contents of another value set.
         List of `str` items. """
 
@@ -271,6 +276,7 @@ class ValueSetCompose(backboneelement.BackboneElement):
         return '<ValueSetCompose %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetComposeInclude(backboneelement.BackboneElement):
     """ Include one or more codes from a code system.
     """
@@ -285,11 +291,11 @@ class ValueSetComposeInclude(backboneelement.BackboneElement):
     """ Select codes/concepts by their properties (including relationships).
         List of `ValueSetComposeIncludeFilter` items (represented as `dict` in JSON). """
 
-    system = Column()
+    system = Column(primitives.StringFieldField)
     """ The system the codes come from.
         Type `str`. """
 
-    version = Column()
+    version = Column(primitives.StringFieldField)
     """ Specific version of the code system referred to.
         Type `str`. """
 
@@ -305,6 +311,7 @@ class ValueSetComposeInclude(backboneelement.BackboneElement):
         return '<ValueSetComposeInclude %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetComposeIncludeConcept(backboneelement.BackboneElement):
     """ A concept defined in the system.
 
@@ -313,7 +320,7 @@ class ValueSetComposeIncludeConcept(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetComposeIncludeConcept"
 
-    code = Column()
+    code = Column(primitives.StringFieldField)
     """ Code or expression from system.
         Type `str`. """
 
@@ -321,7 +328,7 @@ class ValueSetComposeIncludeConcept(backboneelement.BackboneElement):
     """ Additional representations for this valueset.
         List of `ValueSetCodeSystemConceptDesignation` items (represented as `dict` in JSON). """
 
-    display = Column()
+    display = Column(primitives.StringFieldField)
     """ Test to display for this code for this value set.
         Type `str`. """
 
@@ -336,6 +343,7 @@ class ValueSetComposeIncludeConcept(backboneelement.BackboneElement):
         return '<ValueSetComposeIncludeConcept %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetComposeIncludeFilter(backboneelement.BackboneElement):
     """ Select codes/concepts by their properties (including relationships).
 
@@ -346,15 +354,15 @@ class ValueSetComposeIncludeFilter(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetComposeIncludeFilter"
 
-    op = Column()
+    op = Column(primitives.StringFieldField)
     """ = | is-a | is-not-a | regex | in | not-in.
         Type `str`. """
 
-    property = Column()
+    property = Column(primitives.StringFieldField)
     """ A property defined by the code system.
         Type `str`. """
 
-    value = Column()
+    value = Column(primitives.StringFieldField)
     """ Code from the system, or regex criteria.
         Type `str`. """
 
@@ -369,6 +377,7 @@ class ValueSetComposeIncludeFilter(backboneelement.BackboneElement):
         return '<ValueSetComposeIncludeFilter %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetContact(backboneelement.BackboneElement):
     """ Contact details of the publisher.
 
@@ -377,7 +386,7 @@ class ValueSetContact(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetContact"
 
-    name = Column()
+    name = Column(primitives.StringFieldField)
     """ Name of an individual to contact.
         Type `str`. """
 
@@ -395,6 +404,7 @@ class ValueSetContact(backboneelement.BackboneElement):
         return '<ValueSetContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetExpansion(backboneelement.BackboneElement):
     """ Used when the value set is "expanded".
 
@@ -409,11 +419,11 @@ class ValueSetExpansion(backboneelement.BackboneElement):
     """ Codes in the value set.
         List of `ValueSetExpansionContains` items (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(primitives.StringFieldField)
     """ Uniquely identifies this expansion.
         Type `str`. """
 
-    offset = Column()
+    offset = Column(Integer)
     """ Offset at which this resource starts.
         Type `int`. """
 
@@ -421,11 +431,11 @@ class ValueSetExpansion(backboneelement.BackboneElement):
     """ Parameter that controlled the expansion process.
         List of `ValueSetExpansionParameter` items (represented as `dict` in JSON). """
 
-    timestamp = Column()
+    timestamp = Column(FHIRDate)
     """ Time ValueSet expansion happened.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    total = Column()
+    total = Column(Integer)
     """ Total number of codes in the expansion.
         Type `int`. """
 
@@ -443,6 +453,7 @@ class ValueSetExpansion(backboneelement.BackboneElement):
         return '<ValueSetExpansion %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetExpansionContains(backboneelement.BackboneElement):
     """ Codes in the value set.
 
@@ -451,11 +462,11 @@ class ValueSetExpansionContains(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetExpansionContains"
 
-    abstract = Column()
+    abstract = Column(bool)
     """ If user cannot select this entry.
         Type `bool`. """
 
-    code = Column()
+    code = Column(primitives.StringFieldField)
     """ Code - if blank, this is not a selectable code.
         Type `str`. """
 
@@ -463,15 +474,15 @@ class ValueSetExpansionContains(backboneelement.BackboneElement):
     """ Codes contained under this entry.
         List of `ValueSetExpansionContains` items (represented as `dict` in JSON). """
 
-    display = Column()
+    display = Column(primitives.StringFieldField)
     """ User display for the concept.
         Type `str`. """
 
-    system = Column()
+    system = Column(primitives.StringFieldField)
     """ System value for the code.
         Type `str`. """
 
-    version = Column()
+    version = Column(primitives.StringFieldField)
     """ Version in which this code/display is defined.
         Type `str`. """
 
@@ -489,6 +500,7 @@ class ValueSetExpansionContains(backboneelement.BackboneElement):
         return '<ValueSetExpansionContains %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ValueSetExpansionParameter(backboneelement.BackboneElement):
     """ Parameter that controlled the expansion process.
 
@@ -499,31 +511,31 @@ class ValueSetExpansionParameter(backboneelement.BackboneElement):
 
     __tablename__ = "ValueSetExpansionParameter"
 
-    name = Column()
+    name = Column(primitives.StringFieldField)
     """ Name as assigned by the server.
         Type `str`. """
 
-    valueBoolean = Column()
+    valueBoolean = Column(bool)
     """ Value of the named parameter.
         Type `bool`. """
 
-    valueCode = Column()
+    valueCode = Column(primitives.StringFieldField)
     """ Value of the named parameter.
         Type `str`. """
 
-    valueDecimal = Column()
+    valueDecimal = Column(float)
     """ Value of the named parameter.
         Type `float`. """
 
-    valueInteger = Column()
+    valueInteger = Column(Integer)
     """ Value of the named parameter.
         Type `int`. """
 
-    valueString = Column()
+    valueString = Column(primitives.StringFieldField)
     """ Value of the named parameter.
         Type `str`. """
 
-    valueUri = Column()
+    valueUri = Column(primitives.StringFieldField)
     """ Value of the named parameter.
         Type `str`. """
 

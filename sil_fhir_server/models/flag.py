@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Flag(domainresource.DomainResource):
@@ -16,19 +17,19 @@ class Flag(domainresource.DomainResource):
 
     __tablename__ = "Flag"
 
-    author = Column()
+    author = Column(FHIRReference)
     """ Flag creator.
         Type `FHIRReference` referencing `Device, Organization, Patient, Practitioner` (represented as `dict` in JSON). """
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ Clinical, administrative, etc..
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Partially deaf, Requires easy open caps, No permanent address, etc..
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Alert relevant during encounter.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -36,15 +37,15 @@ class Flag(domainresource.DomainResource):
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Time period when flag is active.
         Type `Period` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ active | inactive | entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who/What is flag about?.
         Type `FHIRReference` referencing `Patient, Location, Group, Organization, Practitioner` (represented as `dict` in JSON). """
 

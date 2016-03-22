@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Extension)
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Extension)
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import element
+
 
 class Extension(element.Element):
     """ None.
@@ -15,143 +18,169 @@ class Extension(element.Element):
 
     __tablename__ = "Extension"
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ identifies the meaning of the extension.
         Type `str`. """
 
-    valueAddress = Column()
+    valueAddress = Column(primitives.StringField,
+                          ForeignKey('Address.id'))
     """ Value of extension.
         Type `Address` (represented as `dict` in JSON). """
 
-    valueAnnotation = Column()
+    valueAnnotation = Column(primitives.StringField,
+                             ForeignKey('Annotation.id'))
     """ Value of extension.
         Type `Annotation` (represented as `dict` in JSON). """
 
-    valueAttachment = Column()
+    valueAttachment = Column(primitives.StringField,
+                             ForeignKey('Attachment.id'))
     """ Value of extension.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    valueBase64Binary = Column()
+    valueBase64Binary = Column(primitives.StringField)
     """ Value of extension.
         Type `str`. """
 
-    valueBoolean = Column()
+    valueBoolean = Column(primitives.DecimalField)
     """ Value of extension.
         Type `bool`. """
 
-    valueCode = Column()
+    valueCode = Column(primitives.StringField)
     """ Value of extension.
         Type `str`. """
 
-    valueCodeableConcept = Column()
+    valueCodeableConcept = Column(primitives.StringField,
+                                  ForeignKey('CodeableConcept.id'))
     """ Value of extension.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    valueCoding = Column()
+    valueCoding = Column(primitives.StringField,
+                         ForeignKey('Coding.id'))
     """ Value of extension.
         Type `Coding` (represented as `dict` in JSON). """
 
-    valueContactPoint = Column()
+    valueContactPoint = Column(primitives.StringField,
+                               ForeignKey('ContactPoint.id'))
     """ Value of extension.
         Type `ContactPoint` (represented as `dict` in JSON). """
 
-    valueDate = Column()
+    valueDate = Column(primitives.DateTimeField)
     """ Value of extension.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueDateTime = Column()
+    valueDateTime = Column(primitives.DateTimeField)
     """ Value of extension.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueDecimal = Column()
+    valueDecimal = Column(primitives.DecimalField)
     """ Value of extension.
         Type `float`. """
 
-    valueHumanName = Column()
+    valueHumanName = Column(primitives.StringField,
+                            ForeignKey('HumanName.id'))
     """ Value of extension.
         Type `HumanName` (represented as `dict` in JSON). """
 
-    valueId = Column()
+    valueId = Column(primitives.StringField)
     """ Value of extension.
         Type `str`. """
 
-    valueIdentifier = Column()
+    valueIdentifier = Column(primitives.StringField,
+                             ForeignKey('Identifier.id'))
     """ Value of extension.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    valueInstant = Column()
+    valueInstant = Column(primitives.InstantField)
     """ Value of extension.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueInteger = Column()
+    valueInteger = Column(primitives.IntegerField)
     """ Value of extension.
         Type `int`. """
 
-    valueMarkdown = Column()
+    valueMarkdown = Column(primitives.StringField)
     """ Value of extension.
         Type `str`. """
 
-    valueMeta = Column()
+    # valueMeta = Column(Meta)
     """ Value of extension.
         Type `Meta` (represented as `dict` in JSON). """
 
-    valueOid = Column()
+    valueOid = Column(primitives.StringField)
     """ Value of extension.
         Type `str`. """
 
-    valuePeriod = Column()
+    valuePeriod = Column(primitives.StringField,
+                         ForeignKey('Period.id'))
     """ Value of extension.
         Type `Period` (represented as `dict` in JSON). """
 
-    valuePositiveInt = Column()
+    valuePositiveInt = Column(primitives.IntegerField)
     """ Value of extension.
         Type `int`. """
 
-    valueQuantity = Column()
+    valueQuantity = Column(primitives.StringField,
+                           ForeignKey('Quantity.id'))
     """ Value of extension.
         Type `Quantity` (represented as `dict` in JSON). """
 
-    valueRange = Column()
+    valueRange = Column(primitives.StringField,
+                        ForeignKey('Range.id'))
     """ Value of extension.
         Type `Range` (represented as `dict` in JSON). """
 
-    valueRatio = Column()
+    valueRatio = Column(primitives.StringField,
+                        ForeignKey('Ratio.id'))
     """ Value of extension.
         Type `Ratio` (represented as `dict` in JSON). """
 
-    valueReference = Column()
+    valueReference = Column(primitives.StringField,
+                            ForeignKey('FHIRReference.id'))
     """ Value of extension.
         Type `FHIRReference` (represented as `dict` in JSON). """
 
-    valueSampledData = Column()
+    valueSampledData = Column(primitives.StringField,
+                              ForeignKey('SampledData.id'))
     """ Value of extension.
         Type `SampledData` (represented as `dict` in JSON). """
 
-    valueSignature = Column()
+    valueSignature = Column(primitives.StringField,
+                            ForeignKey('Signature.id'))
     """ Value of extension.
         Type `Signature` (represented as `dict` in JSON). """
 
-    valueString = Column()
+    valueString = Column(primitives.StringField)
     """ Value of extension.
         Type `str`. """
 
-    valueTime = Column()
+    valueTime = Column(primitives.TimeField)
     """ Value of extension.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueTiming = Column()
+    valueTiming = Column(primitives.StringField,
+                         ForeignKey('Timing.id'))
     """ Value of extension.
         Type `Timing` (represented as `dict` in JSON). """
 
-    valueUnsignedInt = Column()
+    valueUnsignedInt = Column(primitives.IntegerField)
     """ Value of extension.
         Type `int`. """
 
-    valueUri = Column()
+    valueUri = Column(primitives.StringField)
     """ Value of extension.
         Type `str`. """
 
-    def __init__(self, url, valueAddress, valueAnnotation, valueAttachment, valueBase64Binary, valueBoolean, valueCode, valueCodeableConcept, valueCoding, valueContactPoint, valueDate, valueDateTime, valueDecimal, valueHumanName, valueId, valueIdentifier, valueInstant, valueInteger, valueMarkdown, valueMeta, valueOid, valuePeriod, valuePositiveInt, valueQuantity, valueRange, valueRatio, valueReference, valueSampledData, valueSignature, valueString, valueTime, valueTiming, valueUnsignedInt, valueUri,):
+    def __init__(self, url, valueAddress, valueAnnotation,
+                 valueAttachment, valueBase64Binary, valueBoolean,
+                 valueCode, valueCodeableConcept, valueCoding,
+                 valueContactPoint, valueDate, valueDateTime,
+                 valueDecimal, valueHumanName, valueId,
+                 valueIdentifier, valueInstant, valueInteger,
+                 valueMarkdown, valueMeta, valueOid, valuePeriod,
+                 valuePositiveInt, valueQuantity, valueRange,
+                 valueRatio, valueReference, valueSampledData,
+                 valueSignature, valueString, valueTime, valueTiming,
+                 valueUnsignedInt, valueUri,):
         """ Initialize all valid properties.
         """
         self.url = url
@@ -191,23 +220,3 @@ class Extension(element.Element):
 
     def __repr__(self):
         return '<Extension %r>' % 'self.property'  # replace self.property
-
-
-from . import address
-from . import annotation
-from . import attachment
-from . import codeableconcept
-from . import coding
-from . import contactpoint
-from . import fhirdate
-from . import fhirreference
-from . import humanname
-from . import identifier
-from . import meta
-from . import period
-from . import quantity
-from . import range
-from . import ratio
-from . import sampleddata
-from . import signature
-from . import timing

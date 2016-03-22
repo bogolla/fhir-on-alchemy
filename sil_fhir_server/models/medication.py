@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Medication(domainresource.DomainResource):
@@ -16,23 +17,23 @@ class Medication(domainresource.DomainResource):
 
     __tablename__ = "Medication"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Codes that identify this medication.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    isBrand = Column()
+    isBrand = Column(bool)
     """ True if a brand.
         Type `bool`. """
 
-    manufacturer = Column()
+    manufacturer = Column(FHIRReference)
     """ Manufacturer of the item.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    package = Column()
+    package = Column(MedicationPackage)
     """ Details about packaged medications.
         Type `MedicationPackage` (represented as `dict` in JSON). """
 
-    product = Column()
+    product = Column(MedicationProduct)
     """ Administrable medication details.
         Type `MedicationProduct` (represented as `dict` in JSON). """
 
@@ -49,6 +50,7 @@ class Medication(domainresource.DomainResource):
         return '<Medication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class MedicationPackage(backboneelement.BackboneElement):
@@ -59,7 +61,7 @@ class MedicationPackage(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationPackage"
 
-    container = Column()
+    container = Column(CodeableConcept)
     """ E.g. box, vial, blister-pack.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -77,6 +79,7 @@ class MedicationPackage(backboneelement.BackboneElement):
         return '<MedicationPackage %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MedicationPackageContent(backboneelement.BackboneElement):
     """ What is  in the package.
 
@@ -85,11 +88,11 @@ class MedicationPackageContent(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationPackageContent"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Quantity present in the package.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    item = Column()
+    item = Column(FHIRReference)
     """ A product in the package.
         Type `FHIRReference` referencing `Medication` (represented as `dict` in JSON). """
 
@@ -103,6 +106,7 @@ class MedicationPackageContent(backboneelement.BackboneElement):
         return '<MedicationPackageContent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MedicationProduct(backboneelement.BackboneElement):
     """ Administrable medication details.
 
@@ -115,7 +119,7 @@ class MedicationProduct(backboneelement.BackboneElement):
     """ None.
         List of `MedicationProductBatch` items (represented as `dict` in JSON). """
 
-    form = Column()
+    form = Column(CodeableConcept)
     """ powder | tablets | carton +.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -134,6 +138,7 @@ class MedicationProduct(backboneelement.BackboneElement):
         return '<MedicationProduct %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MedicationProductBatch(backboneelement.BackboneElement):
     """ None.
 
@@ -143,11 +148,11 @@ class MedicationProductBatch(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationProductBatch"
 
-    expirationDate = Column()
+    expirationDate = Column(FHIRDate)
     """ None.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    lotNumber = Column()
+    lotNumber = Column(primitives.StringField)
     """ None.
         Type `str`. """
 
@@ -161,6 +166,7 @@ class MedicationProductBatch(backboneelement.BackboneElement):
         return '<MedicationProductBatch %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MedicationProductIngredient(backboneelement.BackboneElement):
     """ Active or inactive ingredient.
 
@@ -169,11 +175,11 @@ class MedicationProductIngredient(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationProductIngredient"
 
-    amount = Column()
+    amount = Column(Ratio)
     """ Quantity of ingredient present.
         Type `Ratio` (represented as `dict` in JSON). """
 
-    item = Column()
+    item = Column(FHIRReference)
     """ The product contained.
         Type `FHIRReference` referencing `Substance, Medication` (represented as `dict` in JSON). """
 

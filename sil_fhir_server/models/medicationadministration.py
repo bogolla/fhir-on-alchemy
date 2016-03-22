@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class MedicationAdministration(domainresource.DomainResource):
@@ -23,19 +24,19 @@ class MedicationAdministration(domainresource.DomainResource):
     """ Device used to administer.
         List of `FHIRReference` items referencing `Device` (represented as `dict` in JSON). """
 
-    dosage = Column()
+    dosage = Column(MedicationAdministrationDosage)
     """ Details of how medication was taken.
         Type `MedicationAdministrationDosage` (represented as `dict` in JSON). """
 
-    effectiveTimeDateTime = Column()
+    effectiveTimeDateTime = Column(FHIRDate)
     """ Start and end time of administration.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    effectiveTimePeriod = Column()
+    effectiveTimePeriod = Column(Period)
     """ Start and end time of administration.
         Type `Period` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Encounter administered as part of.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -43,27 +44,27 @@ class MedicationAdministration(domainresource.DomainResource):
     """ External identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    medicationCodeableConcept = Column()
+    medicationCodeableConcept = Column(CodeableConcept)
     """ What was administered.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    medicationReference = Column()
+    medicationReference = Column(FHIRReference)
     """ What was administered.
         Type `FHIRReference` referencing `Medication` (represented as `dict` in JSON). """
 
-    note = Column()
+    note = Column(primitives.StringField)
     """ Information about the administration.
         Type `str`. """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who received medication.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    practitioner = Column()
+    practitioner = Column(FHIRReference)
     """ Who administered substance.
         Type `FHIRReference` referencing `Practitioner, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    prescription = Column()
+    prescription = Column(FHIRReference)
     """ Order administration performed against.
         Type `FHIRReference` referencing `MedicationOrder` (represented as `dict` in JSON). """
 
@@ -75,11 +76,11 @@ class MedicationAdministration(domainresource.DomainResource):
     """ Reason administration not performed.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ in-progress | on-hold | completed | entered-in-error | stopped.
         Type `str`. """
 
-    wasNotGiven = Column()
+    wasNotGiven = Column(bool)
     """ True if medication not administered.
         Type `bool`. """
 
@@ -107,6 +108,7 @@ class MedicationAdministration(domainresource.DomainResource):
         return '<MedicationAdministration %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class MedicationAdministrationDosage(backboneelement.BackboneElement):
@@ -118,35 +120,35 @@ class MedicationAdministrationDosage(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationAdministrationDosage"
 
-    method = Column()
+    method = Column(CodeableConcept)
     """ How drug was administered.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Amount administered in one dose.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    rateRange = Column()
+    rateRange = Column(Range)
     """ Dose quantity per unit of time.
         Type `Range` (represented as `dict` in JSON). """
 
-    rateRatio = Column()
+    rateRatio = Column(Ratio)
     """ Dose quantity per unit of time.
         Type `Ratio` (represented as `dict` in JSON). """
 
-    route = Column()
+    route = Column(CodeableConcept)
     """ Path of substance into body.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    siteCodeableConcept = Column()
+    siteCodeableConcept = Column(CodeableConcept)
     """ Body site administered to.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    siteReference = Column()
+    siteReference = Column(FHIRReference)
     """ Body site administered to.
         Type `FHIRReference` referencing `BodySite` (represented as `dict` in JSON). """
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Dosage Instructions.
         Type `str`. """
 

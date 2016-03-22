@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Substance(domainresource.DomainResource):
@@ -17,11 +18,11 @@ class Substance(domainresource.DomainResource):
     """ What class/type of substance this is.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ What substance this is.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Textual description of the substance, comments.
         Type `str`. """
 
@@ -51,6 +52,7 @@ class Substance(domainresource.DomainResource):
         return '<Substance %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class SubstanceIngredient(backboneelement.BackboneElement):
@@ -61,11 +63,11 @@ class SubstanceIngredient(backboneelement.BackboneElement):
 
     __tablename__ = "SubstanceIngredient"
 
-    quantity = Column()
+    quantity = Column(Ratio)
     """ Optional amount (concentration).
         Type `Ratio` (represented as `dict` in JSON). """
 
-    substance = Column()
+    substance = Column(FHIRReference)
     """ A component of the substance.
         Type `FHIRReference` referencing `Substance` (represented as `dict` in JSON). """
 
@@ -79,6 +81,7 @@ class SubstanceIngredient(backboneelement.BackboneElement):
         return '<SubstanceIngredient %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class SubstanceInstance(backboneelement.BackboneElement):
     """ If this describes a specific package/container of the substance.
 
@@ -88,15 +91,15 @@ class SubstanceInstance(backboneelement.BackboneElement):
 
     __tablename__ = "SubstanceInstance"
 
-    expiry = Column()
+    expiry = Column(FHIRDate)
     """ When no longer valid to use.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Identifier of the package/container.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Amount of substance in the package.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 

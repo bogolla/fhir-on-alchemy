@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Schedule(domainresource.DomainResource):
@@ -14,14 +15,14 @@ class Schedule(domainresource.DomainResource):
 
     __tablename__ = "Schedule"
 
-    actor = Column()
+    actor = Column(FHIRReference)
     """ The resource this Schedule resource is providing availability
         information for. These are expected to usually be one of
         HealthcareService, Location, Practitioner, Device, Patient or
         RelatedPerson.
         Type `FHIRReference` referencing `Patient, Practitioner, RelatedPerson, Device, HealthcareService, Location` (represented as `dict` in JSON). """
 
-    comment = Column()
+    comment = Column(primitives.StringField)
     """ Comments on the availability to describe any extended information.
         Such as custom constraints on the slot(s) that may be associated.
         Type `str`. """
@@ -30,7 +31,7 @@ class Schedule(domainresource.DomainResource):
     """ External Ids for this item.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    planningHorizon = Column()
+    planningHorizon = Column(Period)
     """ The period of time that the slots that are attached to this
         Schedule resource cover (even if none exist). These  cover the
         amount of time that an organization's planning horizon; the

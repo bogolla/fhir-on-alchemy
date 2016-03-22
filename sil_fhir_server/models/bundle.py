@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import resource
 
 class Bundle(resource.Resource):
@@ -23,15 +25,15 @@ class Bundle(resource.Resource):
     """ Links related to this Bundle.
         List of `BundleLink` items (represented as `dict` in JSON). """
 
-    signature = Column()
+    signature = Column(Signature)
     """ Digital Signature.
         Type `Signature` (represented as `dict` in JSON). """
 
-    total = Column()
+    total = Column(Integer)
     """ If search, the total number of matches.
         Type `int`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ document | message | transaction | transaction-response | batch |
         batch-response | history | searchset | collection.
         Type `str`. """
@@ -49,6 +51,7 @@ class Bundle(resource.Resource):
         return '<Bundle %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class BundleEntry(backboneelement.BackboneElement):
@@ -60,7 +63,7 @@ class BundleEntry(backboneelement.BackboneElement):
 
     __tablename__ = "BundleEntry"
 
-    fullUrl = Column()
+    fullUrl = Column(primitives.StringField)
     """ Absolute URL for resource (server address, or UUID/OID).
         Type `str`. """
 
@@ -68,19 +71,19 @@ class BundleEntry(backboneelement.BackboneElement):
     """ Links related to this entry.
         List of `BundleLink` items (represented as `dict` in JSON). """
 
-    request = Column()
+    request = Column(BundleEntryRequest)
     """ Transaction Related Information.
         Type `BundleEntryRequest` (represented as `dict` in JSON). """
 
-    resource = Column()
+    resource = Column(Resource)
     """ A resource in the bundle.
         Type `Resource` (represented as `dict` in JSON). """
 
-    response = Column()
+    response = Column(BundleEntryResponse)
     """ Transaction Related Information.
         Type `BundleEntryResponse` (represented as `dict` in JSON). """
 
-    search = Column()
+    search = Column(BundleEntrySearch)
     """ Search related information.
         Type `BundleEntrySearch` (represented as `dict` in JSON). """
 
@@ -98,6 +101,7 @@ class BundleEntry(backboneelement.BackboneElement):
         return '<BundleEntry %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class BundleEntryRequest(backboneelement.BackboneElement):
     """ Transaction Related Information.
 
@@ -107,27 +111,27 @@ class BundleEntryRequest(backboneelement.BackboneElement):
 
     __tablename__ = "BundleEntryRequest"
 
-    ifMatch = Column()
+    ifMatch = Column(primitives.StringField)
     """ For managing update contention.
         Type `str`. """
 
-    ifModifiedSince = Column()
+    ifModifiedSince = Column(FHIRDate)
     """ For managing update contention.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    ifNoneExist = Column()
+    ifNoneExist = Column(primitives.StringField)
     """ For conditional creates.
         Type `str`. """
 
-    ifNoneMatch = Column()
+    ifNoneMatch = Column(primitives.StringField)
     """ For managing cache currency.
         Type `str`. """
 
-    method = Column()
+    method = Column(primitives.StringField)
     """ GET | POST | PUT | DELETE.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ URL for HTTP equivalent of this entry.
         Type `str`. """
 
@@ -145,6 +149,7 @@ class BundleEntryRequest(backboneelement.BackboneElement):
         return '<BundleEntryRequest %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class BundleEntryResponse(backboneelement.BackboneElement):
     """ Transaction Related Information.
 
@@ -154,19 +159,19 @@ class BundleEntryResponse(backboneelement.BackboneElement):
 
     __tablename__ = "BundleEntryResponse"
 
-    etag = Column()
+    etag = Column(primitives.StringField)
     """ The etag for the resource (if relevant).
         Type `str`. """
 
-    lastModified = Column()
+    lastModified = Column(FHIRDate)
     """ Server's date time modified.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    location = Column()
+    location = Column(primitives.StringField)
     """ The location, if the operation returns a location.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ Status return code for entry.
         Type `str`. """
 
@@ -182,6 +187,7 @@ class BundleEntryResponse(backboneelement.BackboneElement):
         return '<BundleEntryResponse %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class BundleEntrySearch(backboneelement.BackboneElement):
     """ Search related information.
 
@@ -191,11 +197,11 @@ class BundleEntrySearch(backboneelement.BackboneElement):
 
     __tablename__ = "BundleEntrySearch"
 
-    mode = Column()
+    mode = Column(primitives.StringField)
     """ match | include | outcome - why this is in the result set.
         Type `str`. """
 
-    score = Column()
+    score = Column(float)
     """ Search ranking (between 0 and 1).
         Type `float`. """
 
@@ -209,6 +215,7 @@ class BundleEntrySearch(backboneelement.BackboneElement):
         return '<BundleEntrySearch %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class BundleLink(backboneelement.BackboneElement):
     """ Links related to this Bundle.
 
@@ -217,11 +224,11 @@ class BundleLink(backboneelement.BackboneElement):
 
     __tablename__ = "BundleLink"
 
-    relation = Column()
+    relation = Column(primitives.StringField)
     """ http://www.iana.org/assignments/link-relations/link-relations.xhtml.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Reference details for the link.
         Type `str`. """
 

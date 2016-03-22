@@ -1,0 +1,10 @@
+*.pyc
+__pycache__
+env
+
+# ignore downloads
+fhir_parser/downloads
+
+# ignore IDE files
+*.sublime-*
+

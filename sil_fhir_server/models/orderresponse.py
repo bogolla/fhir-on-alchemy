@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class OrderResponse(domainresource.DomainResource):
@@ -13,11 +14,11 @@ class OrderResponse(domainresource.DomainResource):
 
     __tablename__ = "OrderResponse"
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When the response was made.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Additional description of the response.
         Type `str`. """
 
@@ -30,16 +31,16 @@ class OrderResponse(domainresource.DomainResource):
         receiver.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    orderStatus = Column()
+    orderStatus = Column(primitives.StringField)
     """ pending | review | rejected | error | accepted | cancelled |
         replaced | aborted | completed.
         Type `str`. """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ The order that this is a response to.
         Type `FHIRReference` referencing `Order` (represented as `dict` in JSON). """
 
-    who = Column()
+    who = Column(FHIRReference)
     """ Who made the response.
         Type `FHIRReference` referencing `Practitioner, Organization, Device` (represented as `dict` in JSON). """
 

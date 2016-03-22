@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Composition(domainresource.DomainResource):
@@ -30,23 +32,23 @@ class Composition(domainresource.DomainResource):
     """ Who and/or what authored the composition.
         List of `FHIRReference` items referencing `Practitioner, Device, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    class_fhir = Column()
+    class_fhir = Column(CodeableConcept)
     """ Categorization of Composition.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    confidentiality = Column()
+    confidentiality = Column(primitives.StringField)
     """ As defined by affinity domain.
         Type `str`. """
 
-    custodian = Column()
+    custodian = Column(FHIRReference)
     """ Organization which maintains the composition.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Composition editing time.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Context of the Composition.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -54,7 +56,7 @@ class Composition(domainresource.DomainResource):
     """ The clinical service(s) being documented.
         List of `CompositionEvent` items (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Logical identifier of composition (version-independent).
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -62,19 +64,19 @@ class Composition(domainresource.DomainResource):
     """ Composition is broken into sections.
         List of `CompositionSection` items (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ preliminary | final | amended | entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who and/or what the composition is about.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    title = Column()
+    title = Column(primitives.StringField)
     """ Human Readable name/title.
         Type `str`. """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Kind of composition (LOINC if possible).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -100,6 +102,7 @@ class Composition(domainresource.DomainResource):
         return '<Composition %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class CompositionAttester(backboneelement.BackboneElement):
@@ -110,15 +113,15 @@ class CompositionAttester(backboneelement.BackboneElement):
 
     __tablename__ = "CompositionAttester"
 
-    mode = Column(str)
+    mode = Column(primitives.StringField)
     """ personal | professional | legal | official.
         List of `str` items. """
 
-    party = Column()
+    party = Column(FHIRReference)
     """ Who attested the composition.
         Type `FHIRReference` referencing `Patient, Practitioner, Organization` (represented as `dict` in JSON). """
 
-    time = Column()
+    time = Column(FHIRDate)
     """ When composition attested.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -133,6 +136,7 @@ class CompositionAttester(backboneelement.BackboneElement):
         return '<CompositionAttester %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class CompositionEvent(backboneelement.BackboneElement):
     """ The clinical service(s) being documented.
 
@@ -150,7 +154,7 @@ class CompositionEvent(backboneelement.BackboneElement):
     """ The event(s) being documented.
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ The period covered by the documentation.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -165,6 +169,7 @@ class CompositionEvent(backboneelement.BackboneElement):
         return '<CompositionEvent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class CompositionSection(backboneelement.BackboneElement):
     """ Composition is broken into sections.
 
@@ -173,11 +178,11 @@ class CompositionSection(backboneelement.BackboneElement):
 
     __tablename__ = "CompositionSection"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Classification of section (recommended).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    emptyReason = Column()
+    emptyReason = Column(CodeableConcept)
     """ Why the section is empty.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -185,11 +190,11 @@ class CompositionSection(backboneelement.BackboneElement):
     """ A reference to data that supports this section.
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
 
-    mode = Column()
+    mode = Column(primitives.StringField)
     """ working | snapshot | changes.
         Type `str`. """
 
-    orderedBy = Column()
+    orderedBy = Column(CodeableConcept)
     """ Order of section entries.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -197,11 +202,11 @@ class CompositionSection(backboneelement.BackboneElement):
     """ Nested Section.
         List of `CompositionSection` items (represented as `dict` in JSON). """
 
-    text = Column()
+    text = Column(Narrative)
     """ Text summary of the section, for human interpretation.
         Type `Narrative` (represented as `dict` in JSON). """
 
-    title = Column()
+    title = Column(primitives.StringField)
     """ Label for section (e.g. for ToC).
         Type `str`. """
 

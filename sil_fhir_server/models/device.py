@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Device(domainresource.DomainResource):
@@ -26,7 +27,7 @@ class Device(domainresource.DomainResource):
     """ Details for human/organization for support.
         List of `ContactPoint` items (represented as `dict` in JSON). """
 
-    expiry = Column()
+    expiry = Column(FHIRDate)
     """ Date and time of expiry of this device (if applicable).
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -34,23 +35,23 @@ class Device(domainresource.DomainResource):
     """ Instance id from manufacturer, owner, and others.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Where the resource is found.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    lotNumber = Column()
+    lotNumber = Column(primitives.StringField)
     """ Lot number of manufacture.
         Type `str`. """
 
-    manufactureDate = Column()
+    manufactureDate = Column(FHIRDate)
     """ Manufacture date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    manufacturer = Column()
+    manufacturer = Column(primitives.StringField)
     """ Name of device manufacturer.
         Type `str`. """
 
-    model = Column()
+    model = Column(primitives.StringField)
     """ Model id assigned by the manufacturer.
         Type `str`. """
 
@@ -58,31 +59,31 @@ class Device(domainresource.DomainResource):
     """ Device notes and comments.
         List of `Annotation` items (represented as `dict` in JSON). """
 
-    owner = Column()
+    owner = Column(FHIRReference)
     """ Organization responsible for device.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ If the resource is affixed to a person.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ available | not-available | entered-in-error.
         Type `str`. """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ What kind of device this is.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    udi = Column()
+    udi = Column(primitives.StringField)
     """ FDA mandated Unique Device Identifier.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Network address to contact device.
         Type `str`. """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Version number (i.e. software).
         Type `str`. """
 

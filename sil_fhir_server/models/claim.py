@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Claim(domainresource.DomainResource):
@@ -17,11 +19,11 @@ class Claim(domainresource.DomainResource):
 
     __tablename__ = "Claim"
 
-    accident = Column()
+    accident = Column(FHIRDate)
     """ Accident Date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    accidentType = Column()
+    accidentType = Column(Coding)
     """ Accident Type.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -37,7 +39,7 @@ class Claim(domainresource.DomainResource):
     """ Insurance or medical plan.
         List of `ClaimCoverage` items (represented as `dict` in JSON). """
 
-    created = Column()
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -45,7 +47,7 @@ class Claim(domainresource.DomainResource):
     """ Diagnosis.
         List of `ClaimDiagnosis` items (represented as `dict` in JSON). """
 
-    enterer = Column()
+    enterer = Column(FHIRReference)
     """ Author.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
@@ -53,11 +55,11 @@ class Claim(domainresource.DomainResource):
     """ Eligibility exceptions.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    facility = Column()
+    facility = Column(FHIRReference)
     """ Servicing Facility.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    fundsReserve = Column()
+    fundsReserve = Column(Coding)
     """ Funds requested to be reserved.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -77,59 +79,59 @@ class Claim(domainresource.DomainResource):
     """ Only if type = oral.
         List of `ClaimMissingTeeth` items (represented as `dict` in JSON). """
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    originalPrescription = Column()
+    originalPrescription = Column(FHIRReference)
     """ Original Prescription.
         Type `FHIRReference` referencing `MedicationOrder` (represented as `dict` in JSON). """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original specification followed.
         Type `Coding` (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ The subject of the Products and Services.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    payee = Column()
+    payee = Column(ClaimPayee)
     """ Payee.
         Type `ClaimPayee` (represented as `dict` in JSON). """
 
-    prescription = Column()
+    prescription = Column(FHIRReference)
     """ Prescription.
         Type `FHIRReference` referencing `MedicationOrder, VisionPrescription` (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(Coding)
     """ Desired processing priority.
         Type `Coding` (represented as `dict` in JSON). """
 
-    provider = Column()
+    provider = Column(FHIRReference)
     """ Responsible provider.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    referral = Column()
+    referral = Column(FHIRReference)
     """ Treatment Referral.
         Type `FHIRReference` referencing `ReferralRequest` (represented as `dict` in JSON). """
 
-    ruleset = Column()
+    ruleset = Column(Coding)
     """ Current specification followed.
         Type `Coding` (represented as `dict` in JSON). """
 
-    school = Column()
+    school = Column(primitives.StringField)
     """ Name of School.
         Type `str`. """
 
-    target = Column()
+    target = Column(FHIRReference)
     """ Insurer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ institutional | oral | pharmacy | professional | vision.
         Type `str`. """
 
-    use = Column()
+    use = Column(primitives.StringField)
     """ complete | proposed | exploratory | other.
         Type `str`. """
 
@@ -170,6 +172,7 @@ class Claim(domainresource.DomainResource):
         return '<Claim %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ClaimCoverage(backboneelement.BackboneElement):
@@ -180,35 +183,35 @@ class ClaimCoverage(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimCoverage"
 
-    businessArrangement = Column()
+    businessArrangement = Column(primitives.StringField)
     """ Business agreement.
         Type `str`. """
 
-    claimResponse = Column()
+    claimResponse = Column(FHIRReference)
     """ Adjudication results.
         Type `FHIRReference` referencing `ClaimResponse` (represented as `dict` in JSON). """
 
-    coverage = Column()
+    coverage = Column(FHIRReference)
     """ Insurance information.
         Type `FHIRReference` referencing `Coverage` (represented as `dict` in JSON). """
 
-    focal = Column()
+    focal = Column(bool)
     """ The focal Coverage.
         Type `bool`. """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    preAuthRef = Column(str)
+    preAuthRef = Column(primitives.StringField)
     """ Pre-Authorization/Determination Reference.
         List of `str` items. """
 
-    relationship = Column()
+    relationship = Column(Coding)
     """ Patient relationship to subscriber.
         Type `Coding` (represented as `dict` in JSON). """
 
-    sequence = Column()
+    sequence = Column(Integer)
     """ Service instance identifier.
         Type `int`. """
 
@@ -228,6 +231,7 @@ class ClaimCoverage(backboneelement.BackboneElement):
         return '<ClaimCoverage %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimDiagnosis(backboneelement.BackboneElement):
     """ Diagnosis.
 
@@ -236,11 +240,11 @@ class ClaimDiagnosis(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimDiagnosis"
 
-    diagnosis = Column()
+    diagnosis = Column(Coding)
     """ Patient's list of diagnosis.
         Type `Coding` (represented as `dict` in JSON). """
 
-    sequence = Column()
+    sequence = Column(Integer)
     """ Sequence of diagnosis.
         Type `int`. """
 
@@ -254,6 +258,7 @@ class ClaimDiagnosis(backboneelement.BackboneElement):
         return '<ClaimDiagnosis %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimItem(backboneelement.BackboneElement):
     """ Goods and Services.
 
@@ -262,7 +267,7 @@ class ClaimItem(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimItem"
 
-    bodySite = Column()
+    bodySite = Column(Coding)
     """ Service Location.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -270,11 +275,11 @@ class ClaimItem(backboneelement.BackboneElement):
     """ Additional items.
         List of `ClaimItemDetail` items (represented as `dict` in JSON). """
 
-    diagnosisLinkId = Column(int)
+    diagnosisLinkId = Column(Integer)
     """ Diagnosis Link.
         List of `int` items. """
 
-    factor = Column()
+    factor = Column(float)
     """ Price scaling factor.
         Type `float`. """
 
@@ -282,35 +287,35 @@ class ClaimItem(backboneelement.BackboneElement):
     """ Service/Product billing modifiers.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    net = Column()
+    net = Column(Quantity)
     """ Total item cost.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    points = Column()
+    points = Column(float)
     """ Difficulty scaling factor.
         Type `float`. """
 
-    prosthesis = Column()
+    prosthesis = Column(ClaimItemProsthesis)
     """ Prosthetic details.
         Type `ClaimItemProsthesis` (represented as `dict` in JSON). """
 
-    provider = Column()
+    provider = Column(FHIRReference)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Count of Products or Services.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    sequence = Column()
+    sequence = Column(Integer)
     """ Service instance.
         Type `int`. """
 
-    service = Column()
+    service = Column(Coding)
     """ Item Code.
         Type `Coding` (represented as `dict` in JSON). """
 
-    serviceDate = Column()
+    serviceDate = Column(FHIRDate)
     """ Date of Service.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -318,15 +323,15 @@ class ClaimItem(backboneelement.BackboneElement):
     """ Service Sub-location.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Group or type of product or service.
         Type `Coding` (represented as `dict` in JSON). """
 
-    udi = Column()
+    udi = Column(Coding)
     """ Unique Device Identifier.
         Type `Coding` (represented as `dict` in JSON). """
 
-    unitPrice = Column()
+    unitPrice = Column(Quantity)
     """ Fee, charge or cost per point.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
@@ -355,6 +360,7 @@ class ClaimItem(backboneelement.BackboneElement):
         return '<ClaimItem %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimItemDetail(backboneelement.BackboneElement):
     """ Additional items.
 
@@ -363,27 +369,27 @@ class ClaimItemDetail(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimItemDetail"
 
-    factor = Column()
+    factor = Column(float)
     """ Price scaling factor.
         Type `float`. """
 
-    net = Column()
+    net = Column(Quantity)
     """ Total additional item cost.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    points = Column()
+    points = Column(float)
     """ Difficulty scaling factor.
         Type `float`. """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Count of Products or Services.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    sequence = Column()
+    sequence = Column(Integer)
     """ Service instance.
         Type `int`. """
 
-    service = Column()
+    service = Column(Coding)
     """ Additional item codes.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -391,15 +397,15 @@ class ClaimItemDetail(backboneelement.BackboneElement):
     """ Additional items.
         List of `ClaimItemDetailSubDetail` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Group or type of product or service.
         Type `Coding` (represented as `dict` in JSON). """
 
-    udi = Column()
+    udi = Column(Coding)
     """ Unique Device Identifier.
         Type `Coding` (represented as `dict` in JSON). """
 
-    unitPrice = Column()
+    unitPrice = Column(Quantity)
     """ Fee, charge or cost per point.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
@@ -421,6 +427,7 @@ class ClaimItemDetail(backboneelement.BackboneElement):
         return '<ClaimItemDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimItemDetailSubDetail(backboneelement.BackboneElement):
     """ Additional items.
 
@@ -429,39 +436,39 @@ class ClaimItemDetailSubDetail(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimItemDetailSubDetail"
 
-    factor = Column()
+    factor = Column(float)
     """ Price scaling factor.
         Type `float`. """
 
-    net = Column()
+    net = Column(Quantity)
     """ Net additional item cost.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    points = Column()
+    points = Column(float)
     """ Difficulty scaling factor.
         Type `float`. """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Count of Products or Services.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    sequence = Column()
+    sequence = Column(Integer)
     """ Service instance.
         Type `int`. """
 
-    service = Column()
+    service = Column(Coding)
     """ Additional item codes.
         Type `Coding` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Type of product or service.
         Type `Coding` (represented as `dict` in JSON). """
 
-    udi = Column()
+    udi = Column(Coding)
     """ Unique Device Identifier.
         Type `Coding` (represented as `dict` in JSON). """
 
-    unitPrice = Column()
+    unitPrice = Column(Quantity)
     """ Fee, charge or cost per point.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
@@ -482,6 +489,7 @@ class ClaimItemDetailSubDetail(backboneelement.BackboneElement):
         return '<ClaimItemDetailSubDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimItemProsthesis(backboneelement.BackboneElement):
     """ Prosthetic details.
 
@@ -490,15 +498,15 @@ class ClaimItemProsthesis(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimItemProsthesis"
 
-    initial = Column()
+    initial = Column(bool)
     """ Is this the initial service.
         Type `bool`. """
 
-    priorDate = Column()
+    priorDate = Column(FHIRDate)
     """ Initial service Date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    priorMaterial = Column()
+    priorMaterial = Column(Coding)
     """ Prosthetic Material.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -513,6 +521,7 @@ class ClaimItemProsthesis(backboneelement.BackboneElement):
         return '<ClaimItemProsthesis %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimMissingTeeth(backboneelement.BackboneElement):
     """ Only if type = oral.
 
@@ -522,15 +531,15 @@ class ClaimMissingTeeth(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimMissingTeeth"
 
-    extractionDate = Column()
+    extractionDate = Column(FHIRDate)
     """ Date of Extraction.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    reason = Column()
+    reason = Column(Coding)
     """ Reason for missing.
         Type `Coding` (represented as `dict` in JSON). """
 
-    tooth = Column()
+    tooth = Column(Coding)
     """ Tooth Code.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -545,6 +554,7 @@ class ClaimMissingTeeth(backboneelement.BackboneElement):
         return '<ClaimMissingTeeth %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimPayee(backboneelement.BackboneElement):
     """ Payee.
 
@@ -553,19 +563,19 @@ class ClaimPayee(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimPayee"
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Organization who is the payee.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    person = Column()
+    person = Column(FHIRReference)
     """ Other person who is the payee.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    provider = Column()
+    provider = Column(FHIRReference)
     """ Provider who is the payee.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Party to be paid any benefits payable.
         Type `Coding` (represented as `dict` in JSON). """
 

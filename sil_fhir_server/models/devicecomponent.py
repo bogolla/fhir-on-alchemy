@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DeviceComponent(domainresource.DomainResource):
@@ -16,20 +17,20 @@ class DeviceComponent(domainresource.DomainResource):
 
     __tablename__ = "DeviceComponent"
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Instance id assigned by the software stack.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    languageCode = Column()
+    languageCode = Column(CodeableConcept)
     """ Language code for the human-readable text strings produced by the
         device.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    lastSystemChange = Column()
+    lastSystemChange = Column(FHIRDate)
     """ Recent system change timestamp.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    measurementPrinciple = Column()
+    measurementPrinciple = Column(primitives.StringField)
     """ other | chemical | electrical | impedance | nuclear | optical |
         thermal | biological | mechanical | acoustical | manual+.
         Type `str`. """
@@ -38,11 +39,11 @@ class DeviceComponent(domainresource.DomainResource):
     """ Component operational status.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    parameterGroup = Column()
+    parameterGroup = Column(CodeableConcept)
     """ Current supported parameter group.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    parent = Column()
+    parent = Column(FHIRReference)
     """ Parent resource link.
         Type `FHIRReference` referencing `DeviceComponent` (represented as `dict` in JSON). """
 
@@ -50,11 +51,11 @@ class DeviceComponent(domainresource.DomainResource):
     """ Production specification of the component.
         List of `DeviceComponentProductionSpecification` items (represented as `dict` in JSON). """
 
-    source = Column()
+    source = Column(FHIRReference)
     """ A source device of this component.
         Type `FHIRReference` referencing `Device` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ What kind of component it is.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -76,6 +77,7 @@ class DeviceComponent(domainresource.DomainResource):
         return '<DeviceComponent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DeviceComponentProductionSpecification(backboneelement.BackboneElement):
@@ -87,15 +89,15 @@ class DeviceComponentProductionSpecification(backboneelement.BackboneElement):
 
     __tablename__ = "DeviceComponentProductionSpecification"
 
-    componentId = Column()
+    componentId = Column(Identifier)
     """ Internal component unique identification.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    productionSpec = Column()
+    productionSpec = Column(primitives.StringField)
     """ A printable string defining the component.
         Type `str`. """
 
-    specType = Column()
+    specType = Column(CodeableConcept)
     """ Specification type.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

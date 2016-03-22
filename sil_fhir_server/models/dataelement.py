@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DataElement(domainresource.DomainResource):
@@ -20,11 +21,11 @@ class DataElement(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `DataElementContact` items (represented as `dict` in JSON). """
 
-    copyright = Column()
+    copyright = Column(primitives.StringField)
     """ Use and/or publishing restrictions.
         Type `str`. """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date for this version of the data element.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -32,7 +33,7 @@ class DataElement(domainresource.DomainResource):
     """ Definition of element.
         List of `ElementDefinition` items (represented as `dict` in JSON). """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
@@ -44,24 +45,24 @@ class DataElement(domainresource.DomainResource):
     """ External specification mapped to.
         List of `DataElementMapping` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Descriptive label for this element definition.
         Type `str`. """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    stringency = Column()
+    stringency = Column(primitives.StringField)
     """ comparable | fully-specified | equivalent | convertable | scaleable
         | flexible.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Globally unique logical id for data element.
         Type `str`. """
 
@@ -69,7 +70,7 @@ class DataElement(domainresource.DomainResource):
     """ Content intends to support these contexts.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical id for this version of the data element.
         Type `str`. """
 
@@ -95,6 +96,7 @@ class DataElement(domainresource.DomainResource):
         return '<DataElement %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DataElementContact(backboneelement.BackboneElement):
@@ -105,7 +107,7 @@ class DataElementContact(backboneelement.BackboneElement):
 
     __tablename__ = "DataElementContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -123,6 +125,7 @@ class DataElementContact(backboneelement.BackboneElement):
         return '<DataElementContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class DataElementMapping(backboneelement.BackboneElement):
     """ External specification mapped to.
 
@@ -132,19 +135,19 @@ class DataElementMapping(backboneelement.BackboneElement):
 
     __tablename__ = "DataElementMapping"
 
-    comments = Column()
+    comments = Column(primitives.StringField)
     """ Versions, Issues, Scope limitations etc..
         Type `str`. """
 
-    identity = Column()
+    identity = Column(primitives.StringField)
     """ Internal id when this mapping is used.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Names what this mapping refers to.
         Type `str`. """
 
-    uri = Column()
+    uri = Column(primitives.StringField)
     """ Identifies what this mapping refers to.
         Type `str`. """
 

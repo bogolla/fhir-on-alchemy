@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class RelatedPerson(domainresource.DomainResource):
@@ -22,11 +23,11 @@ class RelatedPerson(domainresource.DomainResource):
     """ Address where the related person can be contacted or visited.
         List of `Address` items (represented as `dict` in JSON). """
 
-    birthDate = Column()
+    birthDate = Column(FHIRDate)
     """ The date on which the related person was born.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    gender = Column()
+    gender = Column(primitives.StringField)
     """ male | female | other | unknown.
         Type `str`. """
 
@@ -34,15 +35,15 @@ class RelatedPerson(domainresource.DomainResource):
     """ A human identifier for this person.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(HumanName)
     """ A name associated with the person.
         Type `HumanName` (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ The patient this person is related to.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Period of time that this relationship is considered valid.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -50,7 +51,7 @@ class RelatedPerson(domainresource.DomainResource):
     """ Image of the person.
         List of `Attachment` items (represented as `dict` in JSON). """
 
-    relationship = Column()
+    relationship = Column(CodeableConcept)
     """ The nature of the relationship.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

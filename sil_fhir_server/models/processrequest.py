@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ProcessRequest(domainresource.DomainResource):
@@ -16,15 +17,15 @@ class ProcessRequest(domainresource.DomainResource):
 
     __tablename__ = "ProcessRequest"
 
-    action = Column()
+    action = Column(primitives.StringField)
     """ cancel | poll | reprocess | status.
         Type `str`. """
 
-    created = Column()
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    exclude = Column(str)
+    exclude = Column(primitives.StringField)
     """ Resource type(s) to exclude.
         List of `str` items. """
 
@@ -32,7 +33,7 @@ class ProcessRequest(domainresource.DomainResource):
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    include = Column(str)
+    include = Column(primitives.StringField)
     """ Resource type(s) to include.
         List of `str` items. """
 
@@ -40,43 +41,43 @@ class ProcessRequest(domainresource.DomainResource):
     """ Items to re-adjudicate.
         List of `ProcessRequestItem` items (represented as `dict` in JSON). """
 
-    nullify = Column()
+    nullify = Column(bool)
     """ Nullify.
         Type `bool`. """
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Period.
         Type `Period` (represented as `dict` in JSON). """
 
-    provider = Column()
+    provider = Column(FHIRReference)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    reference = Column()
+    reference = Column(primitives.StringField)
     """ Reference number/string.
         Type `str`. """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ Request reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    response = Column()
+    response = Column(FHIRReference)
     """ Response reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    ruleset = Column()
+    ruleset = Column(Coding)
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    target = Column()
+    target = Column(FHIRReference)
     """ Target of the request.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
@@ -104,6 +105,7 @@ class ProcessRequest(domainresource.DomainResource):
         return '<ProcessRequest %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ProcessRequestItem(backboneelement.BackboneElement):
@@ -115,7 +117,7 @@ class ProcessRequestItem(backboneelement.BackboneElement):
 
     __tablename__ = "ProcessRequestItem"
 
-    sequenceLinkId = Column()
+    sequenceLinkId = Column(Integer)
     """ Service instance.
         Type `int`. """
 

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Media(domainresource.DomainResource):
@@ -14,23 +15,23 @@ class Media(domainresource.DomainResource):
 
     __tablename__ = "Media"
 
-    content = Column()
+    content = Column(Attachment)
     """ Actual Media - reference or data.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    deviceName = Column()
+    deviceName = Column(primitives.StringField)
     """ Name of the device/manufacturer.
         Type `str`. """
 
-    duration = Column()
+    duration = Column(Integer)
     """ Length in seconds (audio / video).
         Type `int`. """
 
-    frames = Column()
+    frames = Column(Integer)
     """ Number of frames if > 1 (photo).
         Type `int`. """
 
-    height = Column()
+    height = Column(Integer)
     """ Height of the image in pixels (photo/video).
         Type `int`. """
 
@@ -38,27 +39,27 @@ class Media(domainresource.DomainResource):
     """ Identifier(s) for the image.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    operator = Column()
+    operator = Column(FHIRReference)
     """ The person who generated the image.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who/What this Media is a record of.
         Type `FHIRReference` referencing `Patient, Practitioner, Group, Device, Specimen` (represented as `dict` in JSON). """
 
-    subtype = Column()
+    subtype = Column(CodeableConcept)
     """ The type of acquisition equipment/process.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ photo | video | audio.
         Type `str`. """
 
-    view = Column()
+    view = Column(CodeableConcept)
     """ Imaging view, e.g. Lateral or Antero-posterior.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    width = Column()
+    width = Column(Integer)
     """ Width of the image in pixels (photo/video).
         Type `int`. """
 

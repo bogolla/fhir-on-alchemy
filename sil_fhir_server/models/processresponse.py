@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ProcessResponse(domainresource.DomainResource):
@@ -16,11 +17,11 @@ class ProcessResponse(domainresource.DomainResource):
 
     __tablename__ = "ProcessResponse"
 
-    created = Column()
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    disposition = Column()
+    disposition = Column(primitives.StringField)
     """ Disposition Message.
         Type `str`. """
 
@@ -28,7 +29,7 @@ class ProcessResponse(domainresource.DomainResource):
     """ Error code.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    form = Column()
+    form = Column(Coding)
     """ Printed Form Identifier.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -40,31 +41,31 @@ class ProcessResponse(domainresource.DomainResource):
     """ Notes.
         List of `ProcessResponseNotes` items (represented as `dict` in JSON). """
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Authoring Organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    outcome = Column()
+    outcome = Column(Coding)
     """ Processing outcome.
         Type `Coding` (represented as `dict` in JSON). """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ Request reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    requestOrganization = Column()
+    requestOrganization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    requestProvider = Column()
+    requestProvider = Column(FHIRReference)
     """ Responsible Practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    ruleset = Column()
+    ruleset = Column(Coding)
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -89,6 +90,7 @@ class ProcessResponse(domainresource.DomainResource):
         return '<ProcessResponse %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ProcessResponseNotes(backboneelement.BackboneElement):
@@ -100,11 +102,11 @@ class ProcessResponseNotes(backboneelement.BackboneElement):
 
     __tablename__ = "ProcessResponseNotes"
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Notes text.
         Type `str`. """
 
-    type = Column()
+    type = Column(Coding)
     """ display | print | printoper.
         Type `Coding` (represented as `dict` in JSON). """
 

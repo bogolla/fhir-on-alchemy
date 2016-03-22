@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ExplanationOfBenefit(domainresource.DomainResource):
@@ -17,11 +18,11 @@ class ExplanationOfBenefit(domainresource.DomainResource):
 
     __tablename__ = "ExplanationOfBenefit"
 
-    created = Column()
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    disposition = Column()
+    disposition = Column(primitives.StringField)
     """ Disposition Message.
         Type `str`. """
 
@@ -29,31 +30,31 @@ class ExplanationOfBenefit(domainresource.DomainResource):
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Insurer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    outcome = Column()
+    outcome = Column(primitives.StringField)
     """ complete | error.
         Type `str`. """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ Claim reference.
         Type `FHIRReference` referencing `Claim` (represented as `dict` in JSON). """
 
-    requestOrganization = Column()
+    requestOrganization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    requestProvider = Column()
+    requestProvider = Column(FHIRReference)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    ruleset = Column()
+    ruleset = Column(Coding)
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
 

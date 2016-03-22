@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ImagingObjectSelection(domainresource.DomainResource):
@@ -24,19 +25,19 @@ class ImagingObjectSelection(domainresource.DomainResource):
 
     __tablename__ = "ImagingObjectSelection"
 
-    author = Column()
+    author = Column(FHIRReference)
     """ Author (human or machine).
         Type `FHIRReference` referencing `Practitioner, Device, Organization, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    authoringTime = Column()
+    authoringTime = Column(FHIRDate)
     """ Authoring time of the selection.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Description text.
         Type `str`. """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Patient of the selected objects.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -44,11 +45,11 @@ class ImagingObjectSelection(domainresource.DomainResource):
     """ Study identity of the selected instances.
         List of `ImagingObjectSelectionStudy` items (represented as `dict` in JSON). """
 
-    title = Column()
+    title = Column(CodeableConcept)
     """ Reason for selection.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    uid = Column()
+    uid = Column(primitives.StringField)
     """ Instance UID.
         Type `str`. """
 
@@ -67,6 +68,7 @@ class ImagingObjectSelection(domainresource.DomainResource):
         return '<ImagingObjectSelection %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ImagingObjectSelectionStudy(backboneelement.BackboneElement):
@@ -78,7 +80,7 @@ class ImagingObjectSelectionStudy(backboneelement.BackboneElement):
 
     __tablename__ = "ImagingObjectSelectionStudy"
 
-    imagingStudy = Column()
+    imagingStudy = Column(FHIRReference)
     """ Reference to ImagingStudy.
         Type `FHIRReference` referencing `ImagingStudy` (represented as `dict` in JSON). """
 
@@ -86,11 +88,11 @@ class ImagingObjectSelectionStudy(backboneelement.BackboneElement):
     """ Series identity of the selected instances.
         List of `ImagingObjectSelectionStudySeries` items (represented as `dict` in JSON). """
 
-    uid = Column()
+    uid = Column(primitives.StringField)
     """ Study instance UID.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Retrieve study URL.
         Type `str`. """
 
@@ -106,6 +108,7 @@ class ImagingObjectSelectionStudy(backboneelement.BackboneElement):
         return '<ImagingObjectSelectionStudy %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImagingObjectSelectionStudySeries(backboneelement.BackboneElement):
     """ Series identity of the selected instances.
 
@@ -119,11 +122,11 @@ class ImagingObjectSelectionStudySeries(backboneelement.BackboneElement):
     """ The selected instance.
         List of `ImagingObjectSelectionStudySeriesInstance` items (represented as `dict` in JSON). """
 
-    uid = Column()
+    uid = Column(primitives.StringField)
     """ Series instance UID.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Retrieve series URL.
         Type `str`. """
 
@@ -138,6 +141,7 @@ class ImagingObjectSelectionStudySeries(backboneelement.BackboneElement):
         return '<ImagingObjectSelectionStudySeries %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImagingObjectSelectionStudySeriesInstance(backboneelement.BackboneElement):
     """ The selected instance.
 
@@ -150,15 +154,15 @@ class ImagingObjectSelectionStudySeriesInstance(backboneelement.BackboneElement)
     """ The frame set.
         List of `ImagingObjectSelectionStudySeriesInstanceFrames` items (represented as `dict` in JSON). """
 
-    sopClass = Column()
+    sopClass = Column(primitives.StringField)
     """ SOP class UID of instance.
         Type `str`. """
 
-    uid = Column()
+    uid = Column(primitives.StringField)
     """ Selected instance UID.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Retrieve instance URL.
         Type `str`. """
 
@@ -174,6 +178,7 @@ class ImagingObjectSelectionStudySeriesInstance(backboneelement.BackboneElement)
         return '<ImagingObjectSelectionStudySeriesInstance %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImagingObjectSelectionStudySeriesInstanceFrames(backboneelement.BackboneElement):
     """ The frame set.
 
@@ -182,11 +187,11 @@ class ImagingObjectSelectionStudySeriesInstanceFrames(backboneelement.BackboneEl
 
     __tablename__ = "ImagingObjectSelectionStudySeriesInstanceFrames"
 
-    frameNumbers = Column(int)
+    frameNumbers = Column(Integer)
     """ Frame numbers.
         List of `int` items. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Retrieve frame URL.
         Type `str`. """
 

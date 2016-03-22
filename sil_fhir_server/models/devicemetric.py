@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DeviceMetric(domainresource.DomainResource):
@@ -21,39 +22,39 @@ class DeviceMetric(domainresource.DomainResource):
         required to be performed.
         List of `DeviceMetricCalibration` items (represented as `dict` in JSON). """
 
-    category = Column()
+    category = Column(primitives.StringField)
     """ measurement | setting | calculation | unspecified.
         Type `str`. """
 
-    color = Column()
+    color = Column(primitives.StringField)
     """ black | red | green | yellow | blue | magenta | cyan | white.
         Type `str`. """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Unique identifier of this DeviceMetric.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    measurementPeriod = Column()
+    measurementPeriod = Column(Timing)
     """ Describes the measurement repetition time.
         Type `Timing` (represented as `dict` in JSON). """
 
-    operationalStatus = Column()
+    operationalStatus = Column(primitives.StringField)
     """ on | off | standby.
         Type `str`. """
 
-    parent = Column()
+    parent = Column(FHIRReference)
     """ Describes the link to the parent DeviceComponent.
         Type `FHIRReference` referencing `DeviceComponent` (represented as `dict` in JSON). """
 
-    source = Column()
+    source = Column(FHIRReference)
     """ Describes the link to the source Device.
         Type `FHIRReference` referencing `Device` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Type of metric.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    unit = Column()
+    unit = Column(CodeableConcept)
     """ Unit of metric.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -75,6 +76,7 @@ class DeviceMetric(domainresource.DomainResource):
         return '<DeviceMetric %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DeviceMetricCalibration(backboneelement.BackboneElement):
@@ -84,15 +86,15 @@ class DeviceMetricCalibration(backboneelement.BackboneElement):
 
     __tablename__ = "DeviceMetricCalibration"
 
-    state = Column()
+    state = Column(primitives.StringField)
     """ not-calibrated | calibration-required | calibrated | unspecified.
         Type `str`. """
 
-    time = Column()
+    time = Column(FHIRDate)
     """ Describes the time last calibration has been performed.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ unspecified | offset | gain | two-point.
         Type `str`. """
 

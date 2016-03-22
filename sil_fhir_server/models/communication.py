@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Communication(domainresource.DomainResource):
@@ -17,11 +19,11 @@ class Communication(domainresource.DomainResource):
 
     __tablename__ = "Communication"
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ Message category.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Encounter leading to message.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -41,7 +43,7 @@ class Communication(domainresource.DomainResource):
     """ Indication for message.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    received = Column()
+    received = Column(FHIRDate)
     """ When received.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -49,23 +51,23 @@ class Communication(domainresource.DomainResource):
     """ Message recipient.
         List of `FHIRReference` items referencing `Device, Organization, Patient, Practitioner, RelatedPerson, Group` (represented as `dict` in JSON). """
 
-    requestDetail = Column()
+    requestDetail = Column(FHIRReference)
     """ CommunicationRequest producing this message.
         Type `FHIRReference` referencing `CommunicationRequest` (represented as `dict` in JSON). """
 
-    sender = Column()
+    sender = Column(FHIRReference)
     """ Message sender.
         Type `FHIRReference` referencing `Device, Organization, Patient, Practitioner, RelatedPerson` (represented as `dict` in JSON). """
 
-    sent = Column()
+    sent = Column(FHIRDate)
     """ When sent.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ in-progress | completed | suspended | rejected | failed.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Focus of message.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -90,6 +92,7 @@ class Communication(domainresource.DomainResource):
         return '<Communication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class CommunicationPayload(backboneelement.BackboneElement):
@@ -100,15 +103,15 @@ class CommunicationPayload(backboneelement.BackboneElement):
 
     __tablename__ = "CommunicationPayload"
 
-    contentAttachment = Column()
+    contentAttachment = Column(Attachment)
     """ Message part content.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    contentReference = Column()
+    contentReference = Column(FHIRReference)
     """ Message part content.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    contentString = Column()
+    contentString = Column(primitives.StringField)
     """ Message part content.
         Type `str`. """
 

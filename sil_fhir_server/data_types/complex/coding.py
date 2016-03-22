@@ -1,39 +1,41 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Coding)
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Coding)
 #  Date: 2016-03-18.
 
 
-from . import element
+from sqlalchemy import Column
+from sil_fhir_server.data_types import primitives
+from . import complex_dt
 
-class Coding(element.Element):
-    """ A reference to a code defined by a terminology system.
-    """
+
+class Coding(complex_dt.ComplexElement):
+    """ A reference to a code defined by a terminology system. """
 
     __tablename__ = "Coding"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ Symbol in syntax defined by the system.
         Type `str`. """
 
-    display = Column()
+    display = Column(primitives.StringField)
     """ Representation defined by the system.
         Type `str`. """
 
-    system = Column()
+    system = Column(primitives.StringField)
     """ Identity of the terminology system.
         Type `str`. """
 
-    userSelected = Column()
+    userSelected = Column(primitives.BooleanField)
     """ If this coding was chosen directly by the user.
         Type `bool`. """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Version of the system - if relevant.
         Type `str`. """
 
-    def __init__(self, code, display, system, userSelected, version,):
+    def __init__(self, code, display, system, userSelected, version):
         """ Initialize all valid properties.
         """
         self.code = code
@@ -43,5 +45,4 @@ class Coding(element.Element):
         self.version = version
 
     def __repr__(self):
-        return '<Coding %r>' % 'self.property'  # replace self.property
-
+        return '<Coding %r>' % self.display

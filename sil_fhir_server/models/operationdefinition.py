@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class OperationDefinition(domainresource.DomainResource):
@@ -16,11 +17,11 @@ class OperationDefinition(domainresource.DomainResource):
 
     __tablename__ = "OperationDefinition"
 
-    base = Column()
+    base = Column(FHIRReference)
     """ Marks this as a profile of the base.
         Type `FHIRReference` referencing `OperationDefinition` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ Name used to invoke the operation.
         Type `str`. """
 
@@ -28,35 +29,35 @@ class OperationDefinition(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `OperationDefinitionContact` items (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date for this version of the operation definition.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Natural language description of the operation.
         Type `str`. """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
-    idempotent = Column()
+    idempotent = Column(bool)
     """ Whether content is unchanged by operation.
         Type `bool`. """
 
-    instance = Column()
+    instance = Column(bool)
     """ Invoke on an instance?.
         Type `bool`. """
 
-    kind = Column()
+    kind = Column(primitives.StringField)
     """ operation | query.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Informal name for this operation.
         Type `str`. """
 
-    notes = Column()
+    notes = Column(primitives.StringField)
     """ Additional information about use.
         Type `str`. """
 
@@ -64,31 +65,31 @@ class OperationDefinition(domainresource.DomainResource):
     """ Parameters for the operation/query.
         List of `OperationDefinitionParameter` items (represented as `dict` in JSON). """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    requirements = Column()
+    requirements = Column(primitives.StringField)
     """ Why is this needed?.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    system = Column()
+    system = Column(bool)
     """ Invoke at the system level?.
         Type `bool`. """
 
-    type = Column(str)
+    type = Column(primitives.StringField)
     """ Invoke at resource level for these type.
         List of `str` items. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Logical URL to reference this operation definition.
         Type `str`. """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical id for this version of the operation definition.
         Type `str`. """
 
@@ -119,6 +120,7 @@ class OperationDefinition(domainresource.DomainResource):
         return '<OperationDefinition %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class OperationDefinitionContact(backboneelement.BackboneElement):
@@ -129,7 +131,7 @@ class OperationDefinitionContact(backboneelement.BackboneElement):
 
     __tablename__ = "OperationDefinitionContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -147,6 +149,7 @@ class OperationDefinitionContact(backboneelement.BackboneElement):
         return '<OperationDefinitionContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class OperationDefinitionParameter(backboneelement.BackboneElement):
     """ Parameters for the operation/query.
 
@@ -155,23 +158,23 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
 
     __tablename__ = "OperationDefinitionParameter"
 
-    binding = Column()
+    binding = Column(OperationDefinitionParameterBinding)
     """ ValueSet details if this is coded.
         Type `OperationDefinitionParameterBinding` (represented as `dict` in JSON). """
 
-    documentation = Column()
+    documentation = Column(primitives.StringField)
     """ Description of meaning/use.
         Type `str`. """
 
-    max = Column()
+    max = Column(primitives.StringField)
     """ Maximum Cardinality (a number or *).
         Type `str`. """
 
-    min = Column()
+    min = Column(Integer)
     """ Minimum Cardinality.
         Type `int`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name in Parameters.parameter.name or in URL.
         Type `str`. """
 
@@ -179,15 +182,15 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
     """ Parts of a Tuple Parameter.
         List of `OperationDefinitionParameter` items (represented as `dict` in JSON). """
 
-    profile = Column()
+    profile = Column(FHIRReference)
     """ Profile on the type.
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ What type this parameter has.
         Type `str`. """
 
-    use = Column()
+    use = Column(primitives.StringField)
     """ in | out.
         Type `str`. """
 
@@ -208,6 +211,7 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
         return '<OperationDefinitionParameter %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class OperationDefinitionParameterBinding(backboneelement.BackboneElement):
     """ ValueSet details if this is coded.
 
@@ -217,15 +221,15 @@ class OperationDefinitionParameterBinding(backboneelement.BackboneElement):
 
     __tablename__ = "OperationDefinitionParameterBinding"
 
-    strength = Column()
+    strength = Column(primitives.StringField)
     """ required | extensible | preferred | example.
         Type `str`. """
 
-    valueSetReference = Column()
+    valueSetReference = Column(FHIRReference)
     """ Source of value set.
         Type `FHIRReference` referencing `ValueSet` (represented as `dict` in JSON). """
 
-    valueSetUri = Column()
+    valueSetUri = Column(primitives.StringField)
     """ Source of value set.
         Type `str`. """
 

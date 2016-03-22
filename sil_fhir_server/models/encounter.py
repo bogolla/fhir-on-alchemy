@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Encounter(domainresource.DomainResource):
@@ -17,11 +18,11 @@ class Encounter(domainresource.DomainResource):
 
     __tablename__ = "Encounter"
 
-    appointment = Column()
+    appointment = Column(FHIRReference)
     """ The appointment that scheduled this encounter.
         Type `FHIRReference` referencing `Appointment` (represented as `dict` in JSON). """
 
-    class_fhir = Column()
+    class_fhir = Column(primitives.StringField)
     """ inpatient | outpatient | ambulatory | emergency +.
         Type `str`. """
 
@@ -29,7 +30,7 @@ class Encounter(domainresource.DomainResource):
     """ Episode(s) of care that this encounter should be recorded against.
         List of `FHIRReference` items referencing `EpisodeOfCare` (represented as `dict` in JSON). """
 
-    hospitalization = Column()
+    hospitalization = Column(EncounterHospitalization)
     """ Details about the admission to a healthcare service.
         Type `EncounterHospitalization` (represented as `dict` in JSON). """
 
@@ -45,7 +46,7 @@ class Encounter(domainresource.DomainResource):
     """ Reason the encounter takes place (resource).
         List of `FHIRReference` items referencing `Condition, Procedure` (represented as `dict` in JSON). """
 
-    length = Column()
+    length = Column(Quantity)
     """ Quantity of time the encounter lasted (less time absent).
         Type `Quantity` referencing `Duration` (represented as `dict` in JSON). """
 
@@ -53,7 +54,7 @@ class Encounter(domainresource.DomainResource):
     """ List of locations where the patient has been.
         List of `EncounterLocation` items (represented as `dict` in JSON). """
 
-    partOf = Column()
+    partOf = Column(FHIRReference)
     """ Another Encounter this encounter is part of.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -61,15 +62,15 @@ class Encounter(domainresource.DomainResource):
     """ List of participants involved in the encounter.
         List of `EncounterParticipant` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ The patient present at the encounter.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ The start and end time of the encounter.
         Type `Period` (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(CodeableConcept)
     """ Indicates the urgency of the encounter.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -77,11 +78,11 @@ class Encounter(domainresource.DomainResource):
     """ Reason the encounter takes place (code).
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    serviceProvider = Column()
+    serviceProvider = Column(FHIRReference)
     """ The custodian organization of this Encounter record.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ planned | arrived | in-progress | onleave | finished | cancelled.
         Type `str`. """
 
@@ -120,6 +121,7 @@ class Encounter(domainresource.DomainResource):
         return '<Encounter %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class EncounterHospitalization(backboneelement.BackboneElement):
@@ -128,7 +130,7 @@ class EncounterHospitalization(backboneelement.BackboneElement):
 
     __tablename__ = "EncounterHospitalization"
 
-    admitSource = Column()
+    admitSource = Column(CodeableConcept)
     """ From where patient was admitted (physician referral, transfer).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -136,7 +138,7 @@ class EncounterHospitalization(backboneelement.BackboneElement):
     """ The admitting diagnosis as reported by admitting practitioner.
         List of `FHIRReference` items referencing `Condition` (represented as `dict` in JSON). """
 
-    destination = Column()
+    destination = Column(FHIRReference)
     """ Location to which the patient is discharged.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
@@ -149,19 +151,19 @@ class EncounterHospitalization(backboneelement.BackboneElement):
         hospital after all testing, surgery, and workup are complete.
         List of `FHIRReference` items referencing `Condition` (represented as `dict` in JSON). """
 
-    dischargeDisposition = Column()
+    dischargeDisposition = Column(CodeableConcept)
     """ Category or kind of location after discharge.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    origin = Column()
+    origin = Column(FHIRReference)
     """ The location from which the patient came before admission.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    preAdmissionIdentifier = Column()
+    preAdmissionIdentifier = Column(Identifier)
     """ Pre-admission identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    reAdmission = Column()
+    reAdmission = Column(CodeableConcept)
     """ The type of hospital re-admission that has occurred (if any). If
         the value is absent, then this is not identified as a readmission.
         Type `CodeableConcept` (represented as `dict` in JSON). """
@@ -193,6 +195,7 @@ class EncounterHospitalization(backboneelement.BackboneElement):
         return '<EncounterHospitalization %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class EncounterLocation(backboneelement.BackboneElement):
     """ List of locations where the patient has been.
 
@@ -201,15 +204,15 @@ class EncounterLocation(backboneelement.BackboneElement):
 
     __tablename__ = "EncounterLocation"
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Location the encounter takes place.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Time period during which the patient was present at the location.
         Type `Period` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ planned | active | reserved | completed.
         Type `str`. """
 
@@ -224,6 +227,7 @@ class EncounterLocation(backboneelement.BackboneElement):
         return '<EncounterLocation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class EncounterParticipant(backboneelement.BackboneElement):
     """ List of participants involved in the encounter.
 
@@ -232,11 +236,11 @@ class EncounterParticipant(backboneelement.BackboneElement):
 
     __tablename__ = "EncounterParticipant"
 
-    individual = Column()
+    individual = Column(FHIRReference)
     """ Persons involved in the encounter other than the patient.
         Type `FHIRReference` referencing `Practitioner, RelatedPerson` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Period of time during the encounter participant was present.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -255,6 +259,7 @@ class EncounterParticipant(backboneelement.BackboneElement):
         return '<EncounterParticipant %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class EncounterStatusHistory(backboneelement.BackboneElement):
     """ List of past encounter statuses.
 
@@ -265,11 +270,11 @@ class EncounterStatusHistory(backboneelement.BackboneElement):
 
     __tablename__ = "EncounterStatusHistory"
 
-    period = Column()
+    period = Column(Period)
     """ The time that the episode was in the specified status.
         Type `Period` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ planned | arrived | in-progress | onleave | finished | cancelled.
         Type `str`. """
 

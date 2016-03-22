@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class AuditEvent(domainresource.DomainResource):
@@ -17,7 +19,7 @@ class AuditEvent(domainresource.DomainResource):
 
     __tablename__ = "AuditEvent"
 
-    event = Column()
+    event = Column(AuditEventEvent)
     """ What was done.
         Type `AuditEventEvent` (represented as `dict` in JSON). """
 
@@ -29,7 +31,7 @@ class AuditEvent(domainresource.DomainResource):
     """ A person, a hardware device or software process.
         List of `AuditEventParticipant` items (represented as `dict` in JSON). """
 
-    source = Column()
+    source = Column(AuditEventSource)
     """ Application systems and processes.
         Type `AuditEventSource` (represented as `dict` in JSON). """
 
@@ -45,6 +47,7 @@ class AuditEvent(domainresource.DomainResource):
         return '<AuditEvent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class AuditEventEvent(backboneelement.BackboneElement):
@@ -56,19 +59,19 @@ class AuditEventEvent(backboneelement.BackboneElement):
 
     __tablename__ = "AuditEventEvent"
 
-    action = Column()
+    action = Column(primitives.StringField)
     """ Type of action performed during the event.
         Type `str`. """
 
-    dateTime = Column()
+    dateTime = Column(FHIRDate)
     """ Time when the event occurred on source.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    outcome = Column()
+    outcome = Column(primitives.StringField)
     """ Whether the event succeeded or failed.
         Type `str`. """
 
-    outcomeDesc = Column()
+    outcomeDesc = Column(primitives.StringField)
     """ Description of the event outcome.
         Type `str`. """
 
@@ -80,7 +83,7 @@ class AuditEventEvent(backboneelement.BackboneElement):
     """ More specific type/id for the event.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Type/identifier of event.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -99,13 +102,14 @@ class AuditEventEvent(backboneelement.BackboneElement):
         return '<AuditEventEvent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class AuditEventObject(backboneelement.BackboneElement):
     """ Specific instances of data or objects that have been accessed.
     """
 
     __tablename__ = "AuditEventObject"
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Descriptive text.
         Type `str`. """
 
@@ -113,27 +117,27 @@ class AuditEventObject(backboneelement.BackboneElement):
     """ Additional Information about the Object.
         List of `AuditEventObjectDetail` items (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Specific instance of object (e.g. versioned).
         Type `Identifier` (represented as `dict` in JSON). """
 
-    lifecycle = Column()
+    lifecycle = Column(Coding)
     """ Life-cycle stage for the object.
         Type `Coding` (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Instance-specific descriptor for Object.
         Type `str`. """
 
-    query = Column()
+    query = Column(primitives.StringField)
     """ Actual query for object.
         Type `str`. """
 
-    reference = Column()
+    reference = Column(FHIRReference)
     """ Specific instance of resource (e.g. versioned).
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    role = Column()
+    role = Column(Coding)
     """ What role the Object played.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -141,7 +145,7 @@ class AuditEventObject(backboneelement.BackboneElement):
     """ Security labels applied to the object.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(Coding)
     """ Type of object involved.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -163,17 +167,18 @@ class AuditEventObject(backboneelement.BackboneElement):
         return '<AuditEventObject %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class AuditEventObjectDetail(backboneelement.BackboneElement):
     """ Additional Information about the Object.
     """
 
     __tablename__ = "AuditEventObjectDetail"
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ Name of the property.
         Type `str`. """
 
-    value = Column()
+    value = Column(primitives.StringField)
     """ Property value.
         Type `str`. """
 
@@ -187,33 +192,34 @@ class AuditEventObjectDetail(backboneelement.BackboneElement):
         return '<AuditEventObjectDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class AuditEventParticipant(backboneelement.BackboneElement):
     """ A person, a hardware device or software process.
     """
 
     __tablename__ = "AuditEventParticipant"
 
-    altId = Column()
+    altId = Column(primitives.StringField)
     """ Alternative User id e.g. authentication.
         Type `str`. """
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Where.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    media = Column()
+    media = Column(Coding)
     """ Type of media.
         Type `Coding` (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Human-meaningful name for the user.
         Type `str`. """
 
-    network = Column()
+    network = Column(AuditEventParticipantNetwork)
     """ Logical network location for application activity.
         Type `AuditEventParticipantNetwork` (represented as `dict` in JSON). """
 
-    policy = Column(str)
+    policy = Column(primitives.StringField)
     """ Policy that authorized event.
         List of `str` items. """
 
@@ -221,11 +227,11 @@ class AuditEventParticipant(backboneelement.BackboneElement):
     """ Reason given for this user.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    reference = Column()
+    reference = Column(FHIRReference)
     """ Direct reference to resource.
         Type `FHIRReference` referencing `Practitioner, Organization, Device, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    requestor = Column()
+    requestor = Column(bool)
     """ Whether user is initiator.
         Type `bool`. """
 
@@ -233,7 +239,7 @@ class AuditEventParticipant(backboneelement.BackboneElement):
     """ User roles (e.g. local RBAC codes).
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    userId = Column()
+    userId = Column(Identifier)
     """ Unique identifier for the user.
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -256,6 +262,7 @@ class AuditEventParticipant(backboneelement.BackboneElement):
         return '<AuditEventParticipant %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class AuditEventParticipantNetwork(backboneelement.BackboneElement):
     """ Logical network location for application activity.
 
@@ -265,11 +272,11 @@ class AuditEventParticipantNetwork(backboneelement.BackboneElement):
 
     __tablename__ = "AuditEventParticipantNetwork"
 
-    address = Column()
+    address = Column(primitives.StringField)
     """ Identifier for the network access point of the user device.
         Type `str`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ The type of network access point.
         Type `str`. """
 
@@ -283,17 +290,18 @@ class AuditEventParticipantNetwork(backboneelement.BackboneElement):
         return '<AuditEventParticipantNetwork %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class AuditEventSource(backboneelement.BackboneElement):
     """ Application systems and processes.
     """
 
     __tablename__ = "AuditEventSource"
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ The identity of source detecting the event.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    site = Column()
+    site = Column(primitives.StringField)
     """ Logical source location within the enterprise.
         Type `str`. """
 

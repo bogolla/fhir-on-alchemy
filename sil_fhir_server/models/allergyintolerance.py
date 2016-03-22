@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class AllergyIntolerance(domainresource.DomainResource):
@@ -16,11 +18,11 @@ class AllergyIntolerance(domainresource.DomainResource):
 
     __tablename__ = "AllergyIntolerance"
 
-    category = Column()
+    category = Column(primitives.StringField)
     """ food | medication | environment | other - Category of Substance.
         Type `str`. """
 
-    criticality = Column()
+    criticality = Column(primitives.StringField)
     """ CRITL | CRITH | CRITU.
         Type `str`. """
 
@@ -28,19 +30,19 @@ class AllergyIntolerance(domainresource.DomainResource):
     """ External ids for this item.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    lastOccurence = Column()
+    lastOccurence = Column(FHIRDate)
     """ Date(/time) of last known occurrence of a reaction.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    note = Column()
+    note = Column(Annotation)
     """ Additional text not captured in other fields.
         Type `Annotation` (represented as `dict` in JSON). """
 
-    onset = Column()
+    onset = Column(FHIRDate)
     """ Date(/time) when manifestations showed.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who the sensitivity is for.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -48,28 +50,28 @@ class AllergyIntolerance(domainresource.DomainResource):
     """ Adverse Reaction Events linked to exposure to substance.
         List of `AllergyIntoleranceReaction` items (represented as `dict` in JSON). """
 
-    recordedDate = Column()
+    recordedDate = Column(FHIRDate)
     """ When recorded.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    recorder = Column()
+    recorder = Column(FHIRReference)
     """ Who recorded the sensitivity.
         Type `FHIRReference` referencing `Practitioner, Patient` (represented as `dict` in JSON). """
 
-    reporter = Column()
+    reporter = Column(FHIRReference)
     """ Source of the information about the allergy.
         Type `FHIRReference` referencing `Patient, RelatedPerson, Practitioner` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ active | unconfirmed | confirmed | inactive | resolved | refuted |
         entered-in-error.
         Type `str`. """
 
-    substance = Column()
+    substance = Column(CodeableConcept)
     """ Substance, (or class) considered to be responsible for risk.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ allergy | intolerance - Underlying mechanism (if known).
         Type `str`. """
 
@@ -95,6 +97,7 @@ class AllergyIntolerance(domainresource.DomainResource):
         return '<AllergyIntolerance %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class AllergyIntoleranceReaction(backboneelement.BackboneElement):
@@ -106,16 +109,16 @@ class AllergyIntoleranceReaction(backboneelement.BackboneElement):
 
     __tablename__ = "AllergyIntoleranceReaction"
 
-    certainty = Column()
+    certainty = Column(primitives.StringField)
     """ unlikely | likely | confirmed - clinical certainty about the
         specific substance.
         Type `str`. """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Description of the event as a whole.
         Type `str`. """
 
-    exposureRoute = Column()
+    exposureRoute = Column(CodeableConcept)
     """ How the subject was exposed to the substance.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -123,19 +126,19 @@ class AllergyIntoleranceReaction(backboneelement.BackboneElement):
     """ Clinical symptoms/signs associated with the Event.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    note = Column()
+    note = Column(Annotation)
     """ Text about event not captured in other fields.
         Type `Annotation` (represented as `dict` in JSON). """
 
-    onset = Column()
+    onset = Column(FHIRDate)
     """ Date(/time) when manifestations showed.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    severity = Column()
+    severity = Column(primitives.StringField)
     """ mild | moderate | severe (of event as a whole).
         Type `str`. """
 
-    substance = Column()
+    substance = Column(CodeableConcept)
     """ Specific substance considered to be responsible for event.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

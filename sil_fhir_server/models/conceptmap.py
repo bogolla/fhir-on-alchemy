@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class ConceptMap(domainresource.DomainResource):
@@ -21,15 +23,15 @@ class ConceptMap(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `ConceptMapContact` items (represented as `dict` in JSON). """
 
-    copyright = Column()
+    copyright = Column(primitives.StringField)
     """ Use and/or publishing restrictions.
         Type `str`. """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date for given status.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Human language description of the concept map.
         Type `str`. """
 
@@ -37,47 +39,47 @@ class ConceptMap(domainresource.DomainResource):
     """ Mappings for a concept from the source set.
         List of `ConceptMapElement` items (represented as `dict` in JSON). """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Additional identifier for the concept map.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Informal name for this concept map.
         Type `str`. """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (organization or individual).
         Type `str`. """
 
-    requirements = Column()
+    requirements = Column(primitives.StringField)
     """ Why needed.
         Type `str`. """
 
-    sourceReference = Column()
+    sourceReference = Column(FHIRReference)
     """ Identifies the source of the concepts which are being mapped.
         Type `FHIRReference` referencing `ValueSet, StructureDefinition` (represented as `dict` in JSON). """
 
-    sourceUri = Column()
+    sourceUri = Column(primitives.StringField)
     """ Identifies the source of the concepts which are being mapped.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    targetReference = Column()
+    targetReference = Column(FHIRReference)
     """ Provides context to the mappings.
         Type `FHIRReference` referencing `ValueSet, StructureDefinition` (represented as `dict` in JSON). """
 
-    targetUri = Column()
+    targetUri = Column(primitives.StringField)
     """ Provides context to the mappings.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Globally unique logical id for concept map.
         Type `str`. """
 
@@ -85,7 +87,7 @@ class ConceptMap(domainresource.DomainResource):
     """ Content intends to support these contexts.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical id for this version of the concept map.
         Type `str`. """
 
@@ -115,6 +117,7 @@ class ConceptMap(domainresource.DomainResource):
         return '<ConceptMap %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ConceptMapContact(backboneelement.BackboneElement):
@@ -125,7 +128,7 @@ class ConceptMapContact(backboneelement.BackboneElement):
 
     __tablename__ = "ConceptMapContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -143,6 +146,7 @@ class ConceptMapContact(backboneelement.BackboneElement):
         return '<ConceptMapContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConceptMapElement(backboneelement.BackboneElement):
     """ Mappings for a concept from the source set.
 
@@ -152,11 +156,11 @@ class ConceptMapElement(backboneelement.BackboneElement):
 
     __tablename__ = "ConceptMapElement"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ Identifies element being mapped.
         Type `str`. """
 
-    codeSystem = Column()
+    codeSystem = Column(primitives.StringField)
     """ Code System (if value set crosses code systems).
         Type `str`. """
 
@@ -175,6 +179,7 @@ class ConceptMapElement(backboneelement.BackboneElement):
         return '<ConceptMapElement %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConceptMapElementTarget(backboneelement.BackboneElement):
     """ Concept in target system for element.
 
@@ -183,15 +188,15 @@ class ConceptMapElementTarget(backboneelement.BackboneElement):
 
     __tablename__ = "ConceptMapElementTarget"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ Code that identifies the target element.
         Type `str`. """
 
-    codeSystem = Column()
+    codeSystem = Column(primitives.StringField)
     """ System of the target (if necessary).
         Type `str`. """
 
-    comments = Column()
+    comments = Column(primitives.StringField)
     """ Description of status/issues in mapping.
         Type `str`. """
 
@@ -199,7 +204,7 @@ class ConceptMapElementTarget(backboneelement.BackboneElement):
     """ Other elements required for this mapping (from context).
         List of `ConceptMapElementTargetDependsOn` items (represented as `dict` in JSON). """
 
-    equivalence = Column()
+    equivalence = Column(primitives.StringField)
     """ equivalent | equal | wider | subsumes | narrower | specializes |
         inexact | unmatched | disjoint.
         Type `str`. """
@@ -222,6 +227,7 @@ class ConceptMapElementTarget(backboneelement.BackboneElement):
         return '<ConceptMapElementTarget %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ConceptMapElementTargetDependsOn(backboneelement.BackboneElement):
     """ Other elements required for this mapping (from context).
 
@@ -232,15 +238,15 @@ class ConceptMapElementTargetDependsOn(backboneelement.BackboneElement):
 
     __tablename__ = "ConceptMapElementTargetDependsOn"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ Value of the referenced element.
         Type `str`. """
 
-    codeSystem = Column()
+    codeSystem = Column(primitives.StringField)
     """ Code System (if necessary).
         Type `str`. """
 
-    element = Column()
+    element = Column(primitives.StringField)
     """ Reference to element/field/ValueSet mapping depends on.
         Type `str`. """
 

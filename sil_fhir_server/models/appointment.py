@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Appointment(domainresource.DomainResource):
@@ -15,15 +17,15 @@ class Appointment(domainresource.DomainResource):
 
     __tablename__ = "Appointment"
 
-    comment = Column()
+    comment = Column(primitives.StringField)
     """ Additional comments.
         Type `str`. """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Shown on a subject line in a meeting request, or appointment list.
         Type `str`. """
 
-    end = Column()
+    end = Column(FHIRDate)
     """ When appointment is to conclude.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -31,7 +33,7 @@ class Appointment(domainresource.DomainResource):
     """ External Ids for this item.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    minutesDuration = Column()
+    minutesDuration = Column(Integer)
     """ Can be less than start/end (e.g. estimate).
         Type `int`. """
 
@@ -39,11 +41,11 @@ class Appointment(domainresource.DomainResource):
     """ Participants involved in appointment.
         List of `AppointmentParticipant` items (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(Integer)
     """ Used to make informed decisions if needing to re-prioritize.
         Type `int`. """
 
-    reason = Column()
+    reason = Column(CodeableConcept)
     """ Reason this appointment is scheduled.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -51,16 +53,16 @@ class Appointment(domainresource.DomainResource):
     """ If provided, then no schedule and start/end values MUST match slot.
         List of `FHIRReference` items referencing `Slot` (represented as `dict` in JSON). """
 
-    start = Column()
+    start = Column(FHIRDate)
     """ When appointment is to take place.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | pending | booked | arrived | fulfilled | cancelled |
         noshow.
         Type `str`. """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ The type of appointment that is being booked.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -84,6 +86,7 @@ class Appointment(domainresource.DomainResource):
         return '<Appointment %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class AppointmentParticipant(backboneelement.BackboneElement):
@@ -94,15 +97,15 @@ class AppointmentParticipant(backboneelement.BackboneElement):
 
     __tablename__ = "AppointmentParticipant"
 
-    actor = Column()
+    actor = Column(FHIRReference)
     """ Person, Location/HealthcareService or Device.
         Type `FHIRReference` referencing `Patient, Practitioner, RelatedPerson, Device, HealthcareService, Location` (represented as `dict` in JSON). """
 
-    required = Column()
+    required = Column(primitives.StringField)
     """ required | optional | information-only.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ accepted | declined | tentative | needs-action.
         Type `str`. """
 

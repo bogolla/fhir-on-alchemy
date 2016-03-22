@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class EpisodeOfCare(domainresource.DomainResource):
@@ -20,7 +21,7 @@ class EpisodeOfCare(domainresource.DomainResource):
 
     __tablename__ = "EpisodeOfCare"
 
-    careManager = Column()
+    careManager = Column(FHIRReference)
     """ Care manager/care co-ordinator for the patient.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
@@ -36,15 +37,15 @@ class EpisodeOfCare(domainresource.DomainResource):
     """ Identifier(s) for the EpisodeOfCare.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    managingOrganization = Column()
+    managingOrganization = Column(FHIRReference)
     """ Organization that assumes care.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Patient for this episode of care.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Interval during responsibility is assumed.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -52,7 +53,7 @@ class EpisodeOfCare(domainresource.DomainResource):
     """ Originating Referral Request(s).
         List of `FHIRReference` items referencing `ReferralRequest` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ planned | waitlist | active | onhold | finished | cancelled.
         Type `str`. """
 
@@ -83,6 +84,7 @@ class EpisodeOfCare(domainresource.DomainResource):
         return '<EpisodeOfCare %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class EpisodeOfCareCareTeam(backboneelement.BackboneElement):
@@ -94,11 +96,11 @@ class EpisodeOfCareCareTeam(backboneelement.BackboneElement):
 
     __tablename__ = "EpisodeOfCareCareTeam"
 
-    member = Column()
+    member = Column(FHIRReference)
     """ The practitioner (or Organization) within the team.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Period of time for this role.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -117,6 +119,7 @@ class EpisodeOfCareCareTeam(backboneelement.BackboneElement):
         return '<EpisodeOfCareCareTeam %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class EpisodeOfCareStatusHistory(backboneelement.BackboneElement):
     """ Past list of status codes.
 
@@ -126,11 +129,11 @@ class EpisodeOfCareStatusHistory(backboneelement.BackboneElement):
 
     __tablename__ = "EpisodeOfCareStatusHistory"
 
-    period = Column()
+    period = Column(Period)
     """ Period for the status.
         Type `Period` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ planned | waitlist | active | onhold | finished | cancelled.
         Type `str`. """
 

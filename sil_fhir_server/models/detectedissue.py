@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DetectedIssue(domainresource.DomainResource):
@@ -18,23 +19,23 @@ class DetectedIssue(domainresource.DomainResource):
 
     __tablename__ = "DetectedIssue"
 
-    author = Column()
+    author = Column(FHIRReference)
     """ The provider or device that identified the issue.
         Type `FHIRReference` referencing `Practitioner, Device` (represented as `dict` in JSON). """
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ Issue Category, e.g. drug-drug, duplicate therapy, etc..
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When identified.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    detail = Column()
+    detail = Column(primitives.StringField)
     """ Description and context.
         Type `str`. """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Unique id for the detected issue.
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -46,15 +47,15 @@ class DetectedIssue(domainresource.DomainResource):
     """ Step taken to address.
         List of `DetectedIssueMitigation` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Associated patient.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    reference = Column()
+    reference = Column(primitives.StringField)
     """ Authority for issue.
         Type `str`. """
 
-    severity = Column()
+    severity = Column(primitives.StringField)
     """ high | moderate | low.
         Type `str`. """
 
@@ -76,6 +77,7 @@ class DetectedIssue(domainresource.DomainResource):
         return '<DetectedIssue %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DetectedIssueMitigation(backboneelement.BackboneElement):
@@ -89,15 +91,15 @@ class DetectedIssueMitigation(backboneelement.BackboneElement):
 
     __tablename__ = "DetectedIssueMitigation"
 
-    action = Column()
+    action = Column(CodeableConcept)
     """ What mitigation?.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    author = Column()
+    author = Column(FHIRReference)
     """ Who is committing?.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date committed.
         Type `FHIRDate` (represented as `str` in JSON). """
 

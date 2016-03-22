@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Basic(domainresource.DomainResource):
@@ -16,24 +17,24 @@ class Basic(domainresource.DomainResource):
     """
 
     __tablename__ = "Basic"
-
-    author = Column()
+    
+    author = Column(FHIRReference)
     """ Who created.
         Type `FHIRReference` referencing `Practitioner, Patient, RelatedPerson` (represented as `dict` in JSON). """
-
-    code = Column()
+    
+    code = Column(CodeableConcept)
     """ Kind of Resource.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    created = Column()
+    
+    created = Column(FHIRDate)
     """ When created.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     identifier = Column(Identifier)
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    subject = Column()
+    
+    subject = Column(FHIRReference)
     """ Identifies the focus of this resource.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 

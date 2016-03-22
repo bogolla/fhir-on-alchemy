@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class BodySite(domainresource.DomainResource):
@@ -17,11 +19,11 @@ class BodySite(domainresource.DomainResource):
 
     __tablename__ = "BodySite"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Named anatomical location.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ The Description of anatomical location.
         Type `str`. """
 
@@ -37,7 +39,7 @@ class BodySite(domainresource.DomainResource):
     """ Modification to location code.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Patient.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 

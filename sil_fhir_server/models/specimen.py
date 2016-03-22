@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Specimen(domainresource.DomainResource):
@@ -15,11 +16,11 @@ class Specimen(domainresource.DomainResource):
 
     __tablename__ = "Specimen"
 
-    accessionIdentifier = Column()
+    accessionIdentifier = Column(Identifier)
     """ Identifier assigned by the lab.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    collection = Column()
+    collection = Column(SpecimenCollection)
     """ Collection details.
         Type `SpecimenCollection` (represented as `dict` in JSON). """
 
@@ -35,15 +36,15 @@ class Specimen(domainresource.DomainResource):
     """ Specimen from which this specimen originated.
         List of `FHIRReference` items referencing `Specimen` (represented as `dict` in JSON). """
 
-    receivedTime = Column()
+    receivedTime = Column(FHIRDate)
     """ The time when specimen was received for processing.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ available | unavailable | unsatisfactory | entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Where the specimen came from. This may be from the patient(s) or
         from the environment or a device.
         Type `FHIRReference` referencing `Patient, Group, Device, Substance` (represented as `dict` in JSON). """
@@ -52,7 +53,7 @@ class Specimen(domainresource.DomainResource):
     """ Treatment and processing step details.
         List of `SpecimenTreatment` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Kind of material that forms the specimen.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -74,6 +75,7 @@ class Specimen(domainresource.DomainResource):
         return '<Specimen %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class SpecimenCollection(backboneelement.BackboneElement):
@@ -84,31 +86,31 @@ class SpecimenCollection(backboneelement.BackboneElement):
 
     __tablename__ = "SpecimenCollection"
 
-    bodySite = Column()
+    bodySite = Column(CodeableConcept)
     """ Anatomical collection site.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    collectedDateTime = Column()
+    collectedDateTime = Column(FHIRDate)
     """ Collection time.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    collectedPeriod = Column()
+    collectedPeriod = Column(Period)
     """ Collection time.
         Type `Period` (represented as `dict` in JSON). """
 
-    collector = Column()
+    collector = Column(FHIRReference)
     """ Who collected the specimen.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    comment = Column(str)
+    comment = Column(primitives.StringField)
     """ Collector comments.
         List of `str` items. """
 
-    method = Column()
+    method = Column(CodeableConcept)
     """ Technique used to perform collection.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ The quantity of specimen collected.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
@@ -127,6 +129,7 @@ class SpecimenCollection(backboneelement.BackboneElement):
         return '<SpecimenCollection %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class SpecimenContainer(backboneelement.BackboneElement):
     """ Direct container of specimen (tube/slide, etc.).
 
@@ -136,19 +139,19 @@ class SpecimenContainer(backboneelement.BackboneElement):
 
     __tablename__ = "SpecimenContainer"
 
-    additiveCodeableConcept = Column()
+    additiveCodeableConcept = Column(CodeableConcept)
     """ Additive associated with container.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    additiveReference = Column()
+    additiveReference = Column(FHIRReference)
     """ Additive associated with container.
         Type `FHIRReference` referencing `Substance` (represented as `dict` in JSON). """
 
-    capacity = Column()
+    capacity = Column(Quantity)
     """ Container volume or size.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Textual description of the container.
         Type `str`. """
 
@@ -156,11 +159,11 @@ class SpecimenContainer(backboneelement.BackboneElement):
     """ Id for the container.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    specimenQuantity = Column()
+    specimenQuantity = Column(Quantity)
     """ Quantity of specimen within container.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Kind of container directly associated with specimen.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -179,6 +182,7 @@ class SpecimenContainer(backboneelement.BackboneElement):
         return '<SpecimenContainer %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class SpecimenTreatment(backboneelement.BackboneElement):
     """ Treatment and processing step details.
 
@@ -191,11 +195,11 @@ class SpecimenTreatment(backboneelement.BackboneElement):
     """ Material used in the processing step.
         List of `FHIRReference` items referencing `Substance` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Textual description of procedure.
         Type `str`. """
 
-    procedure = Column()
+    procedure = Column(CodeableConcept)
     """ Indicates the treatment or processing step  applied to the specimen.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

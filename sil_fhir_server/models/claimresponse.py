@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class ClaimResponse(domainresource.DomainResource):
@@ -24,11 +26,11 @@ class ClaimResponse(domainresource.DomainResource):
     """ Insurance or medical plan.
         List of `ClaimResponseCoverage` items (represented as `dict` in JSON). """
 
-    created = Column()
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    disposition = Column()
+    disposition = Column(primitives.StringField)
     """ Disposition Message.
         Type `str`. """
 
@@ -36,7 +38,7 @@ class ClaimResponse(domainresource.DomainResource):
     """ Processing errors.
         List of `ClaimResponseError` items (represented as `dict` in JSON). """
 
-    form = Column()
+    form = Column(Coding)
     """ Printed Form Identifier.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -52,71 +54,71 @@ class ClaimResponse(domainresource.DomainResource):
     """ Processing notes.
         List of `ClaimResponseNote` items (represented as `dict` in JSON). """
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Insurer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    outcome = Column()
+    outcome = Column(primitives.StringField)
     """ complete | error.
         Type `str`. """
 
-    payeeType = Column()
+    payeeType = Column(Coding)
     """ Party to be paid any benefits payable.
         Type `Coding` (represented as `dict` in JSON). """
 
-    paymentAdjustment = Column()
+    paymentAdjustment = Column(Quantity)
     """ Payment adjustment for non-Claim issues.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    paymentAdjustmentReason = Column()
+    paymentAdjustmentReason = Column(Coding)
     """ Reason for Payment adjustment.
         Type `Coding` (represented as `dict` in JSON). """
 
-    paymentAmount = Column()
+    paymentAmount = Column(Quantity)
     """ Payment amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    paymentDate = Column()
+    paymentDate = Column(FHIRDate)
     """ Expected data of Payment.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    paymentRef = Column()
+    paymentRef = Column(Identifier)
     """ Payment identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ Id of resource triggering adjudication.
         Type `FHIRReference` referencing `Claim` (represented as `dict` in JSON). """
 
-    requestOrganization = Column()
+    requestOrganization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    requestProvider = Column()
+    requestProvider = Column(FHIRReference)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    reserved = Column()
+    reserved = Column(Coding)
     """ Funds reserved status.
         Type `Coding` (represented as `dict` in JSON). """
 
-    ruleset = Column()
+    ruleset = Column(Coding)
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    totalBenefit = Column()
+    totalBenefit = Column(Quantity)
     """ Total benefit payable for the Claim.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    totalCost = Column()
+    totalCost = Column(Quantity)
     """ Total Cost of service from the Claim.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    unallocDeductable = Column()
+    unallocDeductable = Column(Quantity)
     """ Unallocated deductible.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
@@ -154,6 +156,7 @@ class ClaimResponse(domainresource.DomainResource):
         return '<ClaimResponse %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ClaimResponseAddItem(backboneelement.BackboneElement):
@@ -172,19 +175,19 @@ class ClaimResponseAddItem(backboneelement.BackboneElement):
     """ Added items details.
         List of `ClaimResponseAddItemDetail` items (represented as `dict` in JSON). """
 
-    fee = Column()
+    fee = Column(Quantity)
     """ Professional fee or Product charge.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    noteNumberLinkId = Column(int)
+    noteNumberLinkId = Column(Integer)
     """ List of note numbers which apply.
         List of `int` items. """
 
-    sequenceLinkId = Column(int)
+    sequenceLinkId = Column(Integer)
     """ Service instances.
         List of `int` items. """
 
-    service = Column()
+    service = Column(Coding)
     """ Group, Service or Product.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -202,6 +205,7 @@ class ClaimResponseAddItem(backboneelement.BackboneElement):
         return '<ClaimResponseAddItem %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseAddItemAdjudication(backboneelement.BackboneElement):
     """ Added items adjudication.
 
@@ -210,15 +214,15 @@ class ClaimResponseAddItemAdjudication(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimResponseAddItemAdjudication"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Monetary amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(Coding)
     """ Adjudication category such as co-pay, eligible, benefit, etc..
         Type `Coding` (represented as `dict` in JSON). """
 
-    value = Column()
+    value = Column(float)
     """ Non-monetary value.
         Type `float`. """
 
@@ -233,6 +237,7 @@ class ClaimResponseAddItemAdjudication(backboneelement.BackboneElement):
         return '<ClaimResponseAddItemAdjudication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseAddItemDetail(backboneelement.BackboneElement):
     """ Added items details.
 
@@ -245,11 +250,11 @@ class ClaimResponseAddItemDetail(backboneelement.BackboneElement):
     """ Added items detail adjudication.
         List of `ClaimResponseAddItemDetailAdjudication` items (represented as `dict` in JSON). """
 
-    fee = Column()
+    fee = Column(Quantity)
     """ Professional fee or Product charge.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    service = Column()
+    service = Column(Coding)
     """ Service or Product.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -264,6 +269,7 @@ class ClaimResponseAddItemDetail(backboneelement.BackboneElement):
         return '<ClaimResponseAddItemDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseAddItemDetailAdjudication(backboneelement.BackboneElement):
     """ Added items detail adjudication.
 
@@ -272,15 +278,15 @@ class ClaimResponseAddItemDetailAdjudication(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimResponseAddItemDetailAdjudication"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Monetary amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(Coding)
     """ Adjudication category such as co-pay, eligible, benefit, etc..
         Type `Coding` (represented as `dict` in JSON). """
 
-    value = Column()
+    value = Column(float)
     """ Non-monetary value.
         Type `float`. """
 
@@ -295,6 +301,7 @@ class ClaimResponseAddItemDetailAdjudication(backboneelement.BackboneElement):
         return '<ClaimResponseAddItemDetailAdjudication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseCoverage(backboneelement.BackboneElement):
     """ Insurance or medical plan.
 
@@ -303,35 +310,35 @@ class ClaimResponseCoverage(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimResponseCoverage"
 
-    businessArrangement = Column()
+    businessArrangement = Column(primitives.StringField)
     """ Business agreement.
         Type `str`. """
 
-    claimResponse = Column()
+    claimResponse = Column(FHIRReference)
     """ Adjudication results.
         Type `FHIRReference` referencing `ClaimResponse` (represented as `dict` in JSON). """
 
-    coverage = Column()
+    coverage = Column(FHIRReference)
     """ Insurance information.
         Type `FHIRReference` referencing `Coverage` (represented as `dict` in JSON). """
 
-    focal = Column()
+    focal = Column(bool)
     """ Is the focal Coverage.
         Type `bool`. """
 
-    originalRuleset = Column()
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    preAuthRef = Column(str)
+    preAuthRef = Column(primitives.StringField)
     """ Pre-Authorization/Determination Reference.
         List of `str` items. """
 
-    relationship = Column()
+    relationship = Column(Coding)
     """ Patient relationship to subscriber.
         Type `Coding` (represented as `dict` in JSON). """
 
-    sequence = Column()
+    sequence = Column(Integer)
     """ Service instance identifier.
         Type `int`. """
 
@@ -351,6 +358,7 @@ class ClaimResponseCoverage(backboneelement.BackboneElement):
         return '<ClaimResponseCoverage %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseError(backboneelement.BackboneElement):
     """ Processing errors.
 
@@ -359,19 +367,19 @@ class ClaimResponseError(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimResponseError"
 
-    code = Column()
+    code = Column(Coding)
     """ Error code detailing processing issues.
         Type `Coding` (represented as `dict` in JSON). """
 
-    detailSequenceLinkId = Column()
+    detailSequenceLinkId = Column(Integer)
     """ Detail sequence number.
         Type `int`. """
 
-    sequenceLinkId = Column()
+    sequenceLinkId = Column(Integer)
     """ Item sequence number.
         Type `int`. """
 
-    subdetailSequenceLinkId = Column()
+    subdetailSequenceLinkId = Column(Integer)
     """ Subdetail sequence number.
         Type `int`. """
 
@@ -387,6 +395,7 @@ class ClaimResponseError(backboneelement.BackboneElement):
         return '<ClaimResponseError %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseItem(backboneelement.BackboneElement):
     """ Line items.
 
@@ -403,11 +412,11 @@ class ClaimResponseItem(backboneelement.BackboneElement):
     """ Detail line items.
         List of `ClaimResponseItemDetail` items (represented as `dict` in JSON). """
 
-    noteNumber = Column(int)
+    noteNumber = Column(Integer)
     """ List of note numbers which apply.
         List of `int` items. """
 
-    sequenceLinkId = Column()
+    sequenceLinkId = Column(Integer)
     """ Service instance.
         Type `int`. """
 
@@ -423,6 +432,7 @@ class ClaimResponseItem(backboneelement.BackboneElement):
         return '<ClaimResponseItem %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseItemAdjudication(backboneelement.BackboneElement):
     """ Adjudication details.
 
@@ -431,15 +441,15 @@ class ClaimResponseItemAdjudication(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimResponseItemAdjudication"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Monetary amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(Coding)
     """ Adjudication category such as co-pay, eligible, benefit, etc..
         Type `Coding` (represented as `dict` in JSON). """
 
-    value = Column()
+    value = Column(float)
     """ Non-monetary value.
         Type `float`. """
 
@@ -454,6 +464,7 @@ class ClaimResponseItemAdjudication(backboneelement.BackboneElement):
         return '<ClaimResponseItemAdjudication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseItemDetail(backboneelement.BackboneElement):
     """ Detail line items.
 
@@ -466,7 +477,7 @@ class ClaimResponseItemDetail(backboneelement.BackboneElement):
     """ Detail adjudication.
         List of `ClaimResponseItemDetailAdjudication` items (represented as `dict` in JSON). """
 
-    sequenceLinkId = Column()
+    sequenceLinkId = Column(Integer)
     """ Service instance.
         Type `int`. """
 
@@ -485,6 +496,7 @@ class ClaimResponseItemDetail(backboneelement.BackboneElement):
         return '<ClaimResponseItemDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseItemDetailAdjudication(backboneelement.BackboneElement):
     """ Detail adjudication.
 
@@ -493,15 +505,15 @@ class ClaimResponseItemDetailAdjudication(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimResponseItemDetailAdjudication"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Monetary amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(Coding)
     """ Adjudication category such as co-pay, eligible, benefit, etc..
         Type `Coding` (represented as `dict` in JSON). """
 
-    value = Column()
+    value = Column(float)
     """ Non-monetary value.
         Type `float`. """
 
@@ -516,6 +528,7 @@ class ClaimResponseItemDetailAdjudication(backboneelement.BackboneElement):
         return '<ClaimResponseItemDetailAdjudication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseItemDetailSubDetail(backboneelement.BackboneElement):
     """ Subdetail line items.
 
@@ -528,7 +541,7 @@ class ClaimResponseItemDetailSubDetail(backboneelement.BackboneElement):
     """ Subdetail adjudication.
         List of `ClaimResponseItemDetailSubDetailAdjudication` items (represented as `dict` in JSON). """
 
-    sequenceLinkId = Column()
+    sequenceLinkId = Column(Integer)
     """ Service instance.
         Type `int`. """
 
@@ -542,6 +555,7 @@ class ClaimResponseItemDetailSubDetail(backboneelement.BackboneElement):
         return '<ClaimResponseItemDetailSubDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseItemDetailSubDetailAdjudication(backboneelement.BackboneElement):
     """ Subdetail adjudication.
 
@@ -550,15 +564,15 @@ class ClaimResponseItemDetailSubDetailAdjudication(backboneelement.BackboneEleme
 
     __tablename__ = "ClaimResponseItemDetailSubDetailAdjudication"
 
-    amount = Column()
+    amount = Column(Quantity)
     """ Monetary amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(Coding)
     """ Adjudication category such as co-pay, eligible, benefit, etc..
         Type `Coding` (represented as `dict` in JSON). """
 
-    value = Column()
+    value = Column(float)
     """ Non-monetary value.
         Type `float`. """
 
@@ -573,6 +587,7 @@ class ClaimResponseItemDetailSubDetailAdjudication(backboneelement.BackboneEleme
         return '<ClaimResponseItemDetailSubDetailAdjudication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClaimResponseNote(backboneelement.BackboneElement):
     """ Processing notes.
 
@@ -581,15 +596,15 @@ class ClaimResponseNote(backboneelement.BackboneElement):
 
     __tablename__ = "ClaimResponseNote"
 
-    number = Column()
+    number = Column(Integer)
     """ Note Number for this note.
         Type `int`. """
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Note explanatory text.
         Type `str`. """
 
-    type = Column()
+    type = Column(Coding)
     """ display | print | printoper.
         Type `Coding` (represented as `dict` in JSON). """
 

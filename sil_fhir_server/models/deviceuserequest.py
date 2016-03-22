@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DeviceUseRequest(domainresource.DomainResource):
@@ -17,19 +18,19 @@ class DeviceUseRequest(domainresource.DomainResource):
 
     __tablename__ = "DeviceUseRequest"
 
-    bodySiteCodeableConcept = Column()
+    bodySiteCodeableConcept = Column(CodeableConcept)
     """ Target body site.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    bodySiteReference = Column()
+    bodySiteReference = Column(FHIRReference)
     """ Target body site.
         Type `FHIRReference` referencing `BodySite` (represented as `dict` in JSON). """
 
-    device = Column()
+    device = Column(FHIRReference)
     """ Device requested.
         Type `FHIRReference` referencing `Device` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Encounter motivating request.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -41,15 +42,15 @@ class DeviceUseRequest(domainresource.DomainResource):
     """ Reason for request.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    notes = Column(str)
+    notes = Column(primitives.StringField)
     """ Notes or comments.
         List of `str` items. """
 
-    orderedOn = Column()
+    orderedOn = Column(FHIRDate)
     """ When ordered.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    priority = Column()
+    priority = Column(primitives.StringField)
     """ routine | urgent | stat | asap.
         Type `str`. """
 
@@ -57,28 +58,28 @@ class DeviceUseRequest(domainresource.DomainResource):
     """ PRN.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    recordedOn = Column()
+    recordedOn = Column(FHIRDate)
     """ When recorded.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | planned | requested | received | accepted | in-progress
         | completed | suspended | rejected | aborted.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Focus of request.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    timingDateTime = Column()
+    timingDateTime = Column(FHIRDate)
     """ Schedule for use.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    timingPeriod = Column()
+    timingPeriod = Column(Period)
     """ Schedule for use.
         Type `Period` (represented as `dict` in JSON). """
 
-    timingTiming = Column()
+    timingTiming = Column(Timing)
     """ Schedule for use.
         Type `Timing` (represented as `dict` in JSON). """
 

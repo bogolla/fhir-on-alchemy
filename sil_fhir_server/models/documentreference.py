@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DocumentReference(domainresource.DomainResource):
@@ -15,7 +16,7 @@ class DocumentReference(domainresource.DomainResource):
 
     __tablename__ = "DocumentReference"
 
-    authenticator = Column()
+    authenticator = Column(FHIRReference)
     """ Who/what authenticated the document.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
 
@@ -23,7 +24,7 @@ class DocumentReference(domainresource.DomainResource):
     """ Who and/or what authored the document.
         List of `FHIRReference` items referencing `Practitioner, Organization, Device, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    class_fhir = Column()
+    class_fhir = Column(CodeableConcept)
     """ Categorization of document.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -31,23 +32,23 @@ class DocumentReference(domainresource.DomainResource):
     """ Document referenced.
         List of `DocumentReferenceContent` items (represented as `dict` in JSON). """
 
-    context = Column()
+    context = Column(DocumentReferenceContext)
     """ Clinical context of document.
         Type `DocumentReferenceContext` (represented as `dict` in JSON). """
 
-    created = Column()
+    created = Column(FHIRDate)
     """ Document creation time.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    custodian = Column()
+    custodian = Column(FHIRReference)
     """ Organization which maintains the document.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Human-readable description (title).
         Type `str`. """
 
-    docStatus = Column()
+    docStatus = Column(CodeableConcept)
     """ preliminary | final | appended | amended | entered-in-error.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -55,11 +56,11 @@ class DocumentReference(domainresource.DomainResource):
     """ Other identifiers for the document.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    indexed = Column()
+    indexed = Column(FHIRDate)
     """ When this document reference created.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    masterIdentifier = Column()
+    masterIdentifier = Column(Identifier)
     """ Master Version Specific Identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -71,15 +72,15 @@ class DocumentReference(domainresource.DomainResource):
     """ Document security-tags.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ current | superseded | entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who/what is the subject of the document.
         Type `FHIRReference` referencing `Patient, Practitioner, Group, Device` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Kind of document (LOINC if possible).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -108,6 +109,7 @@ class DocumentReference(domainresource.DomainResource):
         return '<DocumentReference %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DocumentReferenceContent(backboneelement.BackboneElement):
@@ -119,7 +121,7 @@ class DocumentReferenceContent(backboneelement.BackboneElement):
 
     __tablename__ = "DocumentReferenceContent"
 
-    attachment = Column()
+    attachment = Column(Attachment)
     """ Where to access the document.
         Type `Attachment` (represented as `dict` in JSON). """
 
@@ -137,6 +139,7 @@ class DocumentReferenceContent(backboneelement.BackboneElement):
         return '<DocumentReferenceContent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class DocumentReferenceContext(backboneelement.BackboneElement):
     """ Clinical context of document.
 
@@ -145,7 +148,7 @@ class DocumentReferenceContext(backboneelement.BackboneElement):
 
     __tablename__ = "DocumentReferenceContext"
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Context of the document  content.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -153,15 +156,15 @@ class DocumentReferenceContext(backboneelement.BackboneElement):
     """ Main Clinical Acts Documented.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    facilityType = Column()
+    facilityType = Column(CodeableConcept)
     """ Kind of facility where patient was seen.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Time of service that is being documented.
         Type `Period` (represented as `dict` in JSON). """
 
-    practiceSetting = Column()
+    practiceSetting = Column(CodeableConcept)
     """ Additional details about where the content was created (e.g.
         clinical specialty).
         Type `CodeableConcept` (represented as `dict` in JSON). """
@@ -170,7 +173,7 @@ class DocumentReferenceContext(backboneelement.BackboneElement):
     """ Related identifiers or resources.
         List of `DocumentReferenceContextRelated` items (represented as `dict` in JSON). """
 
-    sourcePatientInfo = Column()
+    sourcePatientInfo = Column(FHIRReference)
     """ Patient demographics from source.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -189,6 +192,7 @@ class DocumentReferenceContext(backboneelement.BackboneElement):
         return '<DocumentReferenceContext %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class DocumentReferenceContextRelated(backboneelement.BackboneElement):
     """ Related identifiers or resources.
 
@@ -197,11 +201,11 @@ class DocumentReferenceContextRelated(backboneelement.BackboneElement):
 
     __tablename__ = "DocumentReferenceContextRelated"
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Identifier of related objects or events.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    ref = Column()
+    ref = Column(FHIRReference)
     """ Related Resource.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
@@ -215,6 +219,7 @@ class DocumentReferenceContextRelated(backboneelement.BackboneElement):
         return '<DocumentReferenceContextRelated %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class DocumentReferenceRelatesTo(backboneelement.BackboneElement):
     """ Relationships to other documents.
 
@@ -224,11 +229,11 @@ class DocumentReferenceRelatesTo(backboneelement.BackboneElement):
 
     __tablename__ = "DocumentReferenceRelatesTo"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ replaces | transforms | signs | appends.
         Type `str`. """
 
-    target = Column()
+    target = Column(FHIRReference)
     """ Target of the relationship.
         Type `FHIRReference` referencing `DocumentReference` (represented as `dict` in JSON). """
 

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class List(domainresource.DomainResource):
@@ -15,19 +16,19 @@ class List(domainresource.DomainResource):
 
     __tablename__ = "List"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ What the purpose of this list is.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When the list was prepared.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    emptyReason = Column()
+    emptyReason = Column(CodeableConcept)
     """ Why list is empty.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Context in which list created.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -39,31 +40,31 @@ class List(domainresource.DomainResource):
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    mode = Column()
+    mode = Column(primitives.StringField)
     """ working | snapshot | changes.
         Type `str`. """
 
-    note = Column()
+    note = Column(primitives.StringField)
     """ Comments about the list.
         Type `str`. """
 
-    orderedBy = Column()
+    orderedBy = Column(CodeableConcept)
     """ What order the list has.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    source = Column()
+    source = Column(FHIRReference)
     """ Who and/or what defined the list contents (aka Author).
         Type `FHIRReference` referencing `Practitioner, Patient, Device` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ current | retired | entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ If all resources have the same subject.
         Type `FHIRReference` referencing `Patient, Group, Device, Location` (represented as `dict` in JSON). """
 
-    title = Column()
+    title = Column(primitives.StringField)
     """ Descriptive name for the list.
         Type `str`. """
 
@@ -88,6 +89,7 @@ class List(domainresource.DomainResource):
         return '<List %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ListEntry(backboneelement.BackboneElement):
@@ -98,19 +100,19 @@ class ListEntry(backboneelement.BackboneElement):
 
     __tablename__ = "ListEntry"
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When item added to list.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    deleted = Column()
+    deleted = Column(bool)
     """ If this item is actually marked as deleted.
         Type `bool`. """
 
-    flag = Column()
+    flag = Column(CodeableConcept)
     """ Status/Workflow information about this item.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    item = Column()
+    item = Column(FHIRReference)
     """ Actual entry.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 

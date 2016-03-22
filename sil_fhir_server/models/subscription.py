@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Subscription(domainresource.DomainResource):
@@ -19,7 +20,7 @@ class Subscription(domainresource.DomainResource):
 
     __tablename__ = "Subscription"
 
-    channel = Column()
+    channel = Column(SubscriptionChannel)
     """ The channel on which to report matches to the criteria.
         Type `SubscriptionChannel` (represented as `dict` in JSON). """
 
@@ -27,23 +28,23 @@ class Subscription(domainresource.DomainResource):
     """ Contact details for source (e.g. troubleshooting).
         List of `ContactPoint` items (represented as `dict` in JSON). """
 
-    criteria = Column()
+    criteria = Column(primitives.StringField)
     """ Rule for server push criteria.
         Type `str`. """
 
-    end = Column()
+    end = Column(FHIRDate)
     """ When to automatically delete the subscription.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    error = Column()
+    error = Column(primitives.StringField)
     """ Latest error note.
         Type `str`. """
 
-    reason = Column()
+    reason = Column(primitives.StringField)
     """ Description of why this subscription was created.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ requested | active | error | off.
         Type `str`. """
 
@@ -67,6 +68,7 @@ class Subscription(domainresource.DomainResource):
         return '<Subscription %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class SubscriptionChannel(backboneelement.BackboneElement):
@@ -78,19 +80,19 @@ class SubscriptionChannel(backboneelement.BackboneElement):
 
     __tablename__ = "SubscriptionChannel"
 
-    endpoint = Column()
+    endpoint = Column(primitives.StringField)
     """ Where the channel points to.
         Type `str`. """
 
-    header = Column()
+    header = Column(primitives.StringField)
     """ Usage depends on the channel type.
         Type `str`. """
 
-    payload = Column()
+    payload = Column(primitives.StringField)
     """ Mimetype to send, or blank for no payload.
         Type `str`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ rest-hook | websocket | email | sms | message.
         Type `str`. """
 

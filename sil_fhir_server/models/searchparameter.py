@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class SearchParameter(domainresource.DomainResource):
@@ -16,11 +17,11 @@ class SearchParameter(domainresource.DomainResource):
 
     __tablename__ = "SearchParameter"
 
-    base = Column()
+    base = Column(primitives.StringField)
     """ The resource type this search parameter applies to.
         Type `str`. """
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ Code used in URL.
         Type `str`. """
 
@@ -28,52 +29,52 @@ class SearchParameter(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `SearchParameterContact` items (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Publication Date(/time).
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Documentation for  search parameter.
         Type `str`. """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Informal name for this search parameter.
         Type `str`. """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    requirements = Column()
+    requirements = Column(primitives.StringField)
     """ Why this search parameter is defined.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    target = Column(str)
+    target = Column(primitives.StringField)
     """ Types of resource (if a resource reference).
         List of `str` items. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ number | date | string | token | reference | composite | quantity |
         uri.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Absolute URL used to reference this search parameter.
         Type `str`. """
 
-    xpath = Column()
+    xpath = Column(primitives.StringField)
     """ XPath that extracts the values.
         Type `str`. """
 
-    xpathUsage = Column()
+    xpathUsage = Column(primitives.StringField)
     """ normal | phonetic | nearby | distance | other.
         Type `str`. """
 
@@ -100,6 +101,7 @@ class SearchParameter(domainresource.DomainResource):
         return '<SearchParameter %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class SearchParameterContact(backboneelement.BackboneElement):
@@ -110,7 +112,7 @@ class SearchParameterContact(backboneelement.BackboneElement):
 
     __tablename__ = "SearchParameterContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 

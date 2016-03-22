@@ -8,6 +8,7 @@
 {%- for klass in classes %}
 
 
+from sqlalchemy import Column, Integer, String
 {% if klass.superclass in imports and klass.superclass.module not in imported -%}
 from . import {{ klass.superclass.module }}
 {% set _ = imported.update({klass.superclass.module: True}) %}
@@ -26,12 +27,12 @@ class {{ klass.name }}({% if klass.superclass in imports %}{{ klass.superclass.m
     __tablename__ = "{{ klass.resource_name }}"
 {%- endif %}
 {%- for prop in klass.properties %}
-
-    {{ prop.name }} = Column({% if prop.is_array %}{{ prop.class_name }}{% endif %})
+    {% set dt = prop.class_name %}
+    {{ prop.name }} = Column({%- if dt == 'str' %}String{%- elif dt == 'int' %}Integer{%- else %}{{ dt }}{%- endif %})
     """ {{ prop.short|wordwrap(67, wrapstring="\n        ") }}.
-        {% if prop.is_array %}List of{% else %}Type{% endif %} `{{ prop.class_name }}`{% if prop.is_array %} items{% endif %}
+        {% if prop.is_array %}List of{% else %}Type{% endif %} `{{ dt }}`{% if prop.is_array %} items{% endif %}
         {%- if prop.reference_to_names|length > 0 %} referencing `{{ prop.reference_to_names|join(', ') }}`{% endif %}
-        {%- if prop.json_class != prop.class_name %} (represented as `{{ prop.json_class }}` in JSON){% endif %}. """
+        {%- if prop.json_class != dt %} (represented as `{{ prop.json_class }}` in JSON){% endif %}. """
 {%- endfor %}
 
     def __init__(self, {%- for prop in klass.properties %} {{ prop.name }}, {%- endfor %}):

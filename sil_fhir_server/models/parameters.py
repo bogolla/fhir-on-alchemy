@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import resource
 
 class Parameters(resource.Resource):
@@ -30,6 +31,7 @@ class Parameters(resource.Resource):
         return '<Parameters %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ParametersParameter(backboneelement.BackboneElement):
@@ -40,7 +42,7 @@ class ParametersParameter(backboneelement.BackboneElement):
 
     __tablename__ = "ParametersParameter"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name from the definition.
         Type `str`. """
 
@@ -48,139 +50,139 @@ class ParametersParameter(backboneelement.BackboneElement):
     """ Named part of a parameter (e.g. Tuple).
         List of `ParametersParameter` items (represented as `dict` in JSON). """
 
-    resource = Column()
+    resource = Column(Resource)
     """ If parameter is a whole resource.
         Type `Resource` (represented as `dict` in JSON). """
 
-    valueAddress = Column()
+    valueAddress = Column(Address)
     """ If parameter is a data type.
         Type `Address` (represented as `dict` in JSON). """
 
-    valueAnnotation = Column()
+    valueAnnotation = Column(Annotation)
     """ If parameter is a data type.
         Type `Annotation` (represented as `dict` in JSON). """
 
-    valueAttachment = Column()
+    valueAttachment = Column(Attachment)
     """ If parameter is a data type.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    valueBase64Binary = Column()
+    valueBase64Binary = Column(primitives.StringField)
     """ If parameter is a data type.
         Type `str`. """
 
-    valueBoolean = Column()
+    valueBoolean = Column(bool)
     """ If parameter is a data type.
         Type `bool`. """
 
-    valueCode = Column()
+    valueCode = Column(primitives.StringField)
     """ If parameter is a data type.
         Type `str`. """
 
-    valueCodeableConcept = Column()
+    valueCodeableConcept = Column(CodeableConcept)
     """ If parameter is a data type.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    valueCoding = Column()
+    valueCoding = Column(Coding)
     """ If parameter is a data type.
         Type `Coding` (represented as `dict` in JSON). """
 
-    valueContactPoint = Column()
+    valueContactPoint = Column(ContactPoint)
     """ If parameter is a data type.
         Type `ContactPoint` (represented as `dict` in JSON). """
 
-    valueDate = Column()
+    valueDate = Column(FHIRDate)
     """ If parameter is a data type.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueDateTime = Column()
+    valueDateTime = Column(FHIRDate)
     """ If parameter is a data type.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueDecimal = Column()
+    valueDecimal = Column(float)
     """ If parameter is a data type.
         Type `float`. """
 
-    valueHumanName = Column()
+    valueHumanName = Column(HumanName)
     """ If parameter is a data type.
         Type `HumanName` (represented as `dict` in JSON). """
 
-    valueId = Column()
+    valueId = Column(primitives.StringField)
     """ If parameter is a data type.
         Type `str`. """
 
-    valueIdentifier = Column()
+    valueIdentifier = Column(Identifier)
     """ If parameter is a data type.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    valueInstant = Column()
+    valueInstant = Column(FHIRDate)
     """ If parameter is a data type.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueInteger = Column()
+    valueInteger = Column(Integer)
     """ If parameter is a data type.
         Type `int`. """
 
-    valueMarkdown = Column()
+    valueMarkdown = Column(primitives.StringField)
     """ If parameter is a data type.
         Type `str`. """
 
-    valueMeta = Column()
+    valueMeta = Column(Meta)
     """ If parameter is a data type.
         Type `Meta` (represented as `dict` in JSON). """
 
-    valueOid = Column()
+    valueOid = Column(primitives.StringField)
     """ If parameter is a data type.
         Type `str`. """
 
-    valuePeriod = Column()
+    valuePeriod = Column(Period)
     """ If parameter is a data type.
         Type `Period` (represented as `dict` in JSON). """
 
-    valuePositiveInt = Column()
+    valuePositiveInt = Column(Integer)
     """ If parameter is a data type.
         Type `int`. """
 
-    valueQuantity = Column()
+    valueQuantity = Column(Quantity)
     """ If parameter is a data type.
         Type `Quantity` (represented as `dict` in JSON). """
 
-    valueRange = Column()
+    valueRange = Column(Range)
     """ If parameter is a data type.
         Type `Range` (represented as `dict` in JSON). """
 
-    valueRatio = Column()
+    valueRatio = Column(Ratio)
     """ If parameter is a data type.
         Type `Ratio` (represented as `dict` in JSON). """
 
-    valueReference = Column()
+    valueReference = Column(FHIRReference)
     """ If parameter is a data type.
         Type `FHIRReference` (represented as `dict` in JSON). """
 
-    valueSampledData = Column()
+    valueSampledData = Column(SampledData)
     """ If parameter is a data type.
         Type `SampledData` (represented as `dict` in JSON). """
 
-    valueSignature = Column()
+    valueSignature = Column(Signature)
     """ If parameter is a data type.
         Type `Signature` (represented as `dict` in JSON). """
 
-    valueString = Column()
+    valueString = Column(primitives.StringField)
     """ If parameter is a data type.
         Type `str`. """
 
-    valueTime = Column()
+    valueTime = Column(FHIRDate)
     """ If parameter is a data type.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    valueTiming = Column()
+    valueTiming = Column(Timing)
     """ If parameter is a data type.
         Type `Timing` (represented as `dict` in JSON). """
 
-    valueUnsignedInt = Column()
+    valueUnsignedInt = Column(Integer)
     """ If parameter is a data type.
         Type `int`. """
 
-    valueUri = Column()
+    valueUri = Column(primitives.StringField)
     """ If parameter is a data type.
         Type `str`. """
 

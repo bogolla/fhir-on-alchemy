@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import fhirabstractresource
 
 class Resource(fhirabstractresource.FHIRAbstractResource):
@@ -15,19 +16,19 @@ class Resource(fhirabstractresource.FHIRAbstractResource):
 
     __tablename__ = "Resource"
 
-    id = Column()
+    id = Column(primitives.StringField)
     """ Logical id of this artifact.
         Type `str`. """
 
-    implicitRules = Column()
+    implicitRules = Column(primitives.StringField)
     """ A set of rules under which this content was created.
         Type `str`. """
 
-    language = Column()
+    language = Column(primitives.StringField)
     """ Language of the resource content.
         Type `str`. """
 
-    meta = Column()
+    meta = Column(Meta)
     """ Metadata about the resource.
         Type `Meta` (represented as `dict` in JSON). """
 

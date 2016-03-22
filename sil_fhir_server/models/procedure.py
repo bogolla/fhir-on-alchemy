@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Procedure(domainresource.DomainResource):
@@ -21,11 +22,11 @@ class Procedure(domainresource.DomainResource):
     """ Target body sites.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ Classification of the procedure.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Identification of the procedure.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -33,7 +34,7 @@ class Procedure(domainresource.DomainResource):
     """ Complication following the procedure.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ The encounter associated with the procedure.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -49,11 +50,11 @@ class Procedure(domainresource.DomainResource):
     """ External Identifiers for this procedure.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Where the procedure happened.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    notPerformed = Column()
+    notPerformed = Column(bool)
     """ True if procedure was not performed as scheduled.
         Type `bool`. """
 
@@ -61,15 +62,15 @@ class Procedure(domainresource.DomainResource):
     """ Additional information about the procedure.
         List of `Annotation` items (represented as `dict` in JSON). """
 
-    outcome = Column()
+    outcome = Column(CodeableConcept)
     """ The result of procedure.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    performedDateTime = Column()
+    performedDateTime = Column(FHIRDate)
     """ Date/Period the procedure was performed.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    performedPeriod = Column()
+    performedPeriod = Column(Period)
     """ Date/Period the procedure was performed.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -77,7 +78,7 @@ class Procedure(domainresource.DomainResource):
     """ The people who performed the procedure.
         List of `ProcedurePerformer` items (represented as `dict` in JSON). """
 
-    reasonCodeableConcept = Column()
+    reasonCodeableConcept = Column(CodeableConcept)
     """ Reason procedure performed.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -85,7 +86,7 @@ class Procedure(domainresource.DomainResource):
     """ Reason procedure was not performed.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    reasonReference = Column()
+    reasonReference = Column(FHIRReference)
     """ Reason procedure performed.
         Type `FHIRReference` referencing `Condition` (represented as `dict` in JSON). """
 
@@ -93,15 +94,15 @@ class Procedure(domainresource.DomainResource):
     """ Any report resulting from the procedure.
         List of `FHIRReference` items referencing `DiagnosticReport` (represented as `dict` in JSON). """
 
-    request = Column()
+    request = Column(FHIRReference)
     """ A request for this procedure.
         Type `FHIRReference` referencing `CarePlan, DiagnosticOrder, ProcedureRequest, ReferralRequest` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ in-progress | aborted | completed | entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who the procedure was performed on.
         Type `FHIRReference` referencing `Patient, Group` (represented as `dict` in JSON). """
 
@@ -140,6 +141,7 @@ class Procedure(domainresource.DomainResource):
         return '<Procedure %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ProcedureFocalDevice(backboneelement.BackboneElement):
@@ -152,11 +154,11 @@ class ProcedureFocalDevice(backboneelement.BackboneElement):
 
     __tablename__ = "ProcedureFocalDevice"
 
-    action = Column()
+    action = Column(CodeableConcept)
     """ Kind of change to device.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    manipulated = Column()
+    manipulated = Column(FHIRReference)
     """ Device that was changed.
         Type `FHIRReference` referencing `Device` (represented as `dict` in JSON). """
 
@@ -170,6 +172,7 @@ class ProcedureFocalDevice(backboneelement.BackboneElement):
         return '<ProcedureFocalDevice %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ProcedurePerformer(backboneelement.BackboneElement):
     """ The people who performed the procedure.
 
@@ -178,11 +181,11 @@ class ProcedurePerformer(backboneelement.BackboneElement):
 
     __tablename__ = "ProcedurePerformer"
 
-    actor = Column()
+    actor = Column(FHIRReference)
     """ The reference to the practitioner.
         Type `FHIRReference` referencing `Practitioner, Organization, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    role = Column()
+    role = Column(CodeableConcept)
     """ The role the actor was in.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

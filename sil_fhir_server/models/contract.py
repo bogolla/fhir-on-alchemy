@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Contract(domainresource.DomainResource):
@@ -28,7 +30,7 @@ class Contract(domainresource.DomainResource):
     """ Contract Actor.
         List of `ContractActor` items (represented as `dict` in JSON). """
 
-    applies = Column()
+    applies = Column(Period)
     """ Effective time.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -36,11 +38,11 @@ class Contract(domainresource.DomainResource):
     """ Authority under which this Contract has standing.
         List of `FHIRReference` items referencing `Organization` (represented as `dict` in JSON). """
 
-    bindingAttachment = Column()
+    bindingAttachment = Column(Attachment)
     """ Binding Contract.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    bindingReference = Column()
+    bindingReference = Column(FHIRReference)
     """ Binding Contract.
         Type `FHIRReference` referencing `Composition, DocumentReference, QuestionnaireResponse` (represented as `dict` in JSON). """
 
@@ -52,11 +54,11 @@ class Contract(domainresource.DomainResource):
     """ Contract Friendly Language.
         List of `ContractFriendly` items (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Contract identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    issued = Column()
+    issued = Column(FHIRDate)
     """ When this Contract was issued.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -84,7 +86,7 @@ class Contract(domainresource.DomainResource):
     """ Contract Term List.
         List of `ContractTerm` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Contract Tyoe.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -119,6 +121,7 @@ class Contract(domainresource.DomainResource):
         return '<Contract %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ContractActor(backboneelement.BackboneElement):
@@ -129,7 +132,7 @@ class ContractActor(backboneelement.BackboneElement):
 
     __tablename__ = "ContractActor"
 
-    entity = Column()
+    entity = Column(FHIRReference)
     """ Contract Actor Type.
         Type `FHIRReference` referencing `Contract, Device, Group, Location, Organization, Patient, Practitioner, RelatedPerson, Substance` (represented as `dict` in JSON). """
 
@@ -147,6 +150,7 @@ class ContractActor(backboneelement.BackboneElement):
         return '<ContractActor %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractFriendly(backboneelement.BackboneElement):
     """ Contract Friendly Language.
 
@@ -161,11 +165,11 @@ class ContractFriendly(backboneelement.BackboneElement):
 
     __tablename__ = "ContractFriendly"
 
-    contentAttachment = Column()
+    contentAttachment = Column(Attachment)
     """ Easily comprehended representation of this Contract.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    contentReference = Column()
+    contentReference = Column(FHIRReference)
     """ Easily comprehended representation of this Contract.
         Type `FHIRReference` referencing `Composition, DocumentReference, QuestionnaireResponse` (represented as `dict` in JSON). """
 
@@ -179,6 +183,7 @@ class ContractFriendly(backboneelement.BackboneElement):
         return '<ContractFriendly %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractLegal(backboneelement.BackboneElement):
     """ Contract Legal Language.
 
@@ -187,11 +192,11 @@ class ContractLegal(backboneelement.BackboneElement):
 
     __tablename__ = "ContractLegal"
 
-    contentAttachment = Column()
+    contentAttachment = Column(Attachment)
     """ Contract Legal Text.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    contentReference = Column()
+    contentReference = Column(FHIRReference)
     """ Contract Legal Text.
         Type `FHIRReference` referencing `Composition, DocumentReference, QuestionnaireResponse` (represented as `dict` in JSON). """
 
@@ -205,6 +210,7 @@ class ContractLegal(backboneelement.BackboneElement):
         return '<ContractLegal %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractRule(backboneelement.BackboneElement):
     """ Computable Contract Language.
 
@@ -213,11 +219,11 @@ class ContractRule(backboneelement.BackboneElement):
 
     __tablename__ = "ContractRule"
 
-    contentAttachment = Column()
+    contentAttachment = Column(Attachment)
     """ Computable Contract Rules.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    contentReference = Column()
+    contentReference = Column(FHIRReference)
     """ Computable Contract Rules.
         Type `FHIRReference` referencing `DocumentReference` (represented as `dict` in JSON). """
 
@@ -231,6 +237,7 @@ class ContractRule(backboneelement.BackboneElement):
         return '<ContractRule %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractSigner(backboneelement.BackboneElement):
     """ Contract Signer.
 
@@ -239,15 +246,15 @@ class ContractSigner(backboneelement.BackboneElement):
 
     __tablename__ = "ContractSigner"
 
-    party = Column()
+    party = Column(FHIRReference)
     """ Contract Signatory Party.
         Type `FHIRReference` referencing `Organization, Patient, Practitioner, RelatedPerson` (represented as `dict` in JSON). """
 
-    signature = Column()
+    signature = Column(primitives.StringField)
     """ Contract Documentation Signature.
         Type `str`. """
 
-    type = Column()
+    type = Column(Coding)
     """ Contract Signer Type.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -262,6 +269,7 @@ class ContractSigner(backboneelement.BackboneElement):
         return '<ContractSigner %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractTerm(backboneelement.BackboneElement):
     """ Contract Term List.
 
@@ -283,7 +291,7 @@ class ContractTerm(backboneelement.BackboneElement):
     """ Contract Term Actor List.
         List of `ContractTermActor` items (represented as `dict` in JSON). """
 
-    applies = Column()
+    applies = Column(Period)
     """ Contract Term Effective Time.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -291,27 +299,27 @@ class ContractTerm(backboneelement.BackboneElement):
     """ Nested Contract Term Group.
         List of `ContractTerm` items (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Contract Term identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    issued = Column()
+    issued = Column(FHIRDate)
     """ Contract Term Issue Date Time.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    subType = Column()
+    subType = Column(CodeableConcept)
     """ Contract Term Subtype.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Subject of this Contract Term.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Human readable Contract term text.
         Type `str`. """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Contract Term Type.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -339,6 +347,7 @@ class ContractTerm(backboneelement.BackboneElement):
         return '<ContractTerm %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractTermActor(backboneelement.BackboneElement):
     """ Contract Term Actor List.
 
@@ -347,7 +356,7 @@ class ContractTermActor(backboneelement.BackboneElement):
 
     __tablename__ = "ContractTermActor"
 
-    entity = Column()
+    entity = Column(FHIRReference)
     """ Contract Term Actor.
         Type `FHIRReference` referencing `Contract, Device, Group, Location, Organization, Patient, Practitioner, RelatedPerson, Substance` (represented as `dict` in JSON). """
 
@@ -365,6 +374,7 @@ class ContractTermActor(backboneelement.BackboneElement):
         return '<ContractTermActor %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractTermValuedItem(backboneelement.BackboneElement):
     """ Contract Term Valued Item.
 
@@ -373,39 +383,39 @@ class ContractTermValuedItem(backboneelement.BackboneElement):
 
     __tablename__ = "ContractTermValuedItem"
 
-    effectiveTime = Column()
+    effectiveTime = Column(FHIRDate)
     """ Contract Term Valued Item Effective Tiem.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    entityCodeableConcept = Column()
+    entityCodeableConcept = Column(CodeableConcept)
     """ Contract Term Valued Item Type.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    entityReference = Column()
+    entityReference = Column(FHIRReference)
     """ Contract Term Valued Item Type.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    factor = Column()
+    factor = Column(float)
     """ Contract Term Valued Item Price Scaling Factor.
         Type `float`. """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Contract Term Valued Item Identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    net = Column()
+    net = Column(Quantity)
     """ Total Contract Term Valued Item Value.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    points = Column()
+    points = Column(float)
     """ Contract Term Valued Item Difficulty Scaling Factor.
         Type `float`. """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Contract Term Valued Item Count.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    unitPrice = Column()
+    unitPrice = Column(Quantity)
     """ Contract Term Valued Item fee, charge, or cost.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
@@ -426,6 +436,7 @@ class ContractTermValuedItem(backboneelement.BackboneElement):
         return '<ContractTermValuedItem %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ContractValuedItem(backboneelement.BackboneElement):
     """ Contract Valued Item.
 
@@ -434,39 +445,39 @@ class ContractValuedItem(backboneelement.BackboneElement):
 
     __tablename__ = "ContractValuedItem"
 
-    effectiveTime = Column()
+    effectiveTime = Column(FHIRDate)
     """ Contract Valued Item Effective Tiem.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    entityCodeableConcept = Column()
+    entityCodeableConcept = Column(CodeableConcept)
     """ Contract Valued Item Type.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    entityReference = Column()
+    entityReference = Column(FHIRReference)
     """ Contract Valued Item Type.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    factor = Column()
+    factor = Column(float)
     """ Contract Valued Item Price Scaling Factor.
         Type `float`. """
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Contract Valued Item Identifier.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    net = Column()
+    net = Column(Quantity)
     """ Total Contract Valued Item Value.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    points = Column()
+    points = Column(float)
     """ Contract Valued Item Difficulty Scaling Factor.
         Type `float`. """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Count of Contract Valued Items.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    unitPrice = Column()
+    unitPrice = Column(Quantity)
     """ Contract Valued Item fee, charge, or cost.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 

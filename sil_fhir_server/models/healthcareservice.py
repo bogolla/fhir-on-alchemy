@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class HealthcareService(domainresource.DomainResource):
@@ -13,11 +14,11 @@ class HealthcareService(domainresource.DomainResource):
 
     __tablename__ = "HealthcareService"
 
-    appointmentRequired = Column()
+    appointmentRequired = Column(bool)
     """ If an appointment is required for access to this service.
         Type `bool`. """
 
-    availabilityExceptions = Column()
+    availabilityExceptions = Column(primitives.StringField)
     """ Description of availability exceptions.
         Type `str`. """
 
@@ -29,7 +30,7 @@ class HealthcareService(domainresource.DomainResource):
     """ Collection of characteristics (attributes).
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    comment = Column()
+    comment = Column(primitives.StringField)
     """ Additional description and/or any specific issues not covered
         elsewhere.
         Type `str`. """
@@ -38,15 +39,15 @@ class HealthcareService(domainresource.DomainResource):
     """ Location(s) service is inteded for/available to.
         List of `FHIRReference` items referencing `Location` (represented as `dict` in JSON). """
 
-    eligibility = Column()
+    eligibility = Column(CodeableConcept)
     """ Specific eligibility requirements required to use the service.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    eligibilityNote = Column()
+    eligibilityNote = Column(primitives.StringField)
     """ Describes the eligibility conditions for the service.
         Type `str`. """
 
-    extraDetails = Column()
+    extraDetails = Column(primitives.StringField)
     """ Extra details about the service that can't be placed in the other
         fields.
         Type `str`. """
@@ -55,7 +56,7 @@ class HealthcareService(domainresource.DomainResource):
     """ External identifiers for this item.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Location where service may be provided.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
@@ -63,19 +64,19 @@ class HealthcareService(domainresource.DomainResource):
     """ Not available during this time due to provided reason.
         List of `HealthcareServiceNotAvailable` items (represented as `dict` in JSON). """
 
-    photo = Column()
+    photo = Column(Attachment)
     """ Facilitates quick identification of the service.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    programName = Column(str)
+    programName = Column(primitives.StringField)
     """ Program Names that categorize the service.
         List of `str` items. """
 
-    providedBy = Column()
+    providedBy = Column(FHIRReference)
     """ Organization that provides this service.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    publicKey = Column()
+    publicKey = Column(primitives.StringField)
     """ PKI Public keys to support secure communications.
         Type `str`. """
 
@@ -83,11 +84,11 @@ class HealthcareService(domainresource.DomainResource):
     """ Ways that the service accepts referrals.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    serviceCategory = Column()
+    serviceCategory = Column(CodeableConcept)
     """ Broad category of service being performed or delivered.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    serviceName = Column()
+    serviceName = Column(primitives.StringField)
     """ Description of service as presented to a consumer while searching.
         Type `str`. """
 
@@ -133,6 +134,7 @@ class HealthcareService(domainresource.DomainResource):
         return '<HealthcareService %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class HealthcareServiceAvailableTime(backboneelement.BackboneElement):
@@ -143,19 +145,19 @@ class HealthcareServiceAvailableTime(backboneelement.BackboneElement):
 
     __tablename__ = "HealthcareServiceAvailableTime"
 
-    allDay = Column()
+    allDay = Column(bool)
     """ Always available? e.g. 24 hour service.
         Type `bool`. """
 
-    availableEndTime = Column()
+    availableEndTime = Column(FHIRDate)
     """ Closing time of day (ignored if allDay = true).
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    availableStartTime = Column()
+    availableStartTime = Column(FHIRDate)
     """ Opening time of day (ignored if allDay = true).
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    daysOfWeek = Column(str)
+    daysOfWeek = Column(primitives.StringField)
     """ mon | tue | wed | thu | fri | sat | sun.
         List of `str` items. """
 
@@ -171,6 +173,7 @@ class HealthcareServiceAvailableTime(backboneelement.BackboneElement):
         return '<HealthcareServiceAvailableTime %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class HealthcareServiceNotAvailable(backboneelement.BackboneElement):
     """ Not available during this time due to provided reason.
 
@@ -180,11 +183,11 @@ class HealthcareServiceNotAvailable(backboneelement.BackboneElement):
 
     __tablename__ = "HealthcareServiceNotAvailable"
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Reason presented to the user explaining why time not available.
         Type `str`. """
 
-    during = Column()
+    during = Column(Period)
     """ Service not availablefrom this date.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -198,6 +201,7 @@ class HealthcareServiceNotAvailable(backboneelement.BackboneElement):
         return '<HealthcareServiceNotAvailable %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class HealthcareServiceServiceType(backboneelement.BackboneElement):
     """ Specific service delivered or performed.
 
@@ -210,7 +214,7 @@ class HealthcareServiceServiceType(backboneelement.BackboneElement):
     """ Specialties handled by the Service Site.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Type of service delivered or performed.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

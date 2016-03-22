@@ -7,8 +7,7 @@ import logging
 
 
 class FHIRAbstractBase(object):
-    """ Abstract base class for all FHIR elements.
-    """
+    """ Abstract base class for all FHIR elements. """
     
     def __init__(self, jsondict=None):
         

@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class DocumentManifest(domainresource.DomainResource):
@@ -21,11 +22,11 @@ class DocumentManifest(domainresource.DomainResource):
     """ The items included.
         List of `DocumentManifestContent` items (represented as `dict` in JSON). """
 
-    created = Column()
+    created = Column(FHIRDate)
     """ When this document manifest created.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Human-readable description (title).
         Type `str`. """
 
@@ -33,7 +34,7 @@ class DocumentManifest(domainresource.DomainResource):
     """ Other identifiers for the manifest.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    masterIdentifier = Column()
+    masterIdentifier = Column(Identifier)
     """ Unique Identifier for the set of documents.
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -45,19 +46,19 @@ class DocumentManifest(domainresource.DomainResource):
     """ Related things.
         List of `DocumentManifestRelated` items (represented as `dict` in JSON). """
 
-    source = Column()
+    source = Column(primitives.StringField)
     """ The source system/application/software.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ current | superseded | entered-in-error.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ The subject of the set of documents.
         Type `FHIRReference` referencing `Patient, Practitioner, Group, Device` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Kind of document set.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -81,6 +82,7 @@ class DocumentManifest(domainresource.DomainResource):
         return '<DocumentManifest %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class DocumentManifestContent(backboneelement.BackboneElement):
@@ -91,11 +93,11 @@ class DocumentManifestContent(backboneelement.BackboneElement):
 
     __tablename__ = "DocumentManifestContent"
 
-    pAttachment = Column()
+    pAttachment = Column(Attachment)
     """ Contents of this set of documents.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    pReference = Column()
+    pReference = Column(FHIRReference)
     """ Contents of this set of documents.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
@@ -109,6 +111,7 @@ class DocumentManifestContent(backboneelement.BackboneElement):
         return '<DocumentManifestContent %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class DocumentManifestRelated(backboneelement.BackboneElement):
     """ Related things.
 
@@ -117,11 +120,11 @@ class DocumentManifestRelated(backboneelement.BackboneElement):
 
     __tablename__ = "DocumentManifestRelated"
 
-    identifier = Column()
+    identifier = Column(Identifier)
     """ Identifiers of things that are related.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    ref = Column()
+    ref = Column(FHIRReference)
     """ Related Resource.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 

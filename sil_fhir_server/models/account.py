@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Account(domainresource.DomainResource):
@@ -17,23 +19,23 @@ class Account(domainresource.DomainResource):
 
     __tablename__ = "Account"
 
-    activePeriod = Column()
+    activePeriod = Column(Period)
     """ Valid from..to.
         Type `Period` (represented as `dict` in JSON). """
 
-    balance = Column()
+    balance = Column(Quantity)
     """ How much is in account?.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
-    coveragePeriod = Column()
+    coveragePeriod = Column(Period)
     """ Transaction window.
         Type `Period` (represented as `dict` in JSON). """
 
-    currency = Column()
+    currency = Column(Coding)
     """ Base currency in which balance is tracked.
         Type `Coding` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Explanation of purpose/use.
         Type `str`. """
 
@@ -41,23 +43,23 @@ class Account(domainresource.DomainResource):
     """ Account number.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Human-readable label.
         Type `str`. """
 
-    owner = Column()
+    owner = Column(FHIRReference)
     """ Who is responsible?.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ active | inactive.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ What is account tied to?.
         Type `FHIRReference` referencing `Patient, Device, Practitioner, Location, HealthcareService, Organization` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ E.g. patient, expense, depreciation.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

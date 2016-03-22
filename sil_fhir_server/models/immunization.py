@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Immunization(domainresource.DomainResource):
@@ -18,23 +19,23 @@ class Immunization(domainresource.DomainResource):
 
     __tablename__ = "Immunization"
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Vaccination administration date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    doseQuantity = Column()
+    doseQuantity = Column(Quantity)
     """ Amount of vaccine administered.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Encounter administered as part of.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
-    expirationDate = Column()
+    expirationDate = Column(FHIRDate)
     """ Vaccine expiration date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    explanation = Column()
+    explanation = Column(ImmunizationExplanation)
     """ Administration/non-administration reasons.
         Type `ImmunizationExplanation` (represented as `dict` in JSON). """
 
@@ -42,15 +43,15 @@ class Immunization(domainresource.DomainResource):
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Where vaccination occurred.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
-    lotNumber = Column()
+    lotNumber = Column(primitives.StringField)
     """ Vaccine lot number.
         Type `str`. """
 
-    manufacturer = Column()
+    manufacturer = Column(FHIRReference)
     """ Vaccine manufacturer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
@@ -58,11 +59,11 @@ class Immunization(domainresource.DomainResource):
     """ Vaccination notes.
         List of `Annotation` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who was immunized.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    performer = Column()
+    performer = Column(FHIRReference)
     """ Who administered vaccine.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
@@ -70,23 +71,23 @@ class Immunization(domainresource.DomainResource):
     """ Details of a reaction that follows immunization.
         List of `ImmunizationReaction` items (represented as `dict` in JSON). """
 
-    reported = Column()
+    reported = Column(bool)
     """ Indicates a self-reported record.
         Type `bool`. """
 
-    requester = Column()
+    requester = Column(FHIRReference)
     """ Who ordered vaccination.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    route = Column()
+    route = Column(CodeableConcept)
     """ How vaccine entered body.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    site = Column()
+    site = Column(CodeableConcept)
     """ Body site vaccine  was administered.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ in-progress | on-hold | completed | entered-in-error | stopped.
         Type `str`. """
 
@@ -94,11 +95,11 @@ class Immunization(domainresource.DomainResource):
     """ What protocol was followed.
         List of `ImmunizationVaccinationProtocol` items (represented as `dict` in JSON). """
 
-    vaccineCode = Column()
+    vaccineCode = Column(CodeableConcept)
     """ Vaccine product administered.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    wasNotGiven = Column()
+    wasNotGiven = Column(bool)
     """ Flag for whether immunization was given.
         Type `bool`. """
 
@@ -131,6 +132,7 @@ class Immunization(domainresource.DomainResource):
         return '<Immunization %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ImmunizationExplanation(backboneelement.BackboneElement):
@@ -159,6 +161,7 @@ class ImmunizationExplanation(backboneelement.BackboneElement):
         return '<ImmunizationExplanation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImmunizationReaction(backboneelement.BackboneElement):
     """ Details of a reaction that follows immunization.
 
@@ -168,15 +171,15 @@ class ImmunizationReaction(backboneelement.BackboneElement):
 
     __tablename__ = "ImmunizationReaction"
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When reaction started.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    detail = Column()
+    detail = Column(FHIRReference)
     """ Additional information on reaction.
         Type `FHIRReference` referencing `Observation` (represented as `dict` in JSON). """
 
-    reported = Column()
+    reported = Column(bool)
     """ Indicates self-reported reaction.
         Type `bool`. """
 
@@ -191,6 +194,7 @@ class ImmunizationReaction(backboneelement.BackboneElement):
         return '<ImmunizationReaction %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImmunizationVaccinationProtocol(backboneelement.BackboneElement):
     """ What protocol was followed.
 
@@ -200,31 +204,31 @@ class ImmunizationVaccinationProtocol(backboneelement.BackboneElement):
 
     __tablename__ = "ImmunizationVaccinationProtocol"
 
-    authority = Column()
+    authority = Column(FHIRReference)
     """ Who is responsible for protocol.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Details of vaccine protocol.
         Type `str`. """
 
-    doseSequence = Column()
+    doseSequence = Column(Integer)
     """ Dose number within series.
         Type `int`. """
 
-    doseStatus = Column()
+    doseStatus = Column(CodeableConcept)
     """ Indicates if dose counts towards immunity.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    doseStatusReason = Column()
+    doseStatusReason = Column(CodeableConcept)
     """ Why dose does (not) count.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    series = Column()
+    series = Column(primitives.StringField)
     """ Name of vaccine series.
         Type `str`. """
 
-    seriesDoses = Column()
+    seriesDoses = Column(Integer)
     """ Recommended number of doses for immunity.
         Type `int`. """
 

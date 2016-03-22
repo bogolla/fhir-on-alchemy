@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class ClinicalImpression(domainresource.DomainResource):
@@ -26,15 +28,15 @@ class ClinicalImpression(domainresource.DomainResource):
     """ Actions taken during assessment.
         List of `FHIRReference` items referencing `ReferralRequest, ProcedureRequest, Procedure, MedicationOrder, DiagnosticOrder, NutritionOrder, SupplyRequest, Appointment` (represented as `dict` in JSON). """
 
-    assessor = Column()
+    assessor = Column(FHIRReference)
     """ The clinician performing the assessment.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When the assessment occurred.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Why/how the assessment was performed.
         Type `str`. """
 
@@ -46,7 +48,7 @@ class ClinicalImpression(domainresource.DomainResource):
     """ One or more sets of investigations (signs, symptions, etc.).
         List of `ClinicalImpressionInvestigations` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ The patient being assessed.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -54,7 +56,7 @@ class ClinicalImpression(domainresource.DomainResource):
     """ Plan of action after assessment.
         List of `FHIRReference` items referencing `CarePlan, Appointment, CommunicationRequest, DeviceUseRequest, DiagnosticOrder, MedicationOrder, NutritionOrder, Order, ProcedureRequest, ProcessRequest, ReferralRequest, SupplyRequest, VisionPrescription` (represented as `dict` in JSON). """
 
-    previous = Column()
+    previous = Column(FHIRReference)
     """ Reference to last assessment.
         Type `FHIRReference` referencing `ClinicalImpression` (represented as `dict` in JSON). """
 
@@ -62,11 +64,11 @@ class ClinicalImpression(domainresource.DomainResource):
     """ General assessment of patient state.
         List of `FHIRReference` items referencing `Condition, AllergyIntolerance` (represented as `dict` in JSON). """
 
-    prognosis = Column()
+    prognosis = Column(primitives.StringField)
     """ Estimate of likely outcome.
         Type `str`. """
 
-    protocol = Column()
+    protocol = Column(primitives.StringField)
     """ Clinical Protocol followed.
         Type `str`. """
 
@@ -78,19 +80,19 @@ class ClinicalImpression(domainresource.DomainResource):
     """ Diagnosis considered not possible.
         List of `ClinicalImpressionRuledOut` items (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ in-progress | completed | entered-in-error.
         Type `str`. """
 
-    summary = Column()
+    summary = Column(primitives.StringField)
     """ Summary of the assessment.
         Type `str`. """
 
-    triggerCodeableConcept = Column()
+    triggerCodeableConcept = Column(CodeableConcept)
     """ Request or event that necessitated this assessment.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    triggerReference = Column()
+    triggerReference = Column(FHIRReference)
     """ Request or event that necessitated this assessment.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
@@ -120,6 +122,7 @@ class ClinicalImpression(domainresource.DomainResource):
         return '<ClinicalImpression %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ClinicalImpressionFinding(backboneelement.BackboneElement):
@@ -131,11 +134,11 @@ class ClinicalImpressionFinding(backboneelement.BackboneElement):
 
     __tablename__ = "ClinicalImpressionFinding"
 
-    cause = Column()
+    cause = Column(primitives.StringField)
     """ Which investigations support finding.
         Type `str`. """
 
-    item = Column()
+    item = Column(CodeableConcept)
     """ Specific text or code for finding.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -149,6 +152,7 @@ class ClinicalImpressionFinding(backboneelement.BackboneElement):
         return '<ClinicalImpressionFinding %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClinicalImpressionInvestigations(backboneelement.BackboneElement):
     """ One or more sets of investigations (signs, symptions, etc.).
 
@@ -161,7 +165,7 @@ class ClinicalImpressionInvestigations(backboneelement.BackboneElement):
 
     __tablename__ = "ClinicalImpressionInvestigations"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ A name/code for the set.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -179,17 +183,18 @@ class ClinicalImpressionInvestigations(backboneelement.BackboneElement):
         return '<ClinicalImpressionInvestigations %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ClinicalImpressionRuledOut(backboneelement.BackboneElement):
     """ Diagnosis considered not possible.
     """
 
     __tablename__ = "ClinicalImpressionRuledOut"
 
-    item = Column()
+    item = Column(CodeableConcept)
     """ Specific text of code for diagnosis.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    reason = Column()
+    reason = Column(primitives.StringField)
     """ Grounds for elimination.
         Type `str`. """
 

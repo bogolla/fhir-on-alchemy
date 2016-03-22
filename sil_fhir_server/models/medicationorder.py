@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class MedicationOrder(domainresource.DomainResource):
@@ -19,15 +20,15 @@ class MedicationOrder(domainresource.DomainResource):
 
     __tablename__ = "MedicationOrder"
 
-    dateEnded = Column()
+    dateEnded = Column(FHIRDate)
     """ When prescription was stopped.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    dateWritten = Column()
+    dateWritten = Column(FHIRDate)
     """ When prescription was authorized.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    dispenseRequest = Column()
+    dispenseRequest = Column(MedicationOrderDispenseRequest)
     """ Medication supply authorization.
         Type `MedicationOrderDispenseRequest` (represented as `dict` in JSON). """
 
@@ -35,7 +36,7 @@ class MedicationOrder(domainresource.DomainResource):
     """ How medication should be taken.
         List of `MedicationOrderDosageInstruction` items (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Created during encounter/admission/stay.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -43,47 +44,47 @@ class MedicationOrder(domainresource.DomainResource):
     """ External identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    medicationCodeableConcept = Column()
+    medicationCodeableConcept = Column(CodeableConcept)
     """ Medication to be taken.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    medicationReference = Column()
+    medicationReference = Column(FHIRReference)
     """ Medication to be taken.
         Type `FHIRReference` referencing `Medication` (represented as `dict` in JSON). """
 
-    note = Column()
+    note = Column(primitives.StringField)
     """ Information about the prescription.
         Type `str`. """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who prescription is for.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    prescriber = Column()
+    prescriber = Column(FHIRReference)
     """ Who ordered the medication(s).
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    priorPrescription = Column()
+    priorPrescription = Column(FHIRReference)
     """ An order/prescription that this supersedes.
         Type `FHIRReference` referencing `MedicationOrder` (represented as `dict` in JSON). """
 
-    reasonCodeableConcept = Column()
+    reasonCodeableConcept = Column(CodeableConcept)
     """ Reason or indication for writing the prescription.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    reasonEnded = Column()
+    reasonEnded = Column(CodeableConcept)
     """ Why prescription was stopped.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    reasonReference = Column()
+    reasonReference = Column(FHIRReference)
     """ Reason or indication for writing the prescription.
         Type `FHIRReference` referencing `Condition` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ active | on-hold | completed | entered-in-error | stopped | draft.
         Type `str`. """
 
-    substitution = Column()
+    substitution = Column(MedicationOrderSubstitution)
     """ Any restrictions on medication substitution.
         Type `MedicationOrderSubstitution` (represented as `dict` in JSON). """
 
@@ -112,6 +113,7 @@ class MedicationOrder(domainresource.DomainResource):
         return '<MedicationOrder %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class MedicationOrderDispenseRequest(backboneelement.BackboneElement):
@@ -126,27 +128,27 @@ class MedicationOrderDispenseRequest(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationOrderDispenseRequest"
 
-    expectedSupplyDuration = Column()
+    expectedSupplyDuration = Column(Quantity)
     """ Number of days supply per dispense.
         Type `Quantity` referencing `Duration` (represented as `dict` in JSON). """
 
-    medicationCodeableConcept = Column()
+    medicationCodeableConcept = Column(CodeableConcept)
     """ Product to be supplied.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    medicationReference = Column()
+    medicationReference = Column(FHIRReference)
     """ Product to be supplied.
         Type `FHIRReference` referencing `Medication` (represented as `dict` in JSON). """
 
-    numberOfRepeatsAllowed = Column()
+    numberOfRepeatsAllowed = Column(Integer)
     """ Number of refills authorized.
         Type `int`. """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ Amount of medication to supply per dispense.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    validityPeriod = Column()
+    validityPeriod = Column(Period)
     """ Time period supply is authorized for.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -164,6 +166,7 @@ class MedicationOrderDispenseRequest(backboneelement.BackboneElement):
         return '<MedicationOrderDispenseRequest %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MedicationOrderDosageInstruction(backboneelement.BackboneElement):
     """ How medication should be taken.
 
@@ -172,59 +175,59 @@ class MedicationOrderDosageInstruction(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationOrderDosageInstruction"
 
-    additionalInstructions = Column()
+    additionalInstructions = Column(CodeableConcept)
     """ Supplemental instructions - e.g. "with meals".
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    asNeededBoolean = Column()
+    asNeededBoolean = Column(bool)
     """ Take "as needed" (for x).
         Type `bool`. """
 
-    asNeededCodeableConcept = Column()
+    asNeededCodeableConcept = Column(CodeableConcept)
     """ Take "as needed" (for x).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    doseQuantity = Column()
+    doseQuantity = Column(Quantity)
     """ Amount of medication per dose.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    doseRange = Column()
+    doseRange = Column(Range)
     """ Amount of medication per dose.
         Type `Range` (represented as `dict` in JSON). """
 
-    maxDosePerPeriod = Column()
+    maxDosePerPeriod = Column(Ratio)
     """ Upper limit on medication per unit of time.
         Type `Ratio` (represented as `dict` in JSON). """
 
-    method = Column()
+    method = Column(CodeableConcept)
     """ Technique for administering medication.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    rateRange = Column()
+    rateRange = Column(Range)
     """ Amount of medication per unit of time.
         Type `Range` (represented as `dict` in JSON). """
 
-    rateRatio = Column()
+    rateRatio = Column(Ratio)
     """ Amount of medication per unit of time.
         Type `Ratio` (represented as `dict` in JSON). """
 
-    route = Column()
+    route = Column(CodeableConcept)
     """ How drug should enter body.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    siteCodeableConcept = Column()
+    siteCodeableConcept = Column(CodeableConcept)
     """ Body site to administer to.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    siteReference = Column()
+    siteReference = Column(FHIRReference)
     """ Body site to administer to.
         Type `FHIRReference` referencing `BodySite` (represented as `dict` in JSON). """
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Dosage instructions expressed as text.
         Type `str`. """
 
-    timing = Column()
+    timing = Column(Timing)
     """ When medication should be administered.
         Type `Timing` (represented as `dict` in JSON). """
 
@@ -250,6 +253,7 @@ class MedicationOrderDosageInstruction(backboneelement.BackboneElement):
         return '<MedicationOrderDosageInstruction %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MedicationOrderSubstitution(backboneelement.BackboneElement):
     """ Any restrictions on medication substitution.
 
@@ -262,11 +266,11 @@ class MedicationOrderSubstitution(backboneelement.BackboneElement):
 
     __tablename__ = "MedicationOrderSubstitution"
 
-    reason = Column()
+    reason = Column(CodeableConcept)
     """ Why should (not) substitution be made.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ generic | formulary +.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

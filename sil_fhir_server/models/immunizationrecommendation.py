@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ImmunizationRecommendation(domainresource.DomainResource):
@@ -21,7 +22,7 @@ class ImmunizationRecommendation(domainresource.DomainResource):
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Who this profile is for.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -40,6 +41,7 @@ class ImmunizationRecommendation(domainresource.DomainResource):
         return '<ImmunizationRecommendation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class ImmunizationRecommendationRecommendation(backboneelement.BackboneElement):
@@ -48,7 +50,7 @@ class ImmunizationRecommendationRecommendation(backboneelement.BackboneElement):
 
     __tablename__ = "ImmunizationRecommendationRecommendation"
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date recommendation created.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -56,15 +58,15 @@ class ImmunizationRecommendationRecommendation(backboneelement.BackboneElement):
     """ Dates governing proposed immunization.
         List of `ImmunizationRecommendationRecommendationDateCriterion` items (represented as `dict` in JSON). """
 
-    doseNumber = Column()
+    doseNumber = Column(Integer)
     """ Recommended dose number.
         Type `int`. """
 
-    forecastStatus = Column()
+    forecastStatus = Column(CodeableConcept)
     """ Vaccine administration status.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    protocol = Column()
+    protocol = Column(ImmunizationRecommendationRecommendationProtocol)
     """ Protocol used by recommendation.
         Type `ImmunizationRecommendationRecommendationProtocol` (represented as `dict` in JSON). """
 
@@ -76,7 +78,7 @@ class ImmunizationRecommendationRecommendation(backboneelement.BackboneElement):
     """ Patient observations supporting recommendation.
         List of `FHIRReference` items referencing `Observation, AllergyIntolerance` (represented as `dict` in JSON). """
 
-    vaccineCode = Column()
+    vaccineCode = Column(CodeableConcept)
     """ Vaccine recommendation applies to.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -96,6 +98,7 @@ class ImmunizationRecommendationRecommendation(backboneelement.BackboneElement):
         return '<ImmunizationRecommendationRecommendation %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImmunizationRecommendationRecommendationDateCriterion(backboneelement.BackboneElement):
     """ Dates governing proposed immunization.
 
@@ -105,11 +108,11 @@ class ImmunizationRecommendationRecommendationDateCriterion(backboneelement.Back
 
     __tablename__ = "ImmunizationRecommendationRecommendationDateCriterion"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Type of date.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    value = Column()
+    value = Column(FHIRDate)
     """ Recommended date.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -123,6 +126,7 @@ class ImmunizationRecommendationRecommendationDateCriterion(backboneelement.Back
         return '<ImmunizationRecommendationRecommendationDateCriterion %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class ImmunizationRecommendationRecommendationProtocol(backboneelement.BackboneElement):
     """ Protocol used by recommendation.
 
@@ -132,19 +136,19 @@ class ImmunizationRecommendationRecommendationProtocol(backboneelement.BackboneE
 
     __tablename__ = "ImmunizationRecommendationRecommendationProtocol"
 
-    authority = Column()
+    authority = Column(FHIRReference)
     """ Who is responsible for protocol.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Protocol details.
         Type `str`. """
 
-    doseSequence = Column()
+    doseSequence = Column(Integer)
     """ Dose number within sequence.
         Type `int`. """
 
-    series = Column()
+    series = Column(primitives.StringField)
     """ Name of vaccination series.
         Type `str`. """
 

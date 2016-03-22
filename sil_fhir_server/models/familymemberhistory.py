@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class FamilyMemberHistory(domainresource.DomainResource):
@@ -16,27 +17,27 @@ class FamilyMemberHistory(domainresource.DomainResource):
 
     __tablename__ = "FamilyMemberHistory"
 
-    ageQuantity = Column()
+    ageQuantity = Column(Quantity)
     """ (approximate) age.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
 
-    ageRange = Column()
+    ageRange = Column(Range)
     """ (approximate) age.
         Type `Range` (represented as `dict` in JSON). """
 
-    ageString = Column()
+    ageString = Column(primitives.StringField)
     """ (approximate) age.
         Type `str`. """
 
-    bornDate = Column()
+    bornDate = Column(FHIRDate)
     """ (approximate) date of birth.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    bornPeriod = Column()
+    bornPeriod = Column(Period)
     """ (approximate) date of birth.
         Type `Period` (represented as `dict` in JSON). """
 
-    bornString = Column()
+    bornString = Column(primitives.StringField)
     """ (approximate) date of birth.
         Type `str`. """
 
@@ -44,31 +45,31 @@ class FamilyMemberHistory(domainresource.DomainResource):
     """ Condition that the related person had.
         List of `FamilyMemberHistoryCondition` items (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ When history was captured/updated.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    deceasedBoolean = Column()
+    deceasedBoolean = Column(bool)
     """ Dead? How old/when?.
         Type `bool`. """
 
-    deceasedDate = Column()
+    deceasedDate = Column(FHIRDate)
     """ Dead? How old/when?.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    deceasedQuantity = Column()
+    deceasedQuantity = Column(Quantity)
     """ Dead? How old/when?.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
 
-    deceasedRange = Column()
+    deceasedRange = Column(Range)
     """ Dead? How old/when?.
         Type `Range` (represented as `dict` in JSON). """
 
-    deceasedString = Column()
+    deceasedString = Column(primitives.StringField)
     """ Dead? How old/when?.
         Type `str`. """
 
-    gender = Column()
+    gender = Column(primitives.StringField)
     """ male | female | other | unknown.
         Type `str`. """
 
@@ -76,23 +77,23 @@ class FamilyMemberHistory(domainresource.DomainResource):
     """ External Id(s) for this record.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ The family member described.
         Type `str`. """
 
-    note = Column()
+    note = Column(Annotation)
     """ General note about related person.
         Type `Annotation` (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Patient history is about.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    relationship = Column()
+    relationship = Column(CodeableConcept)
     """ Relationship to the subject.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ partial | completed | entered-in-error | health-unknown.
         Type `str`. """
 
@@ -124,6 +125,7 @@ class FamilyMemberHistory(domainresource.DomainResource):
         return '<FamilyMemberHistory %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class FamilyMemberHistoryCondition(backboneelement.BackboneElement):
@@ -137,31 +139,31 @@ class FamilyMemberHistoryCondition(backboneelement.BackboneElement):
 
     __tablename__ = "FamilyMemberHistoryCondition"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Condition suffered by relation.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    note = Column()
+    note = Column(Annotation)
     """ Extra information about condition.
         Type `Annotation` (represented as `dict` in JSON). """
 
-    onsetPeriod = Column()
+    onsetPeriod = Column(Period)
     """ When condition first manifested.
         Type `Period` (represented as `dict` in JSON). """
 
-    onsetQuantity = Column()
+    onsetQuantity = Column(Quantity)
     """ When condition first manifested.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
 
-    onsetRange = Column()
+    onsetRange = Column(Range)
     """ When condition first manifested.
         Type `Range` (represented as `dict` in JSON). """
 
-    onsetString = Column()
+    onsetString = Column(primitives.StringField)
     """ When condition first manifested.
         Type `str`. """
 
-    outcome = Column()
+    outcome = Column(CodeableConcept)
     """ deceased | permanent disability | etc..
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

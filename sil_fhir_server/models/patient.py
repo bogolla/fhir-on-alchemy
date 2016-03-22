@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Patient(domainresource.DomainResource):
@@ -16,7 +17,7 @@ class Patient(domainresource.DomainResource):
 
     __tablename__ = "Patient"
 
-    active = Column()
+    active = Column(bool)
     """ Whether this patient's record is in active use.
         Type `bool`. """
 
@@ -24,11 +25,11 @@ class Patient(domainresource.DomainResource):
     """ Addresses for the individual.
         List of `Address` items (represented as `dict` in JSON). """
 
-    animal = Column()
+    animal = Column(PatientAnimal)
     """ This patient is known to be an animal (non-human).
         Type `PatientAnimal` (represented as `dict` in JSON). """
 
-    birthDate = Column()
+    birthDate = Column(FHIRDate)
     """ The date of birth for the individual.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -45,15 +46,15 @@ class Patient(domainresource.DomainResource):
     """ A contact party (e.g. guardian, partner, friend) for the patient.
         List of `PatientContact` items (represented as `dict` in JSON). """
 
-    deceasedBoolean = Column()
+    deceasedBoolean = Column(bool)
     """ Indicates if the individual is deceased or not.
         Type `bool`. """
 
-    deceasedDateTime = Column()
+    deceasedDateTime = Column(FHIRDate)
     """ Indicates if the individual is deceased or not.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    gender = Column()
+    gender = Column(primitives.StringField)
     """ male | female | other | unknown.
         Type `str`. """
 
@@ -66,19 +67,19 @@ class Patient(domainresource.DomainResource):
         person.
         List of `PatientLink` items (represented as `dict` in JSON). """
 
-    managingOrganization = Column()
+    managingOrganization = Column(FHIRReference)
     """ Organization that is the custodian of the patient record.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    maritalStatus = Column()
+    maritalStatus = Column(CodeableConcept)
     """ Marital (civil) status of a patient.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    multipleBirthBoolean = Column()
+    multipleBirthBoolean = Column(bool)
     """ Whether patient is part of a multiple birth.
         Type `bool`. """
 
-    multipleBirthInteger = Column()
+    multipleBirthInteger = Column(Integer)
     """ Whether patient is part of a multiple birth.
         Type `int`. """
 
@@ -121,6 +122,7 @@ class Patient(domainresource.DomainResource):
         return '<Patient %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class PatientAnimal(backboneelement.BackboneElement):
@@ -131,15 +133,15 @@ class PatientAnimal(backboneelement.BackboneElement):
 
     __tablename__ = "PatientAnimal"
 
-    breed = Column()
+    breed = Column(CodeableConcept)
     """ E.g. Poodle, Angus.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    genderStatus = Column()
+    genderStatus = Column(CodeableConcept)
     """ E.g. Neutered, Intact.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    species = Column()
+    species = Column(CodeableConcept)
     """ E.g. Dog, Cow.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -154,6 +156,7 @@ class PatientAnimal(backboneelement.BackboneElement):
         return '<PatientAnimal %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class PatientCommunication(backboneelement.BackboneElement):
     """ A list of Languages which may be used to communicate with the patient about
     his or her health.
@@ -164,12 +167,12 @@ class PatientCommunication(backboneelement.BackboneElement):
 
     __tablename__ = "PatientCommunication"
 
-    language = Column()
+    language = Column(CodeableConcept)
     """ The language which can be used to communicate with the patient
         about his or her health.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    preferred = Column()
+    preferred = Column(bool)
     """ Language preference indicator.
         Type `bool`. """
 
@@ -183,29 +186,30 @@ class PatientCommunication(backboneelement.BackboneElement):
         return '<PatientCommunication %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class PatientContact(backboneelement.BackboneElement):
     """ A contact party (e.g. guardian, partner, friend) for the patient.
     """
 
     __tablename__ = "PatientContact"
 
-    address = Column()
+    address = Column(Address)
     """ Address for the contact person.
         Type `Address` (represented as `dict` in JSON). """
 
-    gender = Column()
+    gender = Column(primitives.StringField)
     """ male | female | other | unknown.
         Type `str`. """
 
-    name = Column()
+    name = Column(HumanName)
     """ A name associated with the contact person.
         Type `HumanName` (represented as `dict` in JSON). """
 
-    organization = Column()
+    organization = Column(FHIRReference)
     """ Organization that is associated with the contact.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ The period during which this contact person or organization is
         valid to be contacted relating to this patient.
         Type `Period` (represented as `dict` in JSON). """
@@ -233,6 +237,7 @@ class PatientContact(backboneelement.BackboneElement):
         return '<PatientContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class PatientLink(backboneelement.BackboneElement):
     """ Link to another patient resource that concerns the same actual person.
 
@@ -241,11 +246,11 @@ class PatientLink(backboneelement.BackboneElement):
 
     __tablename__ = "PatientLink"
 
-    other = Column()
+    other = Column(FHIRReference)
     """ The other patient resource that the link refers to.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ replace | refer | seealso - type of link.
         Type `str`. """
 

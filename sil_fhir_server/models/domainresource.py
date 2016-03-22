@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import resource
 
 class DomainResource(resource.Resource):
@@ -14,20 +15,20 @@ class DomainResource(resource.Resource):
     """
 
     __tablename__ = "DomainResource"
-
+    
     contained = Column(Resource)
     """ Contained, inline Resources.
         List of `Resource` items (represented as `dict` in JSON). """
-
+    
     extension = Column(Extension)
     """ Additional Content defined by implementations.
         List of `Extension` items (represented as `dict` in JSON). """
-
+    
     modifierExtension = Column(Extension)
     """ Extensions that cannot be ignored.
         List of `Extension` items (represented as `dict` in JSON). """
-
-    text = Column()
+    
+    text = Column(Narrative)
     """ Text summary of the resource, for human interpretation.
         Type `Narrative` (represented as `dict` in JSON). """
 

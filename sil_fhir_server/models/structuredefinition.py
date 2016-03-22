@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class StructureDefinition(domainresource.DomainResource):
@@ -17,11 +18,11 @@ class StructureDefinition(domainresource.DomainResource):
 
     __tablename__ = "StructureDefinition"
 
-    abstract = Column()
+    abstract = Column(bool)
     """ Whether the structure is abstract.
         Type `bool`. """
 
-    base = Column()
+    base = Column(primitives.StringField)
     """ Structure that this set of constraints applies to.
         Type `str`. """
 
@@ -29,7 +30,7 @@ class StructureDefinition(domainresource.DomainResource):
     """ Assist with indexing and finding.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    constrainedType = Column()
+    constrainedType = Column(primitives.StringField)
     """ Any datatype or resource, including abstract ones.
         Type `str`. """
 
@@ -37,39 +38,39 @@ class StructureDefinition(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `StructureDefinitionContact` items (represented as `dict` in JSON). """
 
-    context = Column(str)
+    context = Column(primitives.StringField)
     """ Where the extension can be used in instances.
         List of `str` items. """
 
-    contextType = Column()
+    contextType = Column(primitives.StringField)
     """ resource | datatype | mapping | extension.
         Type `str`. """
 
-    copyright = Column()
+    copyright = Column(primitives.StringField)
     """ Use and/or publishing restrictions.
         Type `str`. """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date for this version of the StructureDefinition.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Natural language description of the StructureDefinition.
         Type `str`. """
 
-    differential = Column()
+    differential = Column(StructureDefinitionDifferential)
     """ Differential view of the structure.
         Type `StructureDefinitionDifferential` (represented as `dict` in JSON). """
 
-    display = Column()
+    display = Column(primitives.StringField)
     """ Use this name when displaying the value.
         Type `str`. """
 
-    experimental = Column()
+    experimental = Column(bool)
     """ If for testing purposes, not real usage.
         Type `bool`. """
 
-    fhirVersion = Column()
+    fhirVersion = Column(primitives.StringField)
     """ FHIR Version this StructureDefinition targets.
         Type `str`. """
 
@@ -77,7 +78,7 @@ class StructureDefinition(domainresource.DomainResource):
     """ Other identifiers for the StructureDefinition.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    kind = Column()
+    kind = Column(primitives.StringField)
     """ datatype | resource | logical.
         Type `str`. """
 
@@ -85,27 +86,27 @@ class StructureDefinition(domainresource.DomainResource):
     """ External specification that the content is mapped to.
         List of `StructureDefinitionMapping` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Informal name for this StructureDefinition.
         Type `str`. """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    requirements = Column()
+    requirements = Column(primitives.StringField)
     """ Scope and Usage this structure definition is for.
         Type `str`. """
 
-    snapshot = Column()
+    snapshot = Column(StructureDefinitionSnapshot)
     """ Snapshot view of the structure.
         Type `StructureDefinitionSnapshot` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    url = Column()
+    url = Column(primitives.StringField)
     """ Absolute URL used to reference this StructureDefinition.
         Type `str`. """
 
@@ -113,7 +114,7 @@ class StructureDefinition(domainresource.DomainResource):
     """ Content intends to support these contexts.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical id for this version of the StructureDefinition.
         Type `str`. """
 
@@ -150,6 +151,7 @@ class StructureDefinition(domainresource.DomainResource):
         return '<StructureDefinition %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class StructureDefinitionContact(backboneelement.BackboneElement):
@@ -160,7 +162,7 @@ class StructureDefinitionContact(backboneelement.BackboneElement):
 
     __tablename__ = "StructureDefinitionContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -178,6 +180,7 @@ class StructureDefinitionContact(backboneelement.BackboneElement):
         return '<StructureDefinitionContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class StructureDefinitionDifferential(backboneelement.BackboneElement):
     """ Differential view of the structure.
 
@@ -200,6 +203,7 @@ class StructureDefinitionDifferential(backboneelement.BackboneElement):
         return '<StructureDefinitionDifferential %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class StructureDefinitionMapping(backboneelement.BackboneElement):
     """ External specification that the content is mapped to.
 
@@ -208,19 +212,19 @@ class StructureDefinitionMapping(backboneelement.BackboneElement):
 
     __tablename__ = "StructureDefinitionMapping"
 
-    comments = Column()
+    comments = Column(primitives.StringField)
     """ Versions, Issues, Scope limitations etc..
         Type `str`. """
 
-    identity = Column()
+    identity = Column(primitives.StringField)
     """ Internal id when this mapping is used.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Names what this mapping refers to.
         Type `str`. """
 
-    uri = Column()
+    uri = Column(primitives.StringField)
     """ Identifies what this mapping refers to.
         Type `str`. """
 
@@ -236,6 +240,7 @@ class StructureDefinitionMapping(backboneelement.BackboneElement):
         return '<StructureDefinitionMapping %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class StructureDefinitionSnapshot(backboneelement.BackboneElement):
     """ Snapshot view of the structure.
 

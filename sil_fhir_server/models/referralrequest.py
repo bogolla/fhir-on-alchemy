@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class ReferralRequest(domainresource.DomainResource):
@@ -17,23 +18,23 @@ class ReferralRequest(domainresource.DomainResource):
 
     __tablename__ = "ReferralRequest"
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date of creation/activation.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    dateSent = Column()
+    dateSent = Column(FHIRDate)
     """ Date referral/transfer of care request is sent.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ A textual description of the referral.
         Type `str`. """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Originating encounter.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
-    fulfillmentTime = Column()
+    fulfillmentTime = Column(Period)
     """ Requested service(s) fulfillment time.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -41,15 +42,15 @@ class ReferralRequest(domainresource.DomainResource):
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    patient = Column()
+    patient = Column(FHIRReference)
     """ Patient referred to care or transfer.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(CodeableConcept)
     """ Urgency of referral / transfer of care request.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    reason = Column()
+    reason = Column(CodeableConcept)
     """ Reason for referral / transfer of care request.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -57,7 +58,7 @@ class ReferralRequest(domainresource.DomainResource):
     """ Receiver of referral / transfer of care request.
         List of `FHIRReference` items referencing `Practitioner, Organization` (represented as `dict` in JSON). """
 
-    requester = Column()
+    requester = Column(FHIRReference)
     """ Requester of referral / transfer of care.
         Type `FHIRReference` referencing `Practitioner, Organization, Patient` (represented as `dict` in JSON). """
 
@@ -65,12 +66,12 @@ class ReferralRequest(domainresource.DomainResource):
     """ Actions requested as part of the referral.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    specialty = Column()
+    specialty = Column(CodeableConcept)
     """ The clinical specialty (discipline) that the referral is requested
         for.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | requested | active | cancelled | accepted | rejected |
         completed.
         Type `str`. """
@@ -80,7 +81,7 @@ class ReferralRequest(domainresource.DomainResource):
         request.
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ Referral/Transition of care request type.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 

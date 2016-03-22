@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class MessageHeader(domainresource.DomainResource):
@@ -19,7 +20,7 @@ class MessageHeader(domainresource.DomainResource):
 
     __tablename__ = "MessageHeader"
 
-    author = Column()
+    author = Column(FHIRReference)
     """ The source of the decision.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
@@ -31,35 +32,35 @@ class MessageHeader(domainresource.DomainResource):
     """ Message Destination Application(s).
         List of `MessageHeaderDestination` items (represented as `dict` in JSON). """
 
-    enterer = Column()
+    enterer = Column(FHIRReference)
     """ The source of the data entry.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
 
-    event = Column()
+    event = Column(Coding)
     """ Code for the event this message represents.
         Type `Coding` (represented as `dict` in JSON). """
 
-    reason = Column()
+    reason = Column(CodeableConcept)
     """ Cause of event.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    receiver = Column()
+    receiver = Column(FHIRReference)
     """ Intended "real-world" recipient for the data.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
 
-    response = Column()
+    response = Column(MessageHeaderResponse)
     """ If this is a reply to prior message.
         Type `MessageHeaderResponse` (represented as `dict` in JSON). """
 
-    responsible = Column()
+    responsible = Column(FHIRReference)
     """ Final responsibility for event.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
 
-    source = Column()
+    source = Column(MessageHeaderSource)
     """ Message Source Application.
         Type `MessageHeaderSource` (represented as `dict` in JSON). """
 
-    timestamp = Column()
+    timestamp = Column(FHIRDate)
     """ Time that the message was sent.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -82,6 +83,7 @@ class MessageHeader(domainresource.DomainResource):
         return '<MessageHeader %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class MessageHeaderDestination(backboneelement.BackboneElement):
@@ -92,15 +94,15 @@ class MessageHeaderDestination(backboneelement.BackboneElement):
 
     __tablename__ = "MessageHeaderDestination"
 
-    endpoint = Column()
+    endpoint = Column(primitives.StringField)
     """ Actual destination address or id.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of system.
         Type `str`. """
 
-    target = Column()
+    target = Column(FHIRReference)
     """ Particular delivery destination within the destination.
         Type `FHIRReference` referencing `Device` (represented as `dict` in JSON). """
 
@@ -115,6 +117,7 @@ class MessageHeaderDestination(backboneelement.BackboneElement):
         return '<MessageHeaderDestination %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MessageHeaderResponse(backboneelement.BackboneElement):
     """ If this is a reply to prior message.
 
@@ -124,15 +127,15 @@ class MessageHeaderResponse(backboneelement.BackboneElement):
 
     __tablename__ = "MessageHeaderResponse"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ ok | transient-error | fatal-error.
         Type `str`. """
 
-    details = Column()
+    details = Column(FHIRReference)
     """ Specific list of hints/warnings/errors.
         Type `FHIRReference` referencing `OperationOutcome` (represented as `dict` in JSON). """
 
-    identifier = Column()
+    identifier = Column(primitives.StringField)
     """ Id of original message.
         Type `str`. """
 
@@ -147,6 +150,7 @@ class MessageHeaderResponse(backboneelement.BackboneElement):
         return '<MessageHeaderResponse %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class MessageHeaderSource(backboneelement.BackboneElement):
     """ Message Source Application.
 
@@ -155,23 +159,23 @@ class MessageHeaderSource(backboneelement.BackboneElement):
 
     __tablename__ = "MessageHeaderSource"
 
-    contact = Column()
+    contact = Column(ContactPoint)
     """ Human contact for problems.
         Type `ContactPoint` (represented as `dict` in JSON). """
 
-    endpoint = Column()
+    endpoint = Column(primitives.StringField)
     """ Actual message source address or id.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of system.
         Type `str`. """
 
-    software = Column()
+    software = Column(primitives.StringField)
     """ Name of software running the system.
         Type `str`. """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Version of software running.
         Type `str`. """
 

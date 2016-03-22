@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class EligibilityRequest(domainresource.DomainResource):
@@ -15,32 +16,32 @@ class EligibilityRequest(domainresource.DomainResource):
     """
 
     __tablename__ = "EligibilityRequest"
-
-    created = Column()
+    
+    created = Column(FHIRDate)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     identifier = Column(Identifier)
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    organization = Column()
+    
+    organization = Column(FHIRReference)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    originalRuleset = Column()
+    
+    originalRuleset = Column(Coding)
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    provider = Column()
+    
+    provider = Column(FHIRReference)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    ruleset = Column()
+    
+    ruleset = Column(Coding)
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    target = Column()
+    
+    target = Column(FHIRReference)
     """ Insurer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 

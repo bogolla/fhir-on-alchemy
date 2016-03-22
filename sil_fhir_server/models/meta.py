@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import element
 
 class Meta(element.Element):
@@ -17,11 +18,11 @@ class Meta(element.Element):
 
     __tablename__ = "Meta"
 
-    lastUpdated = Column()
+    lastUpdated = Column(FHIRDate)
     """ When the resource version last changed.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    profile = Column(str)
+    profile = Column(primitives.StringField)
     """ Profiles this resource claims to conform to.
         List of `str` items. """
 
@@ -33,7 +34,7 @@ class Meta(element.Element):
     """ Tags applied to this resource.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    versionId = Column()
+    versionId = Column(primitives.StringField)
     """ Version specific identifier.
         Type `str`. """
 

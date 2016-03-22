@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class CommunicationRequest(domainresource.DomainResource):
@@ -17,11 +19,11 @@ class CommunicationRequest(domainresource.DomainResource):
 
     __tablename__ = "CommunicationRequest"
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ Message category.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    encounter = Column()
+    encounter = Column(FHIRReference)
     """ Encounter leading to message.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
 
@@ -37,7 +39,7 @@ class CommunicationRequest(domainresource.DomainResource):
     """ Message payload.
         List of `CommunicationRequestPayload` items (represented as `dict` in JSON). """
 
-    priority = Column()
+    priority = Column(CodeableConcept)
     """ Message urgency.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -49,32 +51,32 @@ class CommunicationRequest(domainresource.DomainResource):
     """ Message recipient.
         List of `FHIRReference` items referencing `Device, Organization, Patient, Practitioner, RelatedPerson` (represented as `dict` in JSON). """
 
-    requestedOn = Column()
+    requestedOn = Column(FHIRDate)
     """ When ordered or proposed.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    requester = Column()
+    requester = Column(FHIRReference)
     """ An individual who requested a communication.
         Type `FHIRReference` referencing `Practitioner, Patient, RelatedPerson` (represented as `dict` in JSON). """
 
-    scheduledDateTime = Column()
+    scheduledDateTime = Column(FHIRDate)
     """ When scheduled.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    scheduledPeriod = Column()
+    scheduledPeriod = Column(Period)
     """ When scheduled.
         Type `Period` (represented as `dict` in JSON). """
 
-    sender = Column()
+    sender = Column(FHIRReference)
     """ Message sender.
         Type `FHIRReference` referencing `Device, Organization, Patient, Practitioner, RelatedPerson` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | planned | requested | received | accepted | in-progress
         | completed | suspended | rejected | failed.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Focus of message.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
 
@@ -101,6 +103,7 @@ class CommunicationRequest(domainresource.DomainResource):
         return '<CommunicationRequest %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class CommunicationRequestPayload(backboneelement.BackboneElement):
@@ -111,15 +114,15 @@ class CommunicationRequestPayload(backboneelement.BackboneElement):
 
     __tablename__ = "CommunicationRequestPayload"
 
-    contentAttachment = Column()
+    contentAttachment = Column(Attachment)
     """ Message part content.
         Type `Attachment` (represented as `dict` in JSON). """
 
-    contentReference = Column()
+    contentReference = Column(FHIRReference)
     """ Message part content.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    contentString = Column()
+    contentString = Column(primitives.StringField)
     """ Message part content.
         Type `str`. """
 

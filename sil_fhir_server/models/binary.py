@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import resource
 
 class Binary(resource.Resource):
@@ -16,11 +18,11 @@ class Binary(resource.Resource):
 
     __tablename__ = "Binary"
 
-    content = Column()
+    content = Column(primitives.StringField)
     """ The actual content.
         Type `str`. """
 
-    contentType = Column()
+    contentType = Column(primitives.StringField)
     """ MimeType of the binary content.
         Type `str`. """
 

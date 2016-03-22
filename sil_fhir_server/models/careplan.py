@@ -5,6 +5,8 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class CarePlan(domainresource.DomainResource):
@@ -33,11 +35,11 @@ class CarePlan(domainresource.DomainResource):
     """ Type of plan.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    context = Column()
+    context = Column(FHIRReference)
     """ Created in context of.
         Type `FHIRReference` referencing `Encounter, EpisodeOfCare` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Summary of nature of plan.
         Type `str`. """
 
@@ -49,11 +51,11 @@ class CarePlan(domainresource.DomainResource):
     """ External Ids for this plan.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    modified = Column()
+    modified = Column(FHIRDate)
     """ When last updated.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    note = Column()
+    note = Column(Annotation)
     """ Comments about the plan.
         Type `Annotation` (represented as `dict` in JSON). """
 
@@ -61,7 +63,7 @@ class CarePlan(domainresource.DomainResource):
     """ Who's involved in plan?.
         List of `CarePlanParticipant` items (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Time period plan covers.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -69,11 +71,11 @@ class CarePlan(domainresource.DomainResource):
     """ Plans related to this one.
         List of `CarePlanRelatedPlan` items (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ proposed | draft | active | completed | cancelled.
         Type `str`. """
 
-    subject = Column()
+    subject = Column(FHIRReference)
     """ Who care plan is for.
         Type `FHIRReference` referencing `Patient, Group` (represented as `dict` in JSON). """
 
@@ -105,6 +107,7 @@ class CarePlan(domainresource.DomainResource):
         return '<CarePlan %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class CarePlanActivity(backboneelement.BackboneElement):
@@ -121,7 +124,7 @@ class CarePlanActivity(backboneelement.BackboneElement):
     """ Appointments, orders, etc..
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
 
-    detail = Column()
+    detail = Column(CarePlanActivityDetail)
     """ In-line definition of activity.
         Type `CarePlanActivityDetail` (represented as `dict` in JSON). """
 
@@ -129,7 +132,7 @@ class CarePlanActivity(backboneelement.BackboneElement):
     """ Comments about the activity status/progress.
         List of `Annotation` items (represented as `dict` in JSON). """
 
-    reference = Column()
+    reference = Column(FHIRReference)
     """ Activity details defined in specific resource.
         Type `FHIRReference` referencing `Appointment, CommunicationRequest, DeviceUseRequest, DiagnosticOrder, MedicationOrder, NutritionOrder, Order, ProcedureRequest, ProcessRequest, ReferralRequest, SupplyRequest, VisionPrescription` (represented as `dict` in JSON). """
 
@@ -145,6 +148,7 @@ class CarePlanActivity(backboneelement.BackboneElement):
         return '<CarePlanActivity %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class CarePlanActivityDetail(backboneelement.BackboneElement):
     """ In-line definition of activity.
 
@@ -155,19 +159,19 @@ class CarePlanActivityDetail(backboneelement.BackboneElement):
 
     __tablename__ = "CarePlanActivityDetail"
 
-    category = Column()
+    category = Column(CodeableConcept)
     """ diet | drug | encounter | observation | procedure | supply | other.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Detail type of activity.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    dailyAmount = Column()
+    dailyAmount = Column(Quantity)
     """ How to consume/day?.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ Extra info describing activity to perform.
         Type `str`. """
 
@@ -175,7 +179,7 @@ class CarePlanActivityDetail(backboneelement.BackboneElement):
     """ Goals this activity relates to.
         List of `FHIRReference` items referencing `Goal` (represented as `dict` in JSON). """
 
-    location = Column()
+    location = Column(FHIRReference)
     """ Where it should happen.
         Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
 
@@ -183,19 +187,19 @@ class CarePlanActivityDetail(backboneelement.BackboneElement):
     """ Who will be responsible?.
         List of `FHIRReference` items referencing `Practitioner, Organization, RelatedPerson, Patient` (represented as `dict` in JSON). """
 
-    productCodeableConcept = Column()
+    productCodeableConcept = Column(CodeableConcept)
     """ What is to be administered/supplied.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    productReference = Column()
+    productReference = Column(FHIRReference)
     """ What is to be administered/supplied.
         Type `FHIRReference` referencing `Medication, Substance` (represented as `dict` in JSON). """
 
-    prohibited = Column()
+    prohibited = Column(bool)
     """ Do NOT do.
         Type `bool`. """
 
-    quantity = Column()
+    quantity = Column(Quantity)
     """ How much to administer/supply/consume.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
 
@@ -207,24 +211,24 @@ class CarePlanActivityDetail(backboneelement.BackboneElement):
     """ Condition triggering need for activity.
         List of `FHIRReference` items referencing `Condition` (represented as `dict` in JSON). """
 
-    scheduledPeriod = Column()
+    scheduledPeriod = Column(Period)
     """ When activity is to occur.
         Type `Period` (represented as `dict` in JSON). """
 
-    scheduledString = Column()
+    scheduledString = Column(primitives.StringField)
     """ When activity is to occur.
         Type `str`. """
 
-    scheduledTiming = Column()
+    scheduledTiming = Column(Timing)
     """ When activity is to occur.
         Type `Timing` (represented as `dict` in JSON). """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ not-started | scheduled | in-progress | on-hold | completed |
         cancelled.
         Type `str`. """
 
-    statusReason = Column()
+    statusReason = Column(CodeableConcept)
     """ Reason for current status.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -254,6 +258,7 @@ class CarePlanActivityDetail(backboneelement.BackboneElement):
         return '<CarePlanActivityDetail %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class CarePlanParticipant(backboneelement.BackboneElement):
     """ Who's involved in plan?.
 
@@ -263,11 +268,11 @@ class CarePlanParticipant(backboneelement.BackboneElement):
 
     __tablename__ = "CarePlanParticipant"
 
-    member = Column()
+    member = Column(FHIRReference)
     """ Who is involved.
         Type `FHIRReference` referencing `Practitioner, RelatedPerson, Patient, Organization` (represented as `dict` in JSON). """
 
-    role = Column()
+    role = Column(CodeableConcept)
     """ Type of involvement.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -281,6 +286,7 @@ class CarePlanParticipant(backboneelement.BackboneElement):
         return '<CarePlanParticipant %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class CarePlanRelatedPlan(backboneelement.BackboneElement):
     """ Plans related to this one.
 
@@ -290,11 +296,11 @@ class CarePlanRelatedPlan(backboneelement.BackboneElement):
 
     __tablename__ = "CarePlanRelatedPlan"
 
-    code = Column()
+    code = Column(primitives.StringField)
     """ includes | replaces | fulfills.
         Type `str`. """
 
-    plan = Column()
+    plan = Column(FHIRReference)
     """ Plan relationship exists with.
         Type `FHIRReference` referencing `CarePlan` (represented as `dict` in JSON). """
 

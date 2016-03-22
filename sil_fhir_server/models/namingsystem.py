@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class NamingSystem(domainresource.DomainResource):
@@ -21,39 +22,39 @@ class NamingSystem(domainresource.DomainResource):
     """ Contact details of the publisher.
         List of `NamingSystemContact` items (represented as `dict` in JSON). """
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Publication Date(/time).
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    description = Column()
+    description = Column(primitives.StringField)
     """ What does naming system identify?.
         Type `str`. """
 
-    kind = Column()
+    kind = Column(primitives.StringField)
     """ codesystem | identifier | root.
         Type `str`. """
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Human-readable label.
         Type `str`. """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
 
-    replacedBy = Column()
+    replacedBy = Column(FHIRReference)
     """ Use this instead.
         Type `FHIRReference` referencing `NamingSystem` (represented as `dict` in JSON). """
 
-    responsible = Column()
+    responsible = Column(primitives.StringField)
     """ Who maintains system namespace?.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
 
-    type = Column()
+    type = Column(CodeableConcept)
     """ e.g. driver,  provider,  patient, bank etc..
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -61,7 +62,7 @@ class NamingSystem(domainresource.DomainResource):
     """ Unique identifiers used for system.
         List of `NamingSystemUniqueId` items (represented as `dict` in JSON). """
 
-    usage = Column()
+    usage = Column(primitives.StringField)
     """ How/where is it used.
         Type `str`. """
 
@@ -90,6 +91,7 @@ class NamingSystem(domainresource.DomainResource):
         return '<NamingSystem %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class NamingSystemContact(backboneelement.BackboneElement):
@@ -100,7 +102,7 @@ class NamingSystemContact(backboneelement.BackboneElement):
 
     __tablename__ = "NamingSystemContact"
 
-    name = Column()
+    name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
 
@@ -118,6 +120,7 @@ class NamingSystemContact(backboneelement.BackboneElement):
         return '<NamingSystemContact %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class NamingSystemUniqueId(backboneelement.BackboneElement):
     """ Unique identifiers used for system.
 
@@ -127,19 +130,19 @@ class NamingSystemUniqueId(backboneelement.BackboneElement):
 
     __tablename__ = "NamingSystemUniqueId"
 
-    period = Column()
+    period = Column(Period)
     """ When is identifier valid?.
         Type `Period` (represented as `dict` in JSON). """
 
-    preferred = Column()
+    preferred = Column(bool)
     """ Is this the id that should be used for this type.
         Type `bool`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ oid | uuid | uri | other.
         Type `str`. """
 
-    value = Column()
+    value = Column(primitives.StringField)
     """ The unique identifier.
         Type `str`. """
 

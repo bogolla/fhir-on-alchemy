@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Practitioner(domainresource.DomainResource):
@@ -17,7 +18,7 @@ class Practitioner(domainresource.DomainResource):
 
     __tablename__ = "Practitioner"
 
-    active = Column()
+    active = Column(bool)
     """ Whether this practitioner's record is in active use.
         Type `bool`. """
 
@@ -25,7 +26,7 @@ class Practitioner(domainresource.DomainResource):
     """ Where practitioner can be found/visited.
         List of `Address` items (represented as `dict` in JSON). """
 
-    birthDate = Column()
+    birthDate = Column(FHIRDate)
     """ The date  on which the practitioner was born.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -33,7 +34,7 @@ class Practitioner(domainresource.DomainResource):
     """ A language the practitioner is able to use in patient communication.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
 
-    gender = Column()
+    gender = Column(primitives.StringField)
     """ male | female | other | unknown.
         Type `str`. """
 
@@ -41,7 +42,7 @@ class Practitioner(domainresource.DomainResource):
     """ A identifier for the person as this agent.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    name = Column()
+    name = Column(HumanName)
     """ A name associated with the person.
         Type `HumanName` (represented as `dict` in JSON). """
 
@@ -80,6 +81,7 @@ class Practitioner(domainresource.DomainResource):
         return '<Practitioner %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class PractitionerPractitionerRole(backboneelement.BackboneElement):
@@ -99,16 +101,16 @@ class PractitionerPractitionerRole(backboneelement.BackboneElement):
     """ The location(s) at which this practitioner provides care.
         List of `FHIRReference` items referencing `Location` (represented as `dict` in JSON). """
 
-    managingOrganization = Column()
+    managingOrganization = Column(FHIRReference)
     """ Organization where the roles are performed.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ The period during which the practitioner is authorized to perform
         in these role(s).
         Type `Period` (represented as `dict` in JSON). """
 
-    role = Column()
+    role = Column(CodeableConcept)
     """ Roles which this practitioner may perform.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -130,13 +132,14 @@ class PractitionerPractitionerRole(backboneelement.BackboneElement):
         return '<PractitionerPractitionerRole %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class PractitionerQualification(backboneelement.BackboneElement):
     """ Qualifications obtained by training and certification.
     """
 
     __tablename__ = "PractitionerQualification"
 
-    code = Column()
+    code = Column(CodeableConcept)
     """ Coded representation of the qualification.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -144,11 +147,11 @@ class PractitionerQualification(backboneelement.BackboneElement):
     """ An identifier for this qualification for the practitioner.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    issuer = Column()
+    issuer = Column(FHIRReference)
     """ Organization that regulates and issues the qualification.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    period = Column()
+    period = Column(Period)
     """ Period during which the qualification is valid.
         Type `Period` (represented as `dict` in JSON). """
 

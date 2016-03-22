@@ -5,6 +5,7 @@
 #  Date: 2016-03-18.
 
 
+from sqlalchemy import Column, Integer, String
 from . import domainresource
 
 class Questionnaire(domainresource.DomainResource):
@@ -17,11 +18,11 @@ class Questionnaire(domainresource.DomainResource):
 
     __tablename__ = "Questionnaire"
 
-    date = Column()
+    date = Column(FHIRDate)
     """ Date this version was authored.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    group = Column()
+    group = Column(QuestionnaireGroup)
     """ Grouped questions.
         Type `QuestionnaireGroup` (represented as `dict` in JSON). """
 
@@ -29,15 +30,15 @@ class Questionnaire(domainresource.DomainResource):
     """ External identifiers for this questionnaire.
         List of `Identifier` items (represented as `dict` in JSON). """
 
-    publisher = Column()
+    publisher = Column(primitives.StringField)
     """ Organization/individual who designed the questionnaire.
         Type `str`. """
 
-    status = Column()
+    status = Column(primitives.StringField)
     """ draft | published | retired.
         Type `str`. """
 
-    subjectType = Column(str)
+    subjectType = Column(primitives.StringField)
     """ Resource that can be subject of QuestionnaireResponse.
         List of `str` items. """
 
@@ -45,7 +46,7 @@ class Questionnaire(domainresource.DomainResource):
     """ Contact information of the publisher.
         List of `ContactPoint` items (represented as `dict` in JSON). """
 
-    version = Column()
+    version = Column(primitives.StringField)
     """ Logical identifier for this version of Questionnaire.
         Type `str`. """
 
@@ -65,6 +66,7 @@ class Questionnaire(domainresource.DomainResource):
         return '<Questionnaire %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class QuestionnaireGroup(backboneelement.BackboneElement):
@@ -83,7 +85,7 @@ class QuestionnaireGroup(backboneelement.BackboneElement):
     """ Nested questionnaire group.
         List of `QuestionnaireGroup` items (represented as `dict` in JSON). """
 
-    linkId = Column()
+    linkId = Column(primitives.StringField)
     """ To link questionnaire with questionnaire response.
         Type `str`. """
 
@@ -91,19 +93,19 @@ class QuestionnaireGroup(backboneelement.BackboneElement):
     """ Questions in this group.
         List of `QuestionnaireGroupQuestion` items (represented as `dict` in JSON). """
 
-    repeats = Column()
+    repeats = Column(bool)
     """ Whether the group may repeat.
         Type `bool`. """
 
-    required = Column()
+    required = Column(bool)
     """ Whether the group must be included in data results.
         Type `bool`. """
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Additional text for the group.
         Type `str`. """
 
-    title = Column()
+    title = Column(primitives.StringField)
     """ Name to be displayed for group.
         Type `str`. """
 
@@ -123,6 +125,7 @@ class QuestionnaireGroup(backboneelement.BackboneElement):
         return '<QuestionnaireGroup %r>' % 'self.property'  # replace self.property
 
 
+from sqlalchemy import Column, Integer, String
 class QuestionnaireGroupQuestion(backboneelement.BackboneElement):
     """ Questions in this group.
 
@@ -140,7 +143,7 @@ class QuestionnaireGroupQuestion(backboneelement.BackboneElement):
     """ Nested questionnaire group.
         List of `QuestionnaireGroup` items (represented as `dict` in JSON). """
 
-    linkId = Column()
+    linkId = Column(primitives.StringField)
     """ To link questionnaire with questionnaire response.
         Type `str`. """
 
@@ -148,23 +151,23 @@ class QuestionnaireGroupQuestion(backboneelement.BackboneElement):
     """ Permitted answer.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    options = Column()
+    options = Column(FHIRReference)
     """ Valueset containing permitted answers.
         Type `FHIRReference` referencing `ValueSet` (represented as `dict` in JSON). """
 
-    repeats = Column()
+    repeats = Column(bool)
     """ Whether the question  can have multiple answers.
         Type `bool`. """
 
-    required = Column()
+    required = Column(bool)
     """ Whether the question must be answered in data results.
         Type `bool`. """
 
-    text = Column()
+    text = Column(primitives.StringField)
     """ Text of the question as it is shown to the user.
         Type `str`. """
 
-    type = Column()
+    type = Column(primitives.StringField)
     """ boolean | decimal | integer | date | dateTime +.
         Type `str`. """
 
