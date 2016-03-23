@@ -8,3 +8,5 @@ fhir_parser/downloads/*
 # ignore IDE files
 *.sublime-*
 
+# IDEA config files
+.idea/
