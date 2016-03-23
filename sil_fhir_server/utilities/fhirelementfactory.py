@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Generated from FHIR 1.0.2.7202 on 2016-03-18.
+#  Generated from FHIR 1.0.2.7202 on 2016-03-22.
 #  2016, SMART Health IT.
 
 from . import element

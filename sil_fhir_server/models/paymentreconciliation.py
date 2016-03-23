@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/PaymentReconciliation)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/PaymentReconciliation)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class PaymentReconciliation(domainresource.DomainResource):
@@ -16,64 +17,64 @@ class PaymentReconciliation(domainresource.DomainResource):
     """
 
     __tablename__ = "PaymentReconciliation"
-
-    created = Column(FHIRDate)
+    
+    created = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    detail = Column(PaymentReconciliationDetail)
+    
+    detail = Column(primitives.StringField, ForeignKey('PaymentReconciliationDetail.id'))
     """ Details.
         List of `PaymentReconciliationDetail` items (represented as `dict` in JSON). """
-
+    
     disposition = Column(primitives.StringField)
     """ Disposition Message.
         Type `str`. """
-
-    form = Column(Coding)
+    
+    form = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Printed Form Identifier.
         Type `Coding` (represented as `dict` in JSON). """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    note = Column(PaymentReconciliationNote)
+    
+    note = Column(primitives.StringField, ForeignKey('PaymentReconciliationNote.id'))
     """ Note text.
         List of `PaymentReconciliationNote` items (represented as `dict` in JSON). """
-
-    organization = Column(FHIRReference)
+    
+    organization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Insurer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    originalRuleset = Column(Coding)
+    
+    originalRuleset = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
-
+    
     outcome = Column(primitives.StringField)
     """ complete | error.
         Type `str`. """
-
-    period = Column(Period)
+    
+    period = Column(primitives.StringField, ForeignKey('Period.id'))
     """ Period covered.
         Type `Period` (represented as `dict` in JSON). """
-
-    request = Column(FHIRReference)
+    
+    request = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Claim reference.
         Type `FHIRReference` referencing `ProcessRequest` (represented as `dict` in JSON). """
-
-    requestOrganization = Column(FHIRReference)
+    
+    requestOrganization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    requestProvider = Column(FHIRReference)
+    
+    requestProvider = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    ruleset = Column(Coding)
+    
+    ruleset = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    total = Column(Quantity)
+    
+    total = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Total amount of Payment.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
 
@@ -100,7 +101,8 @@ class PaymentReconciliation(domainresource.DomainResource):
         return '<PaymentReconciliation %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import backboneelement
 
 class PaymentReconciliationDetail(backboneelement.BackboneElement):
@@ -110,32 +112,34 @@ class PaymentReconciliationDetail(backboneelement.BackboneElement):
     """
 
     __tablename__ = "PaymentReconciliationDetail"
-
-    amount = Column(Quantity)
+    
+    amount = Column(primitives.StringField,
+                    ForeignKey('Quantity.id'))
     """ Detail amount.
         Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
-
-    date = Column(FHIRDate)
+    
+    date = Column(primitives.DateTimeField)
     """ Invoice date.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    payee = Column(FHIRReference)
+    
+    payee = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Payee.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    request = Column(FHIRReference)
+    
+    request = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Claim.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    responce = Column(FHIRReference)
+    
+    responce = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Claim Response.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    submitter = Column(FHIRReference)
+    
+    submitter = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Submitter.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    type = Column(Coding)
+    
+    type = Column(primitives.StringField,
+                  ForeignKey('Coding.id'))
     """ Type code.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -154,7 +158,6 @@ class PaymentReconciliationDetail(backboneelement.BackboneElement):
         return '<PaymentReconciliationDetail %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class PaymentReconciliationNote(backboneelement.BackboneElement):
     """ Note text.
 
@@ -162,12 +165,13 @@ class PaymentReconciliationNote(backboneelement.BackboneElement):
     """
 
     __tablename__ = "PaymentReconciliationNote"
-
+    
     text = Column(primitives.StringField)
     """ Notes text.
         Type `str`. """
-
-    type = Column(Coding)
+    
+    type = Column(primitives.StringField,
+                  ForeignKey('Coding.id'))
     """ display | print | printoper.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -179,11 +183,3 @@ class PaymentReconciliationNote(backboneelement.BackboneElement):
 
     def __repr__(self):
         return '<PaymentReconciliationNote %r>' % 'self.property'  # replace self.property
-
-
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import period
-from . import quantity

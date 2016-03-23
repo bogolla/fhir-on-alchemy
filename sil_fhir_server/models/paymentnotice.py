@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/PaymentNotice)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/PaymentNotice)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class PaymentNotice(domainresource.DomainResource):
@@ -17,47 +18,57 @@ class PaymentNotice(domainresource.DomainResource):
 
     __tablename__ = "PaymentNotice"
     
-    created = Column(FHIRDate)
+    created = Column(primitives.DateTimeField)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
     
-    identifier = Column(Identifier)
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
     
-    organization = Column(FHIRReference)
+    # todo organization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    organization = Column(primitives.StringField)
     """ Responsible organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
     
-    originalRuleset = Column(Coding)
+    originalRuleset = Column(primitives.StringField,
+                             ForeignKey('Coding.id'))
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
     
-    paymentStatus = Column(Coding)
+    paymentStatus = Column(primitives.StringField,
+                           ForeignKey('Coding.id'))
     """ Status of the payment.
         Type `Coding` (represented as `dict` in JSON). """
     
-    provider = Column(FHIRReference)
+    # todo provider = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    provider = Column(primitives.StringField)
     """ Responsible practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
     
-    request = Column(FHIRReference)
+    # todo request = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    request = Column(primitives.StringField)
     """ Request reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
     
-    response = Column(FHIRReference)
+    # todo response = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    response = Column(primitives.StringField)
     """ Response reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
     
-    ruleset = Column(Coding)
+    ruleset = Column(primitives.StringField,
+                     ForeignKey('Coding.id'))
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
     
-    target = Column(FHIRReference)
+    # todo target = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    target = Column(primitives.StringField)
     """ Insurer or Regulatory body.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    def __init__(self, created, identifier, organization, originalRuleset, paymentStatus, provider, request, response, ruleset, target,):
+    def __init__(self, created, identifier, organization, originalRuleset,
+                 paymentStatus, provider, request, response, ruleset, target,):
         """ Initialize all valid properties.
         """
         self.created = created
@@ -73,9 +84,3 @@ class PaymentNotice(domainresource.DomainResource):
 
     def __repr__(self):
         return '<PaymentNotice %r>' % 'self.property'  # replace self.property
-
-
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier

@@ -1,13 +1,148 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Composition)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Composition)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, ForeignKey
 from sil_fhir_server.data_types import primitives
 from . import domainresource
+from . import backboneelement
+
+
+class CompositionAttester(backboneelement.BackboneElement):
+    """ Attests to accuracy of composition.
+
+    A participant who has attested to the accuracy of the composition/document.
+    """
+
+    __tablename__ = "CompositionAttester"
+
+    mode = Column(primitives.StringField)
+    """ personal | professional | legal | official.
+        List of `str` items. """
+
+    # todo party = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    party = Column(primitives.StringField)
+    """ Who attested the composition.
+        Type `FHIRReference` referencing `Patient, Practitioner,
+        Organization` (represented as `dict` in JSON). """
+
+    time = Column(primitives.DateTimeField)
+    """ When composition attested.
+        Type `FHIRDate` (represented as `str` in JSON). """
+
+    def __init__(self, mode, party, time,):
+        """ Initialize all valid properties.
+        """
+        self.mode = mode
+        self.party = party
+        self.time = time
+
+    def __repr__(self):
+        return '<CompositionAttester %r>' % 'self.property'  # replace self.property
+
+
+class CompositionEvent(backboneelement.BackboneElement):
+    """ The clinical service(s) being documented.
+
+    The clinical service, such as a colonoscopy or an appendectomy, being
+    documented.
+    """
+
+    __tablename__ = "CompositionEvent"
+
+    code = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
+    """ Code(s) that apply to the event being documented.
+        List of `CodeableConcept` items (represented as `dict` in JSON). """
+
+    # todo detail = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    detail = Column(primitives.StringField)
+    """ The event(s) being documented.
+        List of `FHIRReference` items referencing `Resource`
+        (represented as `dict` in JSON). """
+
+    period = Column(primitives.StringField,
+                    ForeignKey('Period.id'))
+    """ The period covered by the documentation.
+        Type `Period` (represented as `dict` in JSON). """
+
+    def __init__(self, code, detail, period,):
+        """ Initialize all valid properties.
+        """
+        self.code = code
+        self.detail = detail
+        self.period = period
+
+    def __repr__(self):
+        return '<CompositionEvent %r>' % 'self.property'  # replace self.property
+
+
+class CompositionSection(backboneelement.BackboneElement):
+    """ Composition is broken into sections.
+
+    The root of the sections that make up the composition.
+    """
+
+    __tablename__ = "CompositionSection"
+
+    code = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
+    """ Classification of section (recommended).
+        Type `CodeableConcept` (represented as `dict` in JSON). """
+
+    emptyReason = Column(primitives.StringField,
+                         ForeignKey('CodeableConcept.id'))
+    """ Why the section is empty.
+        Type `CodeableConcept` (represented as `dict` in JSON). """
+
+    # todo entry = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    entry = Column(primitives.StringField)
+    """ A reference to data that supports this section.
+        List of `FHIRReference` items referencing `Resource`
+        (represented as `dict` in JSON). """
+
+    mode = Column(primitives.StringField)
+    """ working | snapshot | changes.
+        Type `str`. """
+
+    orderedBy = Column(primitives.StringField,
+                       ForeignKey('CodeableConcept.id'))
+    """ Order of section entries.
+        Type `CodeableConcept` (represented as `dict` in JSON). """
+
+    section = Column(primitives.StringField,
+                     ForeignKey('CompositionSection.id'))
+    """ Nested Section.
+        List of `CompositionSection` items (represented as `dict` in JSON). """
+
+    text = Column(primitives.StringField,
+                  ForeignKey('Narrative.id'))
+    """ Text summary of the section, for human interpretation.
+        Type `Narrative` (represented as `dict` in JSON). """
+
+    title = Column(primitives.StringField)
+    """ Label for section (e.g. for ToC).
+        Type `str`. """
+
+    def __init__(self, code, emptyReason, entry, mode,
+                 orderedBy, section, text, title,):
+        """ Initialize all valid properties.
+        """
+        self.code = code
+        self.emptyReason = emptyReason
+        self.entry = entry
+        self.mode = mode
+        self.orderedBy = orderedBy
+        self.section = section
+        self.text = text
+        self.title = title
+
+    def __repr__(self):
+        return '<CompositionSection %r>' % 'self.property'  # replace self.property
+
 
 class Composition(domainresource.DomainResource):
     """ A set of resources composed into a single coherent clinical statement with
@@ -23,64 +158,78 @@ class Composition(domainresource.DomainResource):
     """
 
     __tablename__ = "Composition"
-
-    attester = Column(CompositionAttester)
+    
+    attester = Column(primitives.StringField,
+                      ForeignKey('CompositionAttester.id'))
     """ Attests to accuracy of composition.
         List of `CompositionAttester` items (represented as `dict` in JSON). """
-
-    author = Column(FHIRReference)
+    
+    # todo author = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    author = Column(primitives.StringField)
     """ Who and/or what authored the composition.
-        List of `FHIRReference` items referencing `Practitioner, Device, Patient, RelatedPerson` (represented as `dict` in JSON). """
-
-    class_fhir = Column(CodeableConcept)
+        List of `FHIRReference` items referencing `Practitioner,
+        Device, Patient, RelatedPerson` (represented as `dict` in JSON). """
+    
+    class_fhir = Column(primitives.StringField,
+                        ForeignKey('CodeableConcept.id'))
     """ Categorization of Composition.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
+    
     confidentiality = Column(primitives.StringField)
     """ As defined by affinity domain.
         Type `str`. """
-
-    custodian = Column(FHIRReference)
+    
+    # todo custodian = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    custodian = Column(primitives.StringField)
     """ Organization which maintains the composition.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    date = Column(FHIRDate)
+    
+    date = Column(primitives.DateTimeField)
     """ Composition editing time.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    encounter = Column(FHIRReference)
+    
+    # todo encounter = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    encounter = Column(primitives.StringField)
     """ Context of the Composition.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
-
-    event = Column(CompositionEvent)
+    
+    event = Column(primitives.StringField,
+                   ForeignKey('CompositionEvent.id'))
     """ The clinical service(s) being documented.
         List of `CompositionEvent` items (represented as `dict` in JSON). """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Logical identifier of composition (version-independent).
         Type `Identifier` (represented as `dict` in JSON). """
-
-    section = Column(CompositionSection)
+    
+    section = Column(primitives.StringField,
+                     ForeignKey('CompositionSection.id'))
     """ Composition is broken into sections.
         List of `CompositionSection` items (represented as `dict` in JSON). """
-
+    
     status = Column(primitives.StringField)
     """ preliminary | final | amended | entered-in-error.
         Type `str`. """
-
-    subject = Column(FHIRReference)
+    
+    # todo subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    subject = Column(primitives.StringField)
     """ Who and/or what the composition is about.
-        Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
+        Type `FHIRReference` referencing `Resource`
+        (represented as `dict` in JSON). """
+    
     title = Column(primitives.StringField)
     """ Human Readable name/title.
         Type `str`. """
-
-    type = Column(CodeableConcept)
+    
+    type = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
     """ Kind of composition (LOINC if possible).
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    def __init__(self, attester, author, class_fhir, confidentiality, custodian, date, encounter, event, identifier, section, status, subject, title, type,):
+    def __init__(self, attester, author, class_fhir, confidentiality,
+                 custodian, date, encounter, event, identifier,
+                 section, status, subject, title, type,):
         """ Initialize all valid properties.
         """
         self.attester = attester
@@ -100,135 +249,3 @@ class Composition(domainresource.DomainResource):
 
     def __repr__(self):
         return '<Composition %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-from . import backboneelement
-
-class CompositionAttester(backboneelement.BackboneElement):
-    """ Attests to accuracy of composition.
-
-    A participant who has attested to the accuracy of the composition/document.
-    """
-
-    __tablename__ = "CompositionAttester"
-
-    mode = Column(primitives.StringField)
-    """ personal | professional | legal | official.
-        List of `str` items. """
-
-    party = Column(FHIRReference)
-    """ Who attested the composition.
-        Type `FHIRReference` referencing `Patient, Practitioner, Organization` (represented as `dict` in JSON). """
-
-    time = Column(FHIRDate)
-    """ When composition attested.
-        Type `FHIRDate` (represented as `str` in JSON). """
-
-    def __init__(self, mode, party, time,):
-        """ Initialize all valid properties.
-        """
-        self.mode = mode
-        self.party = party
-        self.time = time
-
-    def __repr__(self):
-        return '<CompositionAttester %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class CompositionEvent(backboneelement.BackboneElement):
-    """ The clinical service(s) being documented.
-
-    The clinical service, such as a colonoscopy or an appendectomy, being
-    documented.
-    """
-
-    __tablename__ = "CompositionEvent"
-
-    code = Column(CodeableConcept)
-    """ Code(s) that apply to the event being documented.
-        List of `CodeableConcept` items (represented as `dict` in JSON). """
-
-    detail = Column(FHIRReference)
-    """ The event(s) being documented.
-        List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
-
-    period = Column(Period)
-    """ The period covered by the documentation.
-        Type `Period` (represented as `dict` in JSON). """
-
-    def __init__(self, code, detail, period,):
-        """ Initialize all valid properties.
-        """
-        self.code = code
-        self.detail = detail
-        self.period = period
-
-    def __repr__(self):
-        return '<CompositionEvent %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class CompositionSection(backboneelement.BackboneElement):
-    """ Composition is broken into sections.
-
-    The root of the sections that make up the composition.
-    """
-
-    __tablename__ = "CompositionSection"
-
-    code = Column(CodeableConcept)
-    """ Classification of section (recommended).
-        Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    emptyReason = Column(CodeableConcept)
-    """ Why the section is empty.
-        Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    entry = Column(FHIRReference)
-    """ A reference to data that supports this section.
-        List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
-
-    mode = Column(primitives.StringField)
-    """ working | snapshot | changes.
-        Type `str`. """
-
-    orderedBy = Column(CodeableConcept)
-    """ Order of section entries.
-        Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    section = Column(CompositionSection)
-    """ Nested Section.
-        List of `CompositionSection` items (represented as `dict` in JSON). """
-
-    text = Column(Narrative)
-    """ Text summary of the section, for human interpretation.
-        Type `Narrative` (represented as `dict` in JSON). """
-
-    title = Column(primitives.StringField)
-    """ Label for section (e.g. for ToC).
-        Type `str`. """
-
-    def __init__(self, code, emptyReason, entry, mode, orderedBy, section, text, title,):
-        """ Initialize all valid properties.
-        """
-        self.code = code
-        self.emptyReason = emptyReason
-        self.entry = entry
-        self.mode = mode
-        self.orderedBy = orderedBy
-        self.section = section
-        self.text = text
-        self.title = title
-
-    def __repr__(self):
-        return '<CompositionSection %r>' % 'self.property'  # replace self.property
-
-
-from . import codeableconcept
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import narrative
-from . import period

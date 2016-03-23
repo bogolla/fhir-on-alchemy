@@ -81,5 +81,5 @@ class Quantity(QuantityBase):
     __tablename__ = 'Quantity'
 
 
-class SimpleQuantity(QuantityBase):
+class SimpleQuantity(SimpleQuantityBase):
     __tablename__ = 'SimpleQuantity'

@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/EligibilityResponse)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/EligibilityResponse)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class EligibilityResponse(domainresource.DomainResource):
@@ -16,48 +17,61 @@ class EligibilityResponse(domainresource.DomainResource):
     """
 
     __tablename__ = "EligibilityResponse"
-
-    created = Column(FHIRDate)
+    
+    created = Column(primitives.DateTimeField)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     disposition = Column(primitives.StringField)
     """ Disposition Message.
         Type `str`. """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    organization = Column(FHIRReference)
+    
+    # todo organization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    organization = Column(primitives.StringField)
     """ Insurer.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    originalRuleset = Column(Coding)
+    
+    originalRuleset = Column(primitives.StringField,
+                             ForeignKey('Coding.id'))
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
-
+    
     outcome = Column(primitives.StringField)
     """ complete | error.
         Type `str`. """
-
-    request = Column(FHIRReference)
+    
+    # todo request = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    request = Column(primitives.StringField)
     """ Claim reference.
-        Type `FHIRReference` referencing `EligibilityRequest` (represented as `dict` in JSON). """
-
-    requestOrganization = Column(FHIRReference)
+        Type `FHIRReference` referencing `EligibilityRequest`
+        (represented as `dict` in JSON). """
+    
+    # todo requestOrganization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    requestOrganization = Column(primitives.StringField)
     """ Responsible organization.
-        Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    requestProvider = Column(FHIRReference)
+        Type `FHIRReference` referencing `Organization`
+        (represented as `dict` in JSON). """
+    
+    # todo requestProvider = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    requestProvider = Column(primitives.StringField)
     """ Responsible practitioner.
-        Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    ruleset = Column(Coding)
+        Type `FHIRReference` referencing `Practitioner`
+        (represented as `dict` in JSON). """
+    
+    ruleset = Column(primitives.StringField,
+                     ForeignKey('Coding.id'))
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    def __init__(self, created, disposition, identifier, organization, originalRuleset, outcome, request, requestOrganization, requestProvider, ruleset,):
+    def __init__(self, created, disposition, identifier,
+                 organization, originalRuleset, outcome,
+                 request, requestOrganization, requestProvider,
+                 ruleset,):
         """ Initialize all valid properties.
         """
         self.created = created
@@ -73,9 +87,3 @@ class EligibilityResponse(domainresource.DomainResource):
 
     def __repr__(self):
         return '<EligibilityResponse %r>' % 'self.property'  # replace self.property
-
-
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier

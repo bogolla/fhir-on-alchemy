@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR {{ info.version }} ({{ profile.url }})
+#  FHIR {{ info.version }} ({{ profile.url }})
 #  Date: {{ info.date }}.
 
 {%- set imported = {} %}
 {%- for klass in classes %}
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 {% if klass.superclass in imports and klass.superclass.module not in imported -%}
 from . import {{ klass.superclass.module }}
 {% set _ = imported.update({klass.superclass.module: True}) %}
 {% endif -%}
+
 
 class {{ klass.name }}({% if klass.superclass in imports %}{{ klass.superclass.module }}.{% endif -%}
     {{ klass.superclass.name|default('object')}}):
@@ -28,7 +30,12 @@ class {{ klass.name }}({% if klass.superclass in imports %}{{ klass.superclass.m
 {%- endif %}
 {%- for prop in klass.properties %}
     {% set dt = prop.class_name %}
-    {{ prop.name }} = Column({%- if dt == 'str' %}String{%- elif dt == 'int' %}Integer{%- else %}{{ dt }}{%- endif %})
+    {{ prop.name }} = Column(
+        {%- if dt == 'str' -%}primitives.StringField
+        {%- elif dt == 'int' -%}primitives.IntegerField
+        {%- elif dt == 'bool' -%}primitives.BooleanField
+        {%- elif dt == 'float' -%}primitives.DecimalField
+        {%- else -%}primitives.StringField, ForeignKey('{{ dt }}.id'){%- endif %})
     """ {{ prop.short|wordwrap(67, wrapstring="\n        ") }}.
         {% if prop.is_array %}List of{% else %}Type{% endif %} `{{ dt }}`{% if prop.is_array %} items{% endif %}
         {%- if prop.reference_to_names|length > 0 %} referencing `{{ prop.reference_to_names|join(', ') }}`{% endif %}
@@ -47,7 +54,3 @@ class {{ klass.name }}({% if klass.superclass in imports %}{{ klass.superclass.m
         return '<{{ klass.resource_name }} %r>' % 'self.property'  # replace self.property
 
 {%- endfor %}
-
-{% for imp in imports %}{% if imp.module not in imported %}
-from . import {{ imp.module }}
-{%- endif %}{% endfor %}

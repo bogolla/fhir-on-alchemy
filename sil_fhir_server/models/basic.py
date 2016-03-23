@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Basic)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Basic)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
+
 
 class Basic(domainresource.DomainResource):
     """ Resource for non-supported content.
@@ -17,24 +19,29 @@ class Basic(domainresource.DomainResource):
     """
 
     __tablename__ = "Basic"
-    
-    author = Column(FHIRReference)
+
+    # todo
+    # author = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Who created.
-        Type `FHIRReference` referencing `Practitioner, Patient, RelatedPerson` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Practitioner, Patient,
+        RelatedPerson` (represented as `dict` in JSON). """
     
-    code = Column(CodeableConcept)
+    code = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
     """ Kind of Resource.
         Type `CodeableConcept` (represented as `dict` in JSON). """
     
-    created = Column(FHIRDate)
+    created = Column(primitives.DateTimeField)
     """ When created.
         Type `FHIRDate` (represented as `str` in JSON). """
     
-    identifier = Column(Identifier)
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Business identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-    
-    subject = Column(FHIRReference)
+
+    # todo
+    # subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Identifies the focus of this resource.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
@@ -49,9 +56,3 @@ class Basic(domainresource.DomainResource):
 
     def __repr__(self):
         return '<Basic %r>' % 'self.property'  # replace self.property
-
-
-from . import codeableconcept
-from . import fhirdate
-from . import fhirreference
-from . import identifier

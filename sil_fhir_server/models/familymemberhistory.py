@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/FamilyMemberHistory)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class FamilyMemberHistory(domainresource.DomainResource):
@@ -16,83 +17,83 @@ class FamilyMemberHistory(domainresource.DomainResource):
     """
 
     __tablename__ = "FamilyMemberHistory"
-
-    ageQuantity = Column(Quantity)
+    
+    ageQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ (approximate) age.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
-
-    ageRange = Column(Range)
+    
+    ageRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ (approximate) age.
         Type `Range` (represented as `dict` in JSON). """
-
+    
     ageString = Column(primitives.StringField)
     """ (approximate) age.
         Type `str`. """
-
-    bornDate = Column(FHIRDate)
+    
+    bornDate = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ (approximate) date of birth.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    bornPeriod = Column(Period)
+    
+    bornPeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ (approximate) date of birth.
         Type `Period` (represented as `dict` in JSON). """
-
+    
     bornString = Column(primitives.StringField)
     """ (approximate) date of birth.
         Type `str`. """
-
-    condition = Column(FamilyMemberHistoryCondition)
+    
+    condition = Column(primitives.StringField, ForeignKey('FamilyMemberHistoryCondition.id'))
     """ Condition that the related person had.
         List of `FamilyMemberHistoryCondition` items (represented as `dict` in JSON). """
-
-    date = Column(FHIRDate)
+    
+    date = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ When history was captured/updated.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    deceasedBoolean = Column(bool)
+    
+    deceasedBoolean = Column(primitives.BooleanField)
     """ Dead? How old/when?.
         Type `bool`. """
-
-    deceasedDate = Column(FHIRDate)
+    
+    deceasedDate = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Dead? How old/when?.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    deceasedQuantity = Column(Quantity)
+    
+    deceasedQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Dead? How old/when?.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
-
-    deceasedRange = Column(Range)
+    
+    deceasedRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Dead? How old/when?.
         Type `Range` (represented as `dict` in JSON). """
-
+    
     deceasedString = Column(primitives.StringField)
     """ Dead? How old/when?.
         Type `str`. """
-
+    
     gender = Column(primitives.StringField)
     """ male | female | other | unknown.
         Type `str`. """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ External Id(s) for this record.
         List of `Identifier` items (represented as `dict` in JSON). """
-
+    
     name = Column(primitives.StringField)
     """ The family member described.
         Type `str`. """
-
-    note = Column(Annotation)
+    
+    note = Column(primitives.StringField, ForeignKey('Annotation.id'))
     """ General note about related person.
         Type `Annotation` (represented as `dict` in JSON). """
-
-    patient = Column(FHIRReference)
+    
+    patient = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Patient history is about.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
-
-    relationship = Column(CodeableConcept)
+    
+    relationship = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Relationship to the subject.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
+    
     status = Column(primitives.StringField)
     """ partial | completed | entered-in-error | health-unknown.
         Type `str`. """
@@ -125,7 +126,8 @@ class FamilyMemberHistory(domainresource.DomainResource):
         return '<FamilyMemberHistory %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import backboneelement
 
 class FamilyMemberHistoryCondition(backboneelement.BackboneElement):
@@ -138,32 +140,32 @@ class FamilyMemberHistoryCondition(backboneelement.BackboneElement):
     """
 
     __tablename__ = "FamilyMemberHistoryCondition"
-
-    code = Column(CodeableConcept)
+    
+    code = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Condition suffered by relation.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    note = Column(Annotation)
+    
+    note = Column(primitives.StringField, ForeignKey('Annotation.id'))
     """ Extra information about condition.
         Type `Annotation` (represented as `dict` in JSON). """
-
-    onsetPeriod = Column(Period)
+    
+    onsetPeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ When condition first manifested.
         Type `Period` (represented as `dict` in JSON). """
-
-    onsetQuantity = Column(Quantity)
+    
+    onsetQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ When condition first manifested.
         Type `Quantity` referencing `Age` (represented as `dict` in JSON). """
-
-    onsetRange = Column(Range)
+    
+    onsetRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ When condition first manifested.
         Type `Range` (represented as `dict` in JSON). """
-
+    
     onsetString = Column(primitives.StringField)
     """ When condition first manifested.
         Type `str`. """
-
-    outcome = Column(CodeableConcept)
+    
+    outcome = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ deceased | permanent disability | etc..
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -180,13 +182,3 @@ class FamilyMemberHistoryCondition(backboneelement.BackboneElement):
 
     def __repr__(self):
         return '<FamilyMemberHistoryCondition %r>' % 'self.property'  # replace self.property
-
-
-from . import annotation
-from . import codeableconcept
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import period
-from . import quantity
-from . import range

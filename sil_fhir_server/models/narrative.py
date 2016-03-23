@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Narrative)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Narrative)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column
+from sil_fhir_server.data_types import primitives
 from . import element
 
 class Narrative(element.Element):
@@ -13,11 +14,11 @@ class Narrative(element.Element):
     """
 
     __tablename__ = "Narrative"
-
+    
     div = Column(primitives.StringField)
     """ Limited xhtml content.
         Type `str`. """
-
+    
     status = Column(primitives.StringField)
     """ generated | extensions | additional | empty.
         Type `str`. """
@@ -30,4 +31,3 @@ class Narrative(element.Element):
 
     def __repr__(self):
         return '<Narrative %r>' % 'self.property'  # replace self.property
-

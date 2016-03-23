@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/EnrollmentRequest)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/EnrollmentRequest)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class EnrollmentRequest(domainresource.DomainResource):
@@ -17,47 +18,63 @@ class EnrollmentRequest(domainresource.DomainResource):
 
     __tablename__ = "EnrollmentRequest"
     
-    coverage = Column(FHIRReference)
+    # todo coverage = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    coverage = Column(primitives.StringField)
     """ Insurance information.
-        Type `FHIRReference` referencing `Coverage` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Coverage`
+        (represented as `dict` in JSON). """
     
-    created = Column(FHIRDate)
+    created = Column(primitives.DateTimeField)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
     
-    identifier = Column(Identifier)
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
     
-    organization = Column(FHIRReference)
+    # todo organization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    organization = Column(primitives.StringField)
     """ Responsible organization.
-        Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Organization`
+        (represented as `dict` in JSON). """
     
-    originalRuleset = Column(Coding)
+    originalRuleset = Column(primitives.StringField,
+                             ForeignKey('Coding.id'))
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
     
-    provider = Column(FHIRReference)
+    # todo provider = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    provider = Column(primitives.StringField)
     """ Responsible practitioner.
-        Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Practitioner`
+        (represented as `dict` in JSON). """
     
-    relationship = Column(Coding)
+    relationship = Column(primitives.StringField,
+                          ForeignKey('Coding.id'))
     """ Patient relationship to subscriber.
         Type `Coding` (represented as `dict` in JSON). """
     
-    ruleset = Column(Coding)
+    ruleset = Column(primitives.StringField,
+                     ForeignKey('Coding.id'))
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
     
-    subject = Column(FHIRReference)
+    # todo subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    subject = Column(primitives.StringField)
     """ The subject of the Products and Services.
-        Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Patient`
+        (represented as `dict` in JSON). """
     
-    target = Column(FHIRReference)
+    # todo target = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    target = Column(primitives.StringField)
     """ Insurer.
-        Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Organization`
+        (represented as `dict` in JSON). """
 
-    def __init__(self, coverage, created, identifier, organization, originalRuleset, provider, relationship, ruleset, subject, target,):
+    def __init__(self, coverage, created, identifier, organization,
+                 originalRuleset, provider, relationship, ruleset,
+                 subject, target,):
         """ Initialize all valid properties.
         """
         self.coverage = coverage
@@ -73,9 +90,3 @@ class EnrollmentRequest(domainresource.DomainResource):
 
     def __repr__(self):
         return '<EnrollmentRequest %r>' % 'self.property'  # replace self.property
-
-
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier

@@ -1,139 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Conformance)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Conformance)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, ForeignKey
 from sil_fhir_server.data_types import primitives
 from . import domainresource
-
-class Conformance(domainresource.DomainResource):
-    """ A conformance statement.
-
-    A conformance statement is a set of capabilities of a FHIR Server that may
-    be used as a statement of actual server functionality or a statement of
-    required or desired server implementation.
-    """
-
-    __tablename__ = "Conformance"
-
-    acceptUnknown = Column(primitives.StringField)
-    """ no | extensions | elements | both.
-        Type `str`. """
-
-    contact = Column(ConformanceContact)
-    """ Contact details of the publisher.
-        List of `ConformanceContact` items (represented as `dict` in JSON). """
-
-    copyright = Column(primitives.StringField)
-    """ Use and/or publishing restrictions.
-        Type `str`. """
-
-    date = Column(FHIRDate)
-    """ Publication Date(/time).
-        Type `FHIRDate` (represented as `str` in JSON). """
-
-    description = Column(primitives.StringField)
-    """ Human description of the conformance statement.
-        Type `str`. """
-
-    document = Column(ConformanceDocument)
-    """ Document definition.
-        List of `ConformanceDocument` items (represented as `dict` in JSON). """
-
-    experimental = Column(bool)
-    """ If for testing purposes, not real usage.
-        Type `bool`. """
-
-    fhirVersion = Column(primitives.StringField)
-    """ FHIR Version the system uses.
-        Type `str`. """
-
-    format = Column(primitives.StringField)
-    """ formats supported (xml | json | mime type).
-        List of `str` items. """
-
-    implementation = Column(ConformanceImplementation)
-    """ If this describes a specific instance.
-        Type `ConformanceImplementation` (represented as `dict` in JSON). """
-
-    kind = Column(primitives.StringField)
-    """ instance | capability | requirements.
-        Type `str`. """
-
-    messaging = Column(ConformanceMessaging)
-    """ If messaging is supported.
-        List of `ConformanceMessaging` items (represented as `dict` in JSON). """
-
-    name = Column(primitives.StringField)
-    """ Informal name for this conformance statement.
-        Type `str`. """
-
-    profile = Column(FHIRReference)
-    """ Profiles for use cases supported.
-        List of `FHIRReference` items referencing `StructureDefinition` (represented as `dict` in JSON). """
-
-    publisher = Column(primitives.StringField)
-    """ Name of the publisher (Organization or individual).
-        Type `str`. """
-
-    requirements = Column(primitives.StringField)
-    """ Why is this needed?.
-        Type `str`. """
-
-    rest = Column(ConformanceRest)
-    """ If the endpoint is a RESTful one.
-        List of `ConformanceRest` items (represented as `dict` in JSON). """
-
-    software = Column(ConformanceSoftware)
-    """ Software that is covered by this conformance statement.
-        Type `ConformanceSoftware` (represented as `dict` in JSON). """
-
-    status = Column(primitives.StringField)
-    """ draft | active | retired.
-        Type `str`. """
-
-    url = Column(primitives.StringField)
-    """ Logical uri to reference this statement.
-        Type `str`. """
-
-    version = Column(primitives.StringField)
-    """ Logical id for this version of the statement.
-        Type `str`. """
-
-    def __init__(self, acceptUnknown, contact, copyright, date, description, document, experimental, fhirVersion, format, implementation, kind, messaging, name, profile, publisher, requirements, rest, software, status, url, version,):
-        """ Initialize all valid properties.
-        """
-        self.acceptUnknown = acceptUnknown
-        self.contact = contact
-        self.copyright = copyright
-        self.date = date
-        self.description = description
-        self.document = document
-        self.experimental = experimental
-        self.fhirVersion = fhirVersion
-        self.format = format
-        self.implementation = implementation
-        self.kind = kind
-        self.messaging = messaging
-        self.name = name
-        self.profile = profile
-        self.publisher = publisher
-        self.requirements = requirements
-        self.rest = rest
-        self.software = software
-        self.status = status
-        self.url = url
-        self.version = version
-
-    def __repr__(self):
-        return '<Conformance %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
 from . import backboneelement
+
 
 class ConformanceContact(backboneelement.BackboneElement):
     """ Contact details of the publisher.
@@ -147,7 +23,8 @@ class ConformanceContact(backboneelement.BackboneElement):
     """ Name of a individual to contact.
         Type `str`. """
 
-    telecom = Column(ContactPoint)
+    telecom = Column(primitives.StringField,
+                     ForeignKey('ContactPoint.id'))
     """ Contact details for individual or publisher.
         List of `ContactPoint` items (represented as `dict` in JSON). """
 
@@ -161,7 +38,6 @@ class ConformanceContact(backboneelement.BackboneElement):
         return '<ConformanceContact %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class ConformanceDocument(backboneelement.BackboneElement):
     """ Document definition.
 
@@ -178,9 +54,11 @@ class ConformanceDocument(backboneelement.BackboneElement):
     """ producer | consumer.
         Type `str`. """
 
-    profile = Column(FHIRReference)
+    # todo profile = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    profile = Column(primitives.StringField)
     """ Constraint on a resource used in the document.
-        Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `StructureDefinition`
+        (represented as `dict` in JSON). """
 
     def __init__(self, documentation, mode, profile,):
         """ Initialize all valid properties.
@@ -193,7 +71,6 @@ class ConformanceDocument(backboneelement.BackboneElement):
         return '<ConformanceDocument %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class ConformanceImplementation(backboneelement.BackboneElement):
     """ If this describes a specific instance.
 
@@ -222,44 +99,6 @@ class ConformanceImplementation(backboneelement.BackboneElement):
         return '<ConformanceImplementation %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
-class ConformanceMessaging(backboneelement.BackboneElement):
-    """ If messaging is supported.
-
-    A description of the messaging capabilities of the solution.
-    """
-
-    __tablename__ = "ConformanceMessaging"
-
-    documentation = Column(primitives.StringField)
-    """ Messaging interface behavior details.
-        Type `str`. """
-
-    endpoint = Column(ConformanceMessagingEndpoint)
-    """ A messaging service end-point.
-        List of `ConformanceMessagingEndpoint` items (represented as `dict` in JSON). """
-
-    event = Column(ConformanceMessagingEvent)
-    """ Declare support for this event.
-        List of `ConformanceMessagingEvent` items (represented as `dict` in JSON). """
-
-    reliableCache = Column(Integer)
-    """ Reliable Message Cache Length (min).
-        Type `int`. """
-
-    def __init__(self, documentation, endpoint, event, reliableCache,):
-        """ Initialize all valid properties.
-        """
-        self.documentation = documentation
-        self.endpoint = endpoint
-        self.event = event
-        self.reliableCache = reliableCache
-
-    def __repr__(self):
-        return '<ConformanceMessaging %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
 class ConformanceMessagingEndpoint(backboneelement.BackboneElement):
     """ A messaging service end-point.
 
@@ -273,7 +112,8 @@ class ConformanceMessagingEndpoint(backboneelement.BackboneElement):
     """ Address of end-point.
         Type `str`. """
 
-    protocol = Column(Coding)
+    protocol = Column(primitives.StringField,
+                      ForeignKey('Coding.id'))
     """ http | ftp | mllp +.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -287,7 +127,6 @@ class ConformanceMessagingEndpoint(backboneelement.BackboneElement):
         return '<ConformanceMessagingEndpoint %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class ConformanceMessagingEvent(backboneelement.BackboneElement):
     """ Declare support for this event.
 
@@ -300,7 +139,8 @@ class ConformanceMessagingEvent(backboneelement.BackboneElement):
     """ Consequence | Currency | Notification.
         Type `str`. """
 
-    code = Column(Coding)
+    code = Column(primitives.StringField,
+                  ForeignKey('Coding.id'))
     """ Event type.
         Type `Coding` (represented as `dict` in JSON). """
 
@@ -316,15 +156,20 @@ class ConformanceMessagingEvent(backboneelement.BackboneElement):
     """ sender | receiver.
         Type `str`. """
 
-    request = Column(FHIRReference)
+    # todo request = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    request = Column(primitives.StringField)
     """ Profile that describes the request.
-        Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `StructureDefinition`
+        (represented as `dict` in JSON). """
 
-    response = Column(FHIRReference)
+    # todo response = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    response = Column(primitives.StringField)
     """ Profile that describes the response.
-        Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `StructureDefinition`
+        (represented as `dict` in JSON). """
 
-    def __init__(self, category, code, documentation, focus, mode, request, response,):
+    def __init__(self, category, code, documentation, focus,
+                 mode, request, response,):
         """ Initialize all valid properties.
         """
         self.category = category
@@ -339,69 +184,44 @@ class ConformanceMessagingEvent(backboneelement.BackboneElement):
         return '<ConformanceMessagingEvent %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
-class ConformanceRest(backboneelement.BackboneElement):
-    """ If the endpoint is a RESTful one.
+class ConformanceMessaging(backboneelement.BackboneElement):
+    """ If messaging is supported.
 
-    A definition of the restful capabilities of the solution, if any.
+    A description of the messaging capabilities of the solution.
     """
 
-    __tablename__ = "ConformanceRest"
-
-    compartment = Column(primitives.StringField)
-    """ Compartments served/used by system.
-        List of `str` items. """
+    __tablename__ = "ConformanceMessaging"
 
     documentation = Column(primitives.StringField)
-    """ General description of implementation.
+    """ Messaging interface behavior details.
         Type `str`. """
 
-    interaction = Column(ConformanceRestInteraction)
-    """ What operations are supported?.
-        List of `ConformanceRestInteraction` items (represented as `dict` in JSON). """
+    endpoint = Column(primitives.StringField,
+                      ForeignKey('ConformanceMessagingEndpoint.id'))
+    """ A messaging service end-point.
+        List of `ConformanceMessagingEndpoint` items (represented as `dict` in JSON). """
 
-    mode = Column(primitives.StringField)
-    """ client | server.
-        Type `str`. """
+    event = Column(primitives.StringField,
+                   ForeignKey('ConformanceMessagingEvent.id'))
+    """ Declare support for this event.
+        List of `ConformanceMessagingEvent` items (represented as `dict` in JSON). """
 
-    operation = Column(ConformanceRestOperation)
-    """ Definition of an operation or a custom query.
-        List of `ConformanceRestOperation` items (represented as `dict` in JSON). """
+    reliableCache = Column(primitives.IntegerField)
+    """ Reliable Message Cache Length (min).
+        Type `int`. """
 
-    resource = Column(ConformanceRestResource)
-    """ Resource served on the REST interface.
-        List of `ConformanceRestResource` items (represented as `dict` in JSON). """
-
-    searchParam = Column(ConformanceRestResourceSearchParam)
-    """ Search params for searching all resources.
-        List of `ConformanceRestResourceSearchParam` items (represented as `dict` in JSON). """
-
-    security = Column(ConformanceRestSecurity)
-    """ Information about security of implementation.
-        Type `ConformanceRestSecurity` (represented as `dict` in JSON). """
-
-    transactionMode = Column(primitives.StringField)
-    """ not-supported | batch | transaction | both.
-        Type `str`. """
-
-    def __init__(self, compartment, documentation, interaction, mode, operation, resource, searchParam, security, transactionMode,):
+    def __init__(self, documentation, endpoint, event, reliableCache,):
         """ Initialize all valid properties.
         """
-        self.compartment = compartment
         self.documentation = documentation
-        self.interaction = interaction
-        self.mode = mode
-        self.operation = operation
-        self.resource = resource
-        self.searchParam = searchParam
-        self.security = security
-        self.transactionMode = transactionMode
+        self.endpoint = endpoint
+        self.event = event
+        self.reliableCache = reliableCache
 
     def __repr__(self):
-        return '<ConformanceRest %r>' % 'self.property'  # replace self.property
+        return '<ConformanceMessaging %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class ConformanceRestInteraction(backboneelement.BackboneElement):
     """ What operations are supported?.
 
@@ -428,7 +248,6 @@ class ConformanceRestInteraction(backboneelement.BackboneElement):
         return '<ConformanceRestInteraction %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class ConformanceRestOperation(backboneelement.BackboneElement):
     """ Definition of an operation or a custom query.
 
@@ -438,9 +257,11 @@ class ConformanceRestOperation(backboneelement.BackboneElement):
 
     __tablename__ = "ConformanceRestOperation"
 
-    definition = Column(FHIRReference)
+    # todo definition = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    definition = Column(primitives.StringField)
     """ The defined operation/query.
-        Type `FHIRReference` referencing `OperationDefinition` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `OperationDefinition`
+        (represented as `dict` in JSON). """
 
     name = Column(primitives.StringField)
     """ Name by which the operation/query is invoked.
@@ -456,86 +277,6 @@ class ConformanceRestOperation(backboneelement.BackboneElement):
         return '<ConformanceRestOperation %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
-class ConformanceRestResource(backboneelement.BackboneElement):
-    """ Resource served on the REST interface.
-
-    A specification of the restful capabilities of the solution for a specific
-    resource type.
-    """
-
-    __tablename__ = "ConformanceRestResource"
-
-    conditionalCreate = Column(bool)
-    """ If allows/uses conditional create.
-        Type `bool`. """
-
-    conditionalDelete = Column(primitives.StringField)
-    """ not-supported | single | multiple - how conditional delete is
-        supported.
-        Type `str`. """
-
-    conditionalUpdate = Column(bool)
-    """ If allows/uses conditional update.
-        Type `bool`. """
-
-    interaction = Column(ConformanceRestResourceInteraction)
-    """ What operations are supported?.
-        List of `ConformanceRestResourceInteraction` items (represented as `dict` in JSON). """
-
-    profile = Column(FHIRReference)
-    """ Base System profile for all uses of resource.
-        Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
-
-    readHistory = Column(bool)
-    """ Whether vRead can return past versions.
-        Type `bool`. """
-
-    searchInclude = Column(primitives.StringField)
-    """ _include values supported by the server.
-        List of `str` items. """
-
-    searchParam = Column(ConformanceRestResourceSearchParam)
-    """ Search params supported by implementation.
-        List of `ConformanceRestResourceSearchParam` items (represented as `dict` in JSON). """
-
-    searchRevInclude = Column(primitives.StringField)
-    """ _revinclude values supported by the server.
-        List of `str` items. """
-
-    type = Column(primitives.StringField)
-    """ A resource type that is supported.
-        Type `str`. """
-
-    updateCreate = Column(bool)
-    """ If update can commit to a new identity.
-        Type `bool`. """
-
-    versioning = Column(primitives.StringField)
-    """ no-version | versioned | versioned-update.
-        Type `str`. """
-
-    def __init__(self, conditionalCreate, conditionalDelete, conditionalUpdate, interaction, profile, readHistory, searchInclude, searchParam, searchRevInclude, type, updateCreate, versioning,):
-        """ Initialize all valid properties.
-        """
-        self.conditionalCreate = conditionalCreate
-        self.conditionalDelete = conditionalDelete
-        self.conditionalUpdate = conditionalUpdate
-        self.interaction = interaction
-        self.profile = profile
-        self.readHistory = readHistory
-        self.searchInclude = searchInclude
-        self.searchParam = searchParam
-        self.searchRevInclude = searchRevInclude
-        self.type = type
-        self.updateCreate = updateCreate
-        self.versioning = versioning
-
-    def __repr__(self):
-        return '<ConformanceRestResource %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
 class ConformanceRestResourceInteraction(backboneelement.BackboneElement):
     """ What operations are supported?.
 
@@ -563,7 +304,6 @@ class ConformanceRestResourceInteraction(backboneelement.BackboneElement):
         return '<ConformanceRestResourceInteraction %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class ConformanceRestResourceSearchParam(backboneelement.BackboneElement):
     """ Search params supported by implementation.
 
@@ -604,7 +344,8 @@ class ConformanceRestResourceSearchParam(backboneelement.BackboneElement):
         uri.
         Type `str`. """
 
-    def __init__(self, chain, definition, documentation, modifier, name, target, type,):
+    def __init__(self, chain, definition, documentation,
+                 modifier, name, target, type,):
         """ Initialize all valid properties.
         """
         self.chain = chain
@@ -619,45 +360,167 @@ class ConformanceRestResourceSearchParam(backboneelement.BackboneElement):
         return '<ConformanceRestResourceSearchParam %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
-class ConformanceRestSecurity(backboneelement.BackboneElement):
-    """ Information about security of implementation.
+class ConformanceRestResource(backboneelement.BackboneElement):
+    """ Resource served on the REST interface.
 
-    Information about security implementation from an interface perspective -
-    what a client needs to know.
+    A specification of the restful capabilities of the solution for a specific
+    resource type.
     """
 
-    __tablename__ = "ConformanceRestSecurity"
+    __tablename__ = "ConformanceRestResource"
 
-    certificate = Column(ConformanceRestSecurityCertificate)
-    """ Certificates associated with security profiles.
-        List of `ConformanceRestSecurityCertificate` items (represented as `dict` in JSON). """
-
-    cors = Column(bool)
-    """ Adds CORS Headers (http://enable-cors.org/).
+    conditionalCreate = Column(primitives.BooleanField)
+    """ If allows/uses conditional create.
         Type `bool`. """
 
-    description = Column(primitives.StringField)
-    """ General description of how security works.
+    conditionalDelete = Column(primitives.StringField)
+    """ not-supported | single | multiple - how conditional delete is
+        supported.
         Type `str`. """
 
-    service = Column(CodeableConcept)
-    """ OAuth | SMART-on-FHIR | NTLM | Basic | Kerberos | Certificates.
-        List of `CodeableConcept` items (represented as `dict` in JSON). """
+    conditionalUpdate = Column(primitives.BooleanField)
+    """ If allows/uses conditional update.
+        Type `bool`. """
 
-    def __init__(self, certificate, cors, description, service,):
+    interaction = Column(primitives.StringField,
+                         ForeignKey(
+                             'ConformanceRestResourceInteraction.id'))
+    """ What operations are supported?.
+        List of `ConformanceRestResourceInteraction` items
+        (represented as `dict` in JSON). """
+
+    # todo profile = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    profile = Column(primitives.StringField)
+    """ Base System profile for all uses of resource.
+        Type `FHIRReference` referencing `StructureDefinition`
+        (represented as `dict` in JSON). """
+
+    readHistory = Column(primitives.BooleanField)
+    """ Whether vRead can return past versions.
+        Type `bool`. """
+
+    searchInclude = Column(primitives.StringField)
+    """ _include values supported by the server.
+        List of `str` items. """
+
+    searchParam = Column(primitives.StringField,
+                         ForeignKey(
+                             'ConformanceRestResourceSearchParam.id'))
+    """ Search params supported by implementation.
+        List of `ConformanceRestResourceSearchParam` items
+        (represented as `dict` in JSON). """
+
+    searchRevInclude = Column(primitives.StringField)
+    """ _revinclude values supported by the server.
+        List of `str` items. """
+
+    type = Column(primitives.StringField)
+    """ A resource type that is supported.
+        Type `str`. """
+
+    updateCreate = Column(primitives.BooleanField)
+    """ If update can commit to a new identity.
+        Type `bool`. """
+
+    versioning = Column(primitives.StringField)
+    """ no-version | versioned | versioned-update.
+        Type `str`. """
+
+    def __init__(self, conditionalCreate, conditionalDelete,
+                 conditionalUpdate, interaction, profile, readHistory,
+                 searchInclude, searchParam, searchRevInclude, type,
+                 updateCreate, versioning,):
         """ Initialize all valid properties.
         """
-        self.certificate = certificate
-        self.cors = cors
-        self.description = description
-        self.service = service
+        self.conditionalCreate = conditionalCreate
+        self.conditionalDelete = conditionalDelete
+        self.conditionalUpdate = conditionalUpdate
+        self.interaction = interaction
+        self.profile = profile
+        self.readHistory = readHistory
+        self.searchInclude = searchInclude
+        self.searchParam = searchParam
+        self.searchRevInclude = searchRevInclude
+        self.type = type
+        self.updateCreate = updateCreate
+        self.versioning = versioning
 
     def __repr__(self):
-        return '<ConformanceRestSecurity %r>' % 'self.property'  # replace self.property
+        return '<ConformanceRestResource %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+class ConformanceRest(backboneelement.BackboneElement):
+    """ If the endpoint is a RESTful one.
+
+    A definition of the restful capabilities of the solution, if any.
+    """
+
+    __tablename__ = "ConformanceRest"
+
+    compartment = Column(primitives.StringField)
+    """ Compartments served/used by system.
+        List of `str` items. """
+
+    documentation = Column(primitives.StringField)
+    """ General description of implementation.
+        Type `str`. """
+
+    interaction = Column(primitives.StringField,
+                         ForeignKey(
+                             'ConformanceRestInteraction.id'))
+    """ What operations are supported?.
+        List of `ConformanceRestInteraction` items (represented as `dict` in JSON). """
+
+    mode = Column(primitives.StringField)
+    """ client | server.
+        Type `str`. """
+
+    operation = Column(primitives.StringField,
+                       ForeignKey(
+                           'ConformanceRestOperation.id'))
+    """ Definition of an operation or a custom query.
+        List of `ConformanceRestOperation` items (represented as `dict` in JSON). """
+
+    resource = Column(primitives.StringField,
+                      ForeignKey(
+                          'ConformanceRestResource.id'))
+    """ Resource served on the REST interface.
+        List of `ConformanceRestResource` items (represented as `dict` in JSON). """
+
+    searchParam = Column(primitives.StringField,
+                         ForeignKey(
+                             'ConformanceRestResourceSearchParam.id'))
+    """ Search params for searching all resources.
+        List of `ConformanceRestResourceSearchParam` items (represented as `dict` in JSON). """
+
+    security = Column(primitives.StringField,
+                      ForeignKey('ConformanceRestSecurity.id'))
+    """ Information about security of implementation.
+        Type `ConformanceRestSecurity` (represented as `dict` in JSON). """
+
+    transactionMode = Column(primitives.StringField)
+    """ not-supported | batch | transaction | both.
+        Type `str`. """
+
+    def __init__(self, compartment, documentation, interaction, mode,
+                 operation, resource, searchParam, security,
+                 transactionMode):
+        """ Initialize all valid properties.
+        """
+        self.compartment = compartment
+        self.documentation = documentation
+        self.interaction = interaction
+        self.mode = mode
+        self.operation = operation
+        self.resource = resource
+        self.searchParam = searchParam
+        self.security = security
+        self.transactionMode = transactionMode
+
+    def __repr__(self):
+        return '<ConformanceRest %r>' % 'self.property'  # replace self.property
+
+
 class ConformanceRestSecurityCertificate(backboneelement.BackboneElement):
     """ Certificates associated with security profiles.
     """
@@ -682,7 +545,47 @@ class ConformanceRestSecurityCertificate(backboneelement.BackboneElement):
         return '<ConformanceRestSecurityCertificate %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+class ConformanceRestSecurity(backboneelement.BackboneElement):
+    """ Information about security of implementation.
+
+    Information about security implementation from an interface perspective -
+    what a client needs to know.
+    """
+
+    __tablename__ = "ConformanceRestSecurity"
+
+    certificate = Column(primitives.StringField,
+                         ForeignKey(
+                             'ConformanceRestSecurityCertificate.id'))
+    """ Certificates associated with security profiles.
+        List of `ConformanceRestSecurityCertificate` items
+        (represented as `dict` in JSON). """
+
+    cors = Column(primitives.BooleanField)
+    """ Adds CORS Headers (http://enable-cors.org/).
+        Type `bool`. """
+
+    description = Column(primitives.StringField)
+    """ General description of how security works.
+        Type `str`. """
+
+    service = Column(primitives.StringField,
+                     ForeignKey('CodeableConcept.id'))
+    """ OAuth | SMART-on-FHIR | NTLM | Basic | Kerberos | Certificates.
+        List of `CodeableConcept` items (represented as `dict` in JSON). """
+
+    def __init__(self, certificate, cors, description, service,):
+        """ Initialize all valid properties.
+        """
+        self.certificate = certificate
+        self.cors = cors
+        self.description = description
+        self.service = service
+
+    def __repr__(self):
+        return '<ConformanceRestSecurity %r>' % 'self.property'  # replace self.property
+
+
 class ConformanceSoftware(backboneelement.BackboneElement):
     """ Software that is covered by this conformance statement.
 
@@ -697,7 +600,7 @@ class ConformanceSoftware(backboneelement.BackboneElement):
     """ A name the software is known by.
         Type `str`. """
 
-    releaseDate = Column(FHIRDate)
+    releaseDate = Column(primitives.DateTimeField)
     """ Date this version released.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -716,8 +619,136 @@ class ConformanceSoftware(backboneelement.BackboneElement):
         return '<ConformanceSoftware %r>' % 'self.property'  # replace self.property
 
 
-from . import codeableconcept
-from . import coding
-from . import contactpoint
-from . import fhirdate
-from . import fhirreference
+class Conformance(domainresource.DomainResource):
+    """ A conformance statement.
+
+    A conformance statement is a set of capabilities of a FHIR Server that may
+    be used as a statement of actual server functionality or a statement of
+    required or desired server implementation.
+    """
+
+    __tablename__ = "Conformance"
+    
+    acceptUnknown = Column(primitives.StringField)
+    """ no | extensions | elements | both.
+        Type `str`. """
+    
+    contact = Column(primitives.StringField,
+                     ForeignKey('ConformanceContact.id'))
+    """ Contact details of the publisher.
+        List of `ConformanceContact` items (represented as `dict` in JSON). """
+    
+    copyright = Column(primitives.StringField)
+    """ Use and/or publishing restrictions.
+        Type `str`. """
+    
+    date = Column(primitives.DateTimeField)
+    """ Publication Date(/time).
+        Type `FHIRDate` (represented as `str` in JSON). """
+    
+    description = Column(primitives.StringField)
+    """ Human description of the conformance statement.
+        Type `str`. """
+    
+    document = Column(primitives.StringField,
+                      ForeignKey('ConformanceDocument.id'))
+    """ Document definition.
+        List of `ConformanceDocument` items (represented as `dict` in JSON). """
+    
+    experimental = Column(primitives.BooleanField)
+    """ If for testing purposes, not real usage.
+        Type `bool`. """
+    
+    fhirVersion = Column(primitives.StringField)
+    """ FHIR Version the system uses.
+        Type `str`. """
+    
+    format = Column(primitives.StringField)
+    """ formats supported (xml | json | mime type).
+        List of `str` items. """
+    
+    implementation = Column(primitives.StringField,
+                            ForeignKey('ConformanceImplementation.id'))
+    """ If this describes a specific instance.
+        Type `ConformanceImplementation` (represented as `dict` in JSON). """
+    
+    kind = Column(primitives.StringField)
+    """ instance | capability | requirements.
+        Type `str`. """
+    
+    messaging = Column(primitives.StringField,
+                       ForeignKey('ConformanceMessaging.id'))
+    """ If messaging is supported.
+        List of `ConformanceMessaging` items (represented as `dict` in JSON). """
+    
+    name = Column(primitives.StringField)
+    """ Informal name for this conformance statement.
+        Type `str`. """
+    
+    # todo profile = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    profile = Column(primitives.StringField)
+    """ Profiles for use cases supported.
+        List of `FHIRReference` items referencing `StructureDefinition`
+        (represented as `dict` in JSON). """
+    
+    publisher = Column(primitives.StringField)
+    """ Name of the publisher (Organization or individual).
+        Type `str`. """
+    
+    requirements = Column(primitives.StringField)
+    """ Why is this needed?.
+        Type `str`. """
+    
+    rest = Column(primitives.StringField,
+                  ForeignKey('ConformanceRest.id'))
+    """ If the endpoint is a RESTful one.
+        List of `ConformanceRest` items (represented as `dict` in JSON). """
+    
+    software = Column(primitives.StringField,
+                      ForeignKey('ConformanceSoftware.id'))
+    """ Software that is covered by this conformance statement.
+        Type `ConformanceSoftware` (represented as `dict` in JSON). """
+    
+    status = Column(primitives.StringField)
+    """ draft | active | retired.
+        Type `str`. """
+    
+    url = Column(primitives.StringField)
+    """ Logical uri to reference this statement.
+        Type `str`. """
+    
+    version = Column(primitives.StringField)
+    """ Logical id for this version of the statement.
+        Type `str`. """
+
+    def __init__(self, acceptUnknown, contact, copyright, date,
+                 description, document, experimental, fhirVersion,
+                 format, implementation, kind, messaging, name,
+                 profile, publisher, requirements, rest, software,
+                 status, url, version,):
+        """ Initialize all valid properties.
+        """
+        self.acceptUnknown = acceptUnknown
+        self.contact = contact
+        self.copyright = copyright
+        self.date = date
+        self.description = description
+        self.document = document
+        self.experimental = experimental
+        self.fhirVersion = fhirVersion
+        self.format = format
+        self.implementation = implementation
+        self.kind = kind
+        self.messaging = messaging
+        self.name = name
+        self.profile = profile
+        self.publisher = publisher
+        self.requirements = requirements
+        self.rest = rest
+        self.software = software
+        self.status = status
+        self.url = url
+        self.version = version
+
+    def __repr__(self):
+        return '<Conformance %r>' % 'self.property'  # replace self.property

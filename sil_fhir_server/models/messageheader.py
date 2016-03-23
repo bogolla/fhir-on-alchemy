@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/MessageHeader)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/MessageHeader)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class MessageHeader(domainresource.DomainResource):
@@ -19,48 +20,48 @@ class MessageHeader(domainresource.DomainResource):
     """
 
     __tablename__ = "MessageHeader"
-
-    author = Column(FHIRReference)
+    
+    author = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ The source of the decision.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    data = Column(FHIRReference)
+    
+    data = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ The actual content of the message.
         List of `FHIRReference` items referencing `Resource` (represented as `dict` in JSON). """
-
-    destination = Column(MessageHeaderDestination)
+    
+    destination = Column(primitives.StringField, ForeignKey('MessageHeaderDestination.id'))
     """ Message Destination Application(s).
         List of `MessageHeaderDestination` items (represented as `dict` in JSON). """
-
-    enterer = Column(FHIRReference)
+    
+    enterer = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ The source of the data entry.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    event = Column(Coding)
+    
+    event = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Code for the event this message represents.
         Type `Coding` (represented as `dict` in JSON). """
-
-    reason = Column(CodeableConcept)
+    
+    reason = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Cause of event.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    receiver = Column(FHIRReference)
+    
+    receiver = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Intended "real-world" recipient for the data.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
-
-    response = Column(MessageHeaderResponse)
+    
+    response = Column(primitives.StringField, ForeignKey('MessageHeaderResponse.id'))
     """ If this is a reply to prior message.
         Type `MessageHeaderResponse` (represented as `dict` in JSON). """
-
-    responsible = Column(FHIRReference)
+    
+    responsible = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Final responsibility for event.
         Type `FHIRReference` referencing `Practitioner, Organization` (represented as `dict` in JSON). """
-
-    source = Column(MessageHeaderSource)
+    
+    source = Column(primitives.StringField, ForeignKey('MessageHeaderSource.id'))
     """ Message Source Application.
         Type `MessageHeaderSource` (represented as `dict` in JSON). """
-
-    timestamp = Column(FHIRDate)
+    
+    timestamp = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Time that the message was sent.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -83,7 +84,8 @@ class MessageHeader(domainresource.DomainResource):
         return '<MessageHeader %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import backboneelement
 
 class MessageHeaderDestination(backboneelement.BackboneElement):
@@ -93,16 +95,16 @@ class MessageHeaderDestination(backboneelement.BackboneElement):
     """
 
     __tablename__ = "MessageHeaderDestination"
-
+    
     endpoint = Column(primitives.StringField)
     """ Actual destination address or id.
         Type `str`. """
-
+    
     name = Column(primitives.StringField)
     """ Name of system.
         Type `str`. """
-
-    target = Column(FHIRReference)
+    
+    target = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Particular delivery destination within the destination.
         Type `FHIRReference` referencing `Device` (represented as `dict` in JSON). """
 
@@ -117,7 +119,8 @@ class MessageHeaderDestination(backboneelement.BackboneElement):
         return '<MessageHeaderDestination %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class MessageHeaderResponse(backboneelement.BackboneElement):
     """ If this is a reply to prior message.
 
@@ -126,15 +129,15 @@ class MessageHeaderResponse(backboneelement.BackboneElement):
     """
 
     __tablename__ = "MessageHeaderResponse"
-
+    
     code = Column(primitives.StringField)
     """ ok | transient-error | fatal-error.
         Type `str`. """
-
-    details = Column(FHIRReference)
+    
+    details = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Specific list of hints/warnings/errors.
         Type `FHIRReference` referencing `OperationOutcome` (represented as `dict` in JSON). """
-
+    
     identifier = Column(primitives.StringField)
     """ Id of original message.
         Type `str`. """
@@ -150,7 +153,8 @@ class MessageHeaderResponse(backboneelement.BackboneElement):
         return '<MessageHeaderResponse %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class MessageHeaderSource(backboneelement.BackboneElement):
     """ Message Source Application.
 
@@ -158,23 +162,23 @@ class MessageHeaderSource(backboneelement.BackboneElement):
     """
 
     __tablename__ = "MessageHeaderSource"
-
-    contact = Column(ContactPoint)
+    
+    contact = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Human contact for problems.
         Type `ContactPoint` (represented as `dict` in JSON). """
-
+    
     endpoint = Column(primitives.StringField)
     """ Actual message source address or id.
         Type `str`. """
-
+    
     name = Column(primitives.StringField)
     """ Name of system.
         Type `str`. """
-
+    
     software = Column(primitives.StringField)
     """ Name of software running the system.
         Type `str`. """
-
+    
     version = Column(primitives.StringField)
     """ Version of software running.
         Type `str`. """
@@ -190,10 +194,3 @@ class MessageHeaderSource(backboneelement.BackboneElement):
 
     def __repr__(self):
         return '<MessageHeaderSource %r>' % 'self.property'  # replace self.property
-
-
-from . import codeableconcept
-from . import coding
-from . import contactpoint
-from . import fhirdate
-from . import fhirreference

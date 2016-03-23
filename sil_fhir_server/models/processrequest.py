@@ -1,12 +1,37 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ProcessRequest)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ProcessRequest)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
+from . import backboneelement
+
+
+class ProcessRequestItem(backboneelement.BackboneElement):
+    """ Items to re-adjudicate.
+
+    List of top level items to be re-adjudicated, if none specified then the
+    entire submission is re-adjudicated.
+    """
+
+    __tablename__ = "ProcessRequestItem"
+
+    sequenceLinkId = Column(primitives.IntegerField)
+    """ Service instance.
+        Type `int`. """
+
+    def __init__(self, sequenceLinkId,):
+        """ Initialize all valid properties.
+        """
+        self.sequenceLinkId = sequenceLinkId
+
+    def __repr__(self):
+        return '<ProcessRequestItem %r>' % 'self.property'  # replace self.property
+
 
 class ProcessRequest(domainresource.DomainResource):
     """ Process request.
@@ -16,72 +41,88 @@ class ProcessRequest(domainresource.DomainResource):
     """
 
     __tablename__ = "ProcessRequest"
-
+    
     action = Column(primitives.StringField)
     """ cancel | poll | reprocess | status.
         Type `str`. """
-
-    created = Column(FHIRDate)
+    
+    created = Column(primitives.DateTimeField)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     exclude = Column(primitives.StringField)
     """ Resource type(s) to exclude.
         List of `str` items. """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
+    
     include = Column(primitives.StringField)
     """ Resource type(s) to include.
         List of `str` items. """
-
-    item = Column(ProcessRequestItem)
+    
+    item = Column(primitives.StringField,
+                  ForeignKey('ProcessRequestItem.id'))
     """ Items to re-adjudicate.
         List of `ProcessRequestItem` items (represented as `dict` in JSON). """
-
-    nullify = Column(bool)
+    
+    nullify = Column(primitives.BooleanField)
     """ Nullify.
         Type `bool`. """
-
-    organization = Column(FHIRReference)
+    
+    # todo organization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    organization = Column(primitives.StringField)
     """ Responsible organization.
-        Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    originalRuleset = Column(Coding)
+        Type `FHIRReference` referencing `Organization`
+        (represented as `dict` in JSON). """
+    
+    originalRuleset = Column(primitives.StringField,
+                             ForeignKey('Coding.id'))
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    period = Column(Period)
+    
+    period = Column(primitives.StringField,
+                    ForeignKey('Period.id'))
     """ Period.
         Type `Period` (represented as `dict` in JSON). """
-
-    provider = Column(FHIRReference)
+    
+    # todo provider = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    provider = Column(primitives.StringField)
     """ Responsible practitioner.
-        Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
+        Type `FHIRReference` referencing `Practitioner`
+        (represented as `dict` in JSON). """
+    
     reference = Column(primitives.StringField)
     """ Reference number/string.
         Type `str`. """
-
-    request = Column(FHIRReference)
+    
+    # todo request = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    request = Column(primitives.StringField)
     """ Request reference.
-        Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    response = Column(FHIRReference)
+        Type `FHIRReference` referencing `Resource`
+        (represented as `dict` in JSON). """
+    
+    # todo response = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    response = Column(primitives.StringField)
     """ Response reference.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    ruleset = Column(Coding)
+    
+    ruleset = Column(primitives.StringField,
+                     ForeignKey('Coding.id'))
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    target = Column(FHIRReference)
+    
+    # todo target = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    target = Column(primitives.StringField)
     """ Target of the request.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
 
-    def __init__(self, action, created, exclude, identifier, include, item, nullify, organization, originalRuleset, period, provider, reference, request, response, ruleset, target,):
+    def __init__(self, action, created, exclude, identifier, include,
+                 item, nullify, organization, originalRuleset,
+                 period, provider, reference, request, response,
+                 ruleset, target,):
         """ Initialize all valid properties.
         """
         self.action = action
@@ -103,35 +144,3 @@ class ProcessRequest(domainresource.DomainResource):
 
     def __repr__(self):
         return '<ProcessRequest %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-from . import backboneelement
-
-class ProcessRequestItem(backboneelement.BackboneElement):
-    """ Items to re-adjudicate.
-
-    List of top level items to be re-adjudicated, if none specified then the
-    entire submission is re-adjudicated.
-    """
-
-    __tablename__ = "ProcessRequestItem"
-
-    sequenceLinkId = Column(Integer)
-    """ Service instance.
-        Type `int`. """
-
-    def __init__(self, sequenceLinkId,):
-        """ Initialize all valid properties.
-        """
-        self.sequenceLinkId = sequenceLinkId
-
-    def __repr__(self):
-        return '<ProcessRequestItem %r>' % 'self.property'  # replace self.property
-
-
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import period

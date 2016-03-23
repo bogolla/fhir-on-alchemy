@@ -1,12 +1,235 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ElementDefinition)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ElementDefinition)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import element
+
+
+class ElementDefinitionBase(element.Element):
+    """ Base definition information for tools.
+
+    Information about the base definition of the element, provided to make it
+    unncessary for tools to trace the deviation of the element through the
+    derived and related profiles. This information is only provided where the
+    element definition represents a constraint on another element definition,
+    and must be present if there is a base element definition.
+    """
+
+    __tablename__ = "ElementDefinitionBase"
+
+    max = Column(primitives.StringField)
+    """ Max cardinality of the base element.
+        Type `str`. """
+
+    min = Column(primitives.IntegerField)
+    """ Min cardinality of the base element.
+        Type `int`. """
+
+    path = Column(primitives.StringField)
+    """ Path that identifies the base element.
+        Type `str`. """
+
+    def __init__(self, max, min, path,):
+        """ Initialize all valid properties.
+        """
+        self.max = max
+        self.min = min
+        self.path = path
+
+    def __repr__(self):
+        return '<ElementDefinitionBase %r>' % 'self.property'  # replace self.property
+
+
+class ElementDefinitionBinding(element.Element):
+    """ ValueSet details if this is coded.
+
+    Binds to a value set if this element is coded (code, Coding,
+    CodeableConcept).
+    """
+
+    __tablename__ = "ElementDefinitionBinding"
+
+    description = Column(primitives.StringField)
+    """ Human explanation of the value set.
+        Type `str`. """
+
+    strength = Column(primitives.StringField)
+    """ required | extensible | preferred | example.
+        Type `str`. """
+
+    # todo valueSetReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    valueSetReference = Column(primitives.StringField)
+    """ Source of value set.
+        Type `FHIRReference` referencing `ValueSet` (represented as `dict` in JSON). """
+
+    valueSetUri = Column(primitives.StringField)
+    """ Source of value set.
+        Type `str`. """
+
+    def __init__(self, description, strength, valueSetReference, valueSetUri,):
+        """ Initialize all valid properties.
+        """
+        self.description = description
+        self.strength = strength
+        self.valueSetReference = valueSetReference
+        self.valueSetUri = valueSetUri
+
+    def __repr__(self):
+        return '<ElementDefinitionBinding %r>' % 'self.property'  # replace self.property
+
+
+class ElementDefinitionConstraint(element.Element):
+    """ Condition that must evaluate to true.
+
+    Formal constraints such as co-occurrence and other constraints that can be
+    computationally evaluated within the context of the instance.
+    """
+
+    __tablename__ = "ElementDefinitionConstraint"
+
+    human = Column(primitives.StringField)
+    """ Human description of constraint.
+        Type `str`. """
+
+    key = Column(primitives.StringField)
+    """ Target of 'condition' reference above.
+        Type `str`. """
+
+    requirements = Column(primitives.StringField)
+    """ Why this constraint necessary or appropriate.
+        Type `str`. """
+
+    severity = Column(primitives.StringField)
+    """ error | warning.
+        Type `str`. """
+
+    xpath = Column(primitives.StringField)
+    """ XPath expression of constraint.
+        Type `str`. """
+
+    def __init__(self, human, key, requirements, severity, xpath,):
+        """ Initialize all valid properties.
+        """
+        self.human = human
+        self.key = key
+        self.requirements = requirements
+        self.severity = severity
+        self.xpath = xpath
+
+    def __repr__(self):
+        return '<ElementDefinitionConstraint %r>' % 'self.property'  # replace self.property
+
+
+class ElementDefinitionMapping(element.Element):
+    """ Map element to another set of definitions.
+
+    Identifies a concept from an external specification that roughly
+    corresponds to this element.
+    """
+
+    __tablename__ = "ElementDefinitionMapping"
+
+    identity = Column(primitives.StringField)
+    """ Reference to mapping declaration.
+        Type `str`. """
+
+    language = Column(primitives.StringField)
+    """ Computable language of mapping.
+        Type `str`. """
+
+    map = Column(primitives.StringField)
+    """ Details of the mapping.
+        Type `str`. """
+
+    def __init__(self, identity, language, map,):
+        """ Initialize all valid properties.
+        """
+        self.identity = identity
+        self.language = language
+        self.map = map
+
+    def __repr__(self):
+        return '<ElementDefinitionMapping %r>' % 'self.property'  # replace self.property
+
+
+class ElementDefinitionSlicing(element.Element):
+    """ This element is sliced - slices follow.
+
+    Indicates that the element is sliced into a set of alternative definitions
+    (i.e. in a structure definition, there are multiple different constraints
+    on a single element in the base resource). Slicing can be used in any
+    resource that has cardinality ..* on the base resource, or any resource
+    with a choice of types. The set of slices is any elements that come after
+    this in the element sequence that have the same path, until a shorter path
+    occurs (the shorter path terminates the set).
+    """
+
+    __tablename__ = "ElementDefinitionSlicing"
+
+    description = Column(primitives.StringField)
+    """ Text description of how slicing works (or not).
+        Type `str`. """
+
+    discriminator = Column(primitives.StringField)
+    """ Element values that used to distinguish the slices.
+        List of `str` items. """
+
+    ordered = Column(primitives.BooleanField)
+    """ If elements must be in same order as slices.
+        Type `bool`. """
+
+    rules = Column(primitives.StringField)
+    """ closed | open | openAtEnd.
+        Type `str`. """
+
+    def __init__(self, description, discriminator, ordered, rules,):
+        """ Initialize all valid properties.
+        """
+        self.description = description
+        self.discriminator = discriminator
+        self.ordered = ordered
+        self.rules = rules
+
+    def __repr__(self):
+        return '<ElementDefinitionSlicing %r>' % 'self.property'  # replace self.property
+
+
+class ElementDefinitionType(element.Element):
+    """ Data type and Profile for this element.
+
+    The data type or resource that the value of this element is permitted to
+    be.
+    """
+
+    __tablename__ = "ElementDefinitionType"
+
+    aggregation = Column(primitives.StringField)
+    """ contained | referenced | bundled - how aggregated.
+        List of `str` items. """
+
+    code = Column(primitives.StringField)
+    """ Name of Data type or Resource.
+        Type `str`. """
+
+    profile = Column(primitives.StringField)
+    """ Profile (StructureDefinition) to apply (or IG).
+        List of `str` items. """
+
+    def __init__(self, aggregation, code, profile,):
+        """ Initialize all valid properties.
+        """
+        self.aggregation = aggregation
+        self.code = code
+        self.profile = profile
+
+    def __repr__(self):
+        return '<ElementDefinitionType %r>' % 'self.property'  # replace self.property
+
 
 class ElementDefinition(element.Element):
     """ Definition of an element in a resource or extension.
@@ -16,900 +239,986 @@ class ElementDefinition(element.Element):
     """
 
     __tablename__ = "ElementDefinition"
-
+    
     alias = Column(primitives.StringField)
     """ Other names.
         List of `str` items. """
-
-    base = Column(ElementDefinitionBase)
+    
+    base = Column(primitives.StringField,
+                  ForeignKey('ElementDefinitionBase.id'))
     """ Base definition information for tools.
         Type `ElementDefinitionBase` (represented as `dict` in JSON). """
-
-    binding = Column(ElementDefinitionBinding)
+    
+    binding = Column(primitives.StringField,
+                     ForeignKey('ElementDefinitionBinding.id'))
     """ ValueSet details if this is coded.
         Type `ElementDefinitionBinding` (represented as `dict` in JSON). """
-
-    code = Column(Coding)
+    
+    code = Column(primitives.StringField,
+                  ForeignKey('Coding.id'))
     """ Defining code.
         List of `Coding` items (represented as `dict` in JSON). """
-
+    
     comments = Column(primitives.StringField)
     """ Comments about the use of this element.
         Type `str`. """
-
+    
     condition = Column(primitives.StringField)
     """ Reference to invariant about presence.
         List of `str` items. """
-
-    constraint = Column(ElementDefinitionConstraint)
+    
+    constraint = Column(primitives.StringField,
+                        ForeignKey('ElementDefinitionConstraint.id'))
     """ Condition that must evaluate to true.
         List of `ElementDefinitionConstraint` items (represented as `dict` in JSON). """
-
-    defaultValueAddress = Column(Address)
+    
+    defaultValueAddress = Column(primitives.StringField,
+                                 ForeignKey('Address.id'))
     """ Specified value it missing from instance.
         Type `Address` (represented as `dict` in JSON). """
-
-    defaultValueAnnotation = Column(Annotation)
+    
+    defaultValueAnnotation = Column(primitives.StringField,
+                                    ForeignKey('Annotation.id'))
     """ Specified value it missing from instance.
         Type `Annotation` (represented as `dict` in JSON). """
-
-    defaultValueAttachment = Column(Attachment)
+    
+    defaultValueAttachment = Column(primitives.StringField,
+                                    ForeignKey('Attachment.id'))
     """ Specified value it missing from instance.
         Type `Attachment` (represented as `dict` in JSON). """
-
+    
     defaultValueBase64Binary = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `str`. """
-
-    defaultValueBoolean = Column(bool)
+    
+    defaultValueBoolean = Column(primitives.BooleanField)
     """ Specified value it missing from instance.
         Type `bool`. """
-
+    
     defaultValueCode = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `str`. """
-
-    defaultValueCodeableConcept = Column(CodeableConcept)
+    
+    defaultValueCodeableConcept = Column(primitives.StringField,
+                                         ForeignKey('CodeableConcept.id'))
     """ Specified value it missing from instance.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    defaultValueCoding = Column(Coding)
+    
+    defaultValueCoding = Column(primitives.StringField,
+                                ForeignKey('Coding.id'))
     """ Specified value it missing from instance.
         Type `Coding` (represented as `dict` in JSON). """
-
-    defaultValueContactPoint = Column(ContactPoint)
+    
+    defaultValueContactPoint = Column(primitives.StringField,
+                                      ForeignKey('ContactPoint.id'))
     """ Specified value it missing from instance.
         Type `ContactPoint` (represented as `dict` in JSON). """
-
-    defaultValueDate = Column(FHIRDate)
+    
+    defaultValueDate = Column(primitives.DateTimeField)
     """ Specified value it missing from instance.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    defaultValueDateTime = Column(FHIRDate)
+    
+    defaultValueDateTime = Column(primitives.DateTimeField)
     """ Specified value it missing from instance.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    defaultValueDecimal = Column(float)
+    
+    defaultValueDecimal = Column(primitives.DecimalField)
     """ Specified value it missing from instance.
         Type `float`. """
-
-    defaultValueHumanName = Column(HumanName)
+    
+    defaultValueHumanName = Column(primitives.StringField,
+                                   ForeignKey('HumanName.id'))
     """ Specified value it missing from instance.
         Type `HumanName` (represented as `dict` in JSON). """
-
+    
     defaultValueId = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `str`. """
-
-    defaultValueIdentifier = Column(Identifier)
+    
+    defaultValueIdentifier = Column(primitives.StringField,
+                                    ForeignKey('Identifier.id'))
     """ Specified value it missing from instance.
         Type `Identifier` (represented as `dict` in JSON). """
-
-    defaultValueInstant = Column(FHIRDate)
+    
+    defaultValueInstant = Column(primitives.DateTimeField)
     """ Specified value it missing from instance.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    defaultValueInteger = Column(Integer)
+    
+    defaultValueInteger = Column(primitives.IntegerField)
     """ Specified value it missing from instance.
         Type `int`. """
-
+    
     defaultValueMarkdown = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `str`. """
-
-    defaultValueMeta = Column(Meta)
+    
+    defaultValueMeta = Column(primitives.StringField,
+                              ForeignKey('Meta.id'))
     """ Specified value it missing from instance.
         Type `Meta` (represented as `dict` in JSON). """
-
+    
     defaultValueOid = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `str`. """
-
-    defaultValuePeriod = Column(Period)
+    
+    defaultValuePeriod = Column(primitives.StringField,
+                                ForeignKey('Period.id'))
     """ Specified value it missing from instance.
         Type `Period` (represented as `dict` in JSON). """
-
-    defaultValuePositiveInt = Column(Integer)
+    
+    defaultValuePositiveInt = Column(primitives.IntegerField)
     """ Specified value it missing from instance.
         Type `int`. """
-
-    defaultValueQuantity = Column(Quantity)
+    
+    defaultValueQuantity = Column(primitives.StringField,
+                                  ForeignKey('Quantity.id'))
     """ Specified value it missing from instance.
         Type `Quantity` (represented as `dict` in JSON). """
-
-    defaultValueRange = Column(Range)
+    
+    defaultValueRange = Column(primitives.StringField,
+                               ForeignKey('Range.id'))
     """ Specified value it missing from instance.
         Type `Range` (represented as `dict` in JSON). """
-
-    defaultValueRatio = Column(Ratio)
+    
+    defaultValueRatio = Column(primitives.StringField,
+                               ForeignKey('Ratio.id'))
     """ Specified value it missing from instance.
         Type `Ratio` (represented as `dict` in JSON). """
-
-    defaultValueReference = Column(FHIRReference)
+    
+    # todo defaultValueReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    defaultValueReference = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `FHIRReference` (represented as `dict` in JSON). """
-
-    defaultValueSampledData = Column(SampledData)
+    
+    defaultValueSampledData = Column(primitives.StringField,
+                                     ForeignKey('SampledData.id'))
     """ Specified value it missing from instance.
         Type `SampledData` (represented as `dict` in JSON). """
-
-    defaultValueSignature = Column(Signature)
+    
+    defaultValueSignature = Column(primitives.StringField,
+                                   ForeignKey('Signature.id'))
     """ Specified value it missing from instance.
         Type `Signature` (represented as `dict` in JSON). """
-
+    
     defaultValueString = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `str`. """
-
-    defaultValueTime = Column(FHIRDate)
+    
+    defaultValueTime = Column(primitives.DateTimeField)
     """ Specified value it missing from instance.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    defaultValueTiming = Column(Timing)
+    
+    defaultValueTiming = Column(primitives.StringField,
+                                ForeignKey('Timing.id'))
     """ Specified value it missing from instance.
         Type `Timing` (represented as `dict` in JSON). """
-
-    defaultValueUnsignedInt = Column(Integer)
+    
+    defaultValueUnsignedInt = Column(primitives.IntegerField)
     """ Specified value it missing from instance.
         Type `int`. """
-
+    
     defaultValueUri = Column(primitives.StringField)
     """ Specified value it missing from instance.
         Type `str`. """
-
+    
     definition = Column(primitives.StringField)
     """ Full formal definition as narrative text.
         Type `str`. """
-
-    exampleAddress = Column(Address)
+    
+    exampleAddress = Column(primitives.StringField, ForeignKey('Address.id'))
     """ Example value: [as defined for type].
         Type `Address` (represented as `dict` in JSON). """
-
-    exampleAnnotation = Column(Annotation)
+    
+    exampleAnnotation = Column(primitives.StringField, ForeignKey('Annotation.id'))
     """ Example value: [as defined for type].
         Type `Annotation` (represented as `dict` in JSON). """
-
-    exampleAttachment = Column(Attachment)
+    
+    exampleAttachment = Column(primitives.StringField, ForeignKey('Attachment.id'))
     """ Example value: [as defined for type].
         Type `Attachment` (represented as `dict` in JSON). """
-
+    
     exampleBase64Binary = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `str`. """
-
-    exampleBoolean = Column(bool)
+    
+    exampleBoolean = Column(primitives.BooleanField)
     """ Example value: [as defined for type].
         Type `bool`. """
-
+    
     exampleCode = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `str`. """
-
-    exampleCodeableConcept = Column(CodeableConcept)
+    
+    exampleCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Example value: [as defined for type].
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    exampleCoding = Column(Coding)
+    
+    exampleCoding = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Example value: [as defined for type].
         Type `Coding` (represented as `dict` in JSON). """
-
-    exampleContactPoint = Column(ContactPoint)
+    
+    exampleContactPoint = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Example value: [as defined for type].
         Type `ContactPoint` (represented as `dict` in JSON). """
-
-    exampleDate = Column(FHIRDate)
+    
+    exampleDate = Column(primitives.DateTimeField)
     """ Example value: [as defined for type].
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    exampleDateTime = Column(FHIRDate)
+    
+    exampleDateTime = Column(primitives.DateTimeField)
     """ Example value: [as defined for type].
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    exampleDecimal = Column(float)
+    
+    exampleDecimal = Column(primitives.DecimalField)
     """ Example value: [as defined for type].
         Type `float`. """
-
-    exampleHumanName = Column(HumanName)
+    
+    exampleHumanName = Column(primitives.StringField, ForeignKey('HumanName.id'))
     """ Example value: [as defined for type].
         Type `HumanName` (represented as `dict` in JSON). """
-
+    
     exampleId = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `str`. """
-
-    exampleIdentifier = Column(Identifier)
+    
+    exampleIdentifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ Example value: [as defined for type].
         Type `Identifier` (represented as `dict` in JSON). """
-
-    exampleInstant = Column(FHIRDate)
+    
+    exampleInstant = Column(primitives.DateTimeField)
     """ Example value: [as defined for type].
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    exampleInteger = Column(Integer)
+    
+    exampleInteger = Column(primitives.IntegerField)
     """ Example value: [as defined for type].
         Type `int`. """
-
+    
     exampleMarkdown = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `str`. """
-
-    exampleMeta = Column(Meta)
+    
+    exampleMeta = Column(primitives.StringField, ForeignKey('Meta.id'))
     """ Example value: [as defined for type].
         Type `Meta` (represented as `dict` in JSON). """
-
+    
     exampleOid = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `str`. """
-
-    examplePeriod = Column(Period)
+    
+    examplePeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ Example value: [as defined for type].
         Type `Period` (represented as `dict` in JSON). """
-
-    examplePositiveInt = Column(Integer)
+    
+    examplePositiveInt = Column(primitives.IntegerField)
     """ Example value: [as defined for type].
         Type `int`. """
-
-    exampleQuantity = Column(Quantity)
+    
+    exampleQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Example value: [as defined for type].
         Type `Quantity` (represented as `dict` in JSON). """
-
-    exampleRange = Column(Range)
+    
+    exampleRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Example value: [as defined for type].
         Type `Range` (represented as `dict` in JSON). """
-
-    exampleRatio = Column(Ratio)
+    
+    exampleRatio = Column(primitives.StringField, ForeignKey('Ratio.id'))
     """ Example value: [as defined for type].
         Type `Ratio` (represented as `dict` in JSON). """
-
-    exampleReference = Column(FHIRReference)
+    
+    # TODO exampleReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    exampleReference = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `FHIRReference` (represented as `dict` in JSON). """
-
-    exampleSampledData = Column(SampledData)
+    
+    exampleSampledData = Column(primitives.StringField, ForeignKey('SampledData.id'))
     """ Example value: [as defined for type].
         Type `SampledData` (represented as `dict` in JSON). """
-
-    exampleSignature = Column(Signature)
+    
+    exampleSignature = Column(primitives.StringField, ForeignKey('Signature.id'))
     """ Example value: [as defined for type].
         Type `Signature` (represented as `dict` in JSON). """
-
+    
     exampleString = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `str`. """
-
-    exampleTime = Column(FHIRDate)
+    
+    exampleTime = Column(primitives.DateTimeField)
     """ Example value: [as defined for type].
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    exampleTiming = Column(Timing)
+    
+    exampleTiming = Column(primitives.StringField, ForeignKey('Timing.id'))
     """ Example value: [as defined for type].
         Type `Timing` (represented as `dict` in JSON). """
-
-    exampleUnsignedInt = Column(Integer)
+    
+    exampleUnsignedInt = Column(primitives.IntegerField)
     """ Example value: [as defined for type].
         Type `int`. """
-
+    
     exampleUri = Column(primitives.StringField)
     """ Example value: [as defined for type].
         Type `str`. """
-
-    fixedAddress = Column(Address)
+    
+    fixedAddress = Column(primitives.StringField, ForeignKey('Address.id'))
     """ Value must be exactly this.
         Type `Address` (represented as `dict` in JSON). """
-
-    fixedAnnotation = Column(Annotation)
+    
+    fixedAnnotation = Column(primitives.StringField, ForeignKey('Annotation.id'))
     """ Value must be exactly this.
         Type `Annotation` (represented as `dict` in JSON). """
-
-    fixedAttachment = Column(Attachment)
+    
+    fixedAttachment = Column(primitives.StringField, ForeignKey('Attachment.id'))
     """ Value must be exactly this.
         Type `Attachment` (represented as `dict` in JSON). """
-
+    
     fixedBase64Binary = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `str`. """
-
-    fixedBoolean = Column(bool)
+    
+    fixedBoolean = Column(primitives.BooleanField)
     """ Value must be exactly this.
         Type `bool`. """
-
+    
     fixedCode = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `str`. """
-
-    fixedCodeableConcept = Column(CodeableConcept)
+    
+    fixedCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Value must be exactly this.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    fixedCoding = Column(Coding)
+    
+    fixedCoding = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Value must be exactly this.
         Type `Coding` (represented as `dict` in JSON). """
-
-    fixedContactPoint = Column(ContactPoint)
+    
+    fixedContactPoint = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Value must be exactly this.
         Type `ContactPoint` (represented as `dict` in JSON). """
-
-    fixedDate = Column(FHIRDate)
+    
+    fixedDate = Column(primitives.DateTimeField)
     """ Value must be exactly this.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    fixedDateTime = Column(FHIRDate)
+    
+    fixedDateTime = Column(primitives.DateTimeField)
     """ Value must be exactly this.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    fixedDecimal = Column(float)
+    
+    fixedDecimal = Column(primitives.DecimalField)
     """ Value must be exactly this.
         Type `float`. """
-
-    fixedHumanName = Column(HumanName)
+    
+    fixedHumanName = Column(primitives.StringField, ForeignKey('HumanName.id'))
     """ Value must be exactly this.
         Type `HumanName` (represented as `dict` in JSON). """
-
+    
     fixedId = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `str`. """
-
-    fixedIdentifier = Column(Identifier)
+    
+    fixedIdentifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ Value must be exactly this.
         Type `Identifier` (represented as `dict` in JSON). """
-
-    fixedInstant = Column(FHIRDate)
+    
+    fixedInstant = Column(primitives.DateTimeField)
     """ Value must be exactly this.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    fixedInteger = Column(Integer)
+    
+    fixedInteger = Column(primitives.IntegerField)
     """ Value must be exactly this.
         Type `int`. """
-
+    
     fixedMarkdown = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `str`. """
-
-    fixedMeta = Column(Meta)
+    
+    fixedMeta = Column(primitives.StringField, ForeignKey('Meta.id'))
     """ Value must be exactly this.
         Type `Meta` (represented as `dict` in JSON). """
-
+    
     fixedOid = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `str`. """
-
-    fixedPeriod = Column(Period)
+    
+    fixedPeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ Value must be exactly this.
         Type `Period` (represented as `dict` in JSON). """
-
-    fixedPositiveInt = Column(Integer)
+    
+    fixedPositiveInt = Column(primitives.IntegerField)
     """ Value must be exactly this.
         Type `int`. """
-
-    fixedQuantity = Column(Quantity)
+    
+    fixedQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Value must be exactly this.
         Type `Quantity` (represented as `dict` in JSON). """
-
-    fixedRange = Column(Range)
+    
+    fixedRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Value must be exactly this.
         Type `Range` (represented as `dict` in JSON). """
-
-    fixedRatio = Column(Ratio)
+    
+    fixedRatio = Column(primitives.StringField, ForeignKey('Ratio.id'))
     """ Value must be exactly this.
         Type `Ratio` (represented as `dict` in JSON). """
-
-    fixedReference = Column(FHIRReference)
+    
+    # todo fixedReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    fixedReference = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `FHIRReference` (represented as `dict` in JSON). """
-
-    fixedSampledData = Column(SampledData)
+    
+    fixedSampledData = Column(primitives.StringField, ForeignKey('SampledData.id'))
     """ Value must be exactly this.
         Type `SampledData` (represented as `dict` in JSON). """
-
-    fixedSignature = Column(Signature)
+    
+    fixedSignature = Column(primitives.StringField, ForeignKey('Signature.id'))
     """ Value must be exactly this.
         Type `Signature` (represented as `dict` in JSON). """
-
+    
     fixedString = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `str`. """
-
-    fixedTime = Column(FHIRDate)
+    
+    fixedTime = Column(primitives.DateTimeField)
     """ Value must be exactly this.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    fixedTiming = Column(Timing)
+    
+    fixedTiming = Column(primitives.StringField, ForeignKey('Timing.id'))
     """ Value must be exactly this.
         Type `Timing` (represented as `dict` in JSON). """
-
-    fixedUnsignedInt = Column(Integer)
+    
+    fixedUnsignedInt = Column(primitives.IntegerField)
     """ Value must be exactly this.
         Type `int`. """
-
+    
     fixedUri = Column(primitives.StringField)
     """ Value must be exactly this.
         Type `str`. """
-
-    isModifier = Column(bool)
+    
+    isModifier = Column(primitives.BooleanField)
     """ If this modifies the meaning of other elements.
         Type `bool`. """
-
-    isSummary = Column(bool)
+    
+    isSummary = Column(primitives.BooleanField)
     """ Include when _summary = true?.
         Type `bool`. """
-
+    
     label = Column(primitives.StringField)
     """ Name for element to display with or prompt for element.
         Type `str`. """
-
-    mapping = Column(ElementDefinitionMapping)
+    
+    mapping = Column(primitives.StringField,
+                     ForeignKey('ElementDefinitionMapping.id'))
     """ Map element to another set of definitions.
         List of `ElementDefinitionMapping` items (represented as `dict` in JSON). """
-
+    
     max = Column(primitives.StringField)
     """ Maximum Cardinality (a number or *).
         Type `str`. """
-
-    maxLength = Column(Integer)
+    
+    maxLength = Column(primitives.IntegerField)
     """ Max length for strings.
         Type `int`. """
-
-    maxValueAddress = Column(Address)
+    
+    maxValueAddress = Column(primitives.StringField, ForeignKey('Address.id'))
     """ Maximum Allowed Value (for some types).
         Type `Address` (represented as `dict` in JSON). """
-
-    maxValueAnnotation = Column(Annotation)
+    
+    maxValueAnnotation = Column(primitives.StringField, ForeignKey('Annotation.id'))
     """ Maximum Allowed Value (for some types).
         Type `Annotation` (represented as `dict` in JSON). """
-
-    maxValueAttachment = Column(Attachment)
+    
+    maxValueAttachment = Column(primitives.StringField, ForeignKey('Attachment.id'))
     """ Maximum Allowed Value (for some types).
         Type `Attachment` (represented as `dict` in JSON). """
-
+    
     maxValueBase64Binary = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `str`. """
-
-    maxValueBoolean = Column(bool)
+    
+    maxValueBoolean = Column(primitives.BooleanField)
     """ Maximum Allowed Value (for some types).
         Type `bool`. """
-
+    
     maxValueCode = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `str`. """
-
-    maxValueCodeableConcept = Column(CodeableConcept)
+    
+    maxValueCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Maximum Allowed Value (for some types).
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    maxValueCoding = Column(Coding)
+    
+    maxValueCoding = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Maximum Allowed Value (for some types).
         Type `Coding` (represented as `dict` in JSON). """
-
-    maxValueContactPoint = Column(ContactPoint)
+    
+    maxValueContactPoint = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Maximum Allowed Value (for some types).
         Type `ContactPoint` (represented as `dict` in JSON). """
-
-    maxValueDate = Column(FHIRDate)
+    
+    maxValueDate = Column(primitives.DateTimeField)
     """ Maximum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    maxValueDateTime = Column(FHIRDate)
+    
+    maxValueDateTime = Column(primitives.DateTimeField)
     """ Maximum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    maxValueDecimal = Column(float)
+    
+    maxValueDecimal = Column(primitives.DecimalField)
     """ Maximum Allowed Value (for some types).
         Type `float`. """
-
-    maxValueHumanName = Column(HumanName)
+    
+    maxValueHumanName = Column(primitives.StringField, ForeignKey('HumanName.id'))
     """ Maximum Allowed Value (for some types).
         Type `HumanName` (represented as `dict` in JSON). """
-
+    
     maxValueId = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `str`. """
-
-    maxValueIdentifier = Column(Identifier)
+    
+    maxValueIdentifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ Maximum Allowed Value (for some types).
         Type `Identifier` (represented as `dict` in JSON). """
-
-    maxValueInstant = Column(FHIRDate)
+    
+    maxValueInstant = Column(primitives.DateTimeField)
     """ Maximum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    maxValueInteger = Column(Integer)
+    
+    maxValueInteger = Column(primitives.IntegerField)
     """ Maximum Allowed Value (for some types).
         Type `int`. """
-
+    
     maxValueMarkdown = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `str`. """
-
-    maxValueMeta = Column(Meta)
+    
+    maxValueMeta = Column(primitives.StringField, ForeignKey('Meta.id'))
     """ Maximum Allowed Value (for some types).
         Type `Meta` (represented as `dict` in JSON). """
-
+    
     maxValueOid = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `str`. """
-
-    maxValuePeriod = Column(Period)
+    
+    maxValuePeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ Maximum Allowed Value (for some types).
         Type `Period` (represented as `dict` in JSON). """
-
-    maxValuePositiveInt = Column(Integer)
+    
+    maxValuePositiveInt = Column(primitives.IntegerField)
     """ Maximum Allowed Value (for some types).
         Type `int`. """
-
-    maxValueQuantity = Column(Quantity)
+    
+    maxValueQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Maximum Allowed Value (for some types).
         Type `Quantity` (represented as `dict` in JSON). """
-
-    maxValueRange = Column(Range)
+    
+    maxValueRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Maximum Allowed Value (for some types).
         Type `Range` (represented as `dict` in JSON). """
-
-    maxValueRatio = Column(Ratio)
+    
+    maxValueRatio = Column(primitives.StringField, ForeignKey('Ratio.id'))
     """ Maximum Allowed Value (for some types).
         Type `Ratio` (represented as `dict` in JSON). """
-
-    maxValueReference = Column(FHIRReference)
+    
+    # todo maxValueReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    maxValueReference = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `FHIRReference` (represented as `dict` in JSON). """
-
-    maxValueSampledData = Column(SampledData)
+    
+    maxValueSampledData = Column(primitives.StringField, ForeignKey('SampledData.id'))
     """ Maximum Allowed Value (for some types).
         Type `SampledData` (represented as `dict` in JSON). """
-
-    maxValueSignature = Column(Signature)
+    
+    maxValueSignature = Column(primitives.StringField, ForeignKey('Signature.id'))
     """ Maximum Allowed Value (for some types).
         Type `Signature` (represented as `dict` in JSON). """
-
+    
     maxValueString = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `str`. """
-
-    maxValueTime = Column(FHIRDate)
+    
+    maxValueTime = Column(primitives.DateTimeField)
     """ Maximum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    maxValueTiming = Column(Timing)
+    
+    maxValueTiming = Column(primitives.StringField, ForeignKey('Timing.id'))
     """ Maximum Allowed Value (for some types).
         Type `Timing` (represented as `dict` in JSON). """
-
-    maxValueUnsignedInt = Column(Integer)
+    
+    maxValueUnsignedInt = Column(primitives.IntegerField)
     """ Maximum Allowed Value (for some types).
         Type `int`. """
-
+    
     maxValueUri = Column(primitives.StringField)
     """ Maximum Allowed Value (for some types).
         Type `str`. """
-
+    
     meaningWhenMissing = Column(primitives.StringField)
     """ Implicit meaning when this element is missing.
         Type `str`. """
-
-    min = Column(Integer)
+    
+    min = Column(primitives.IntegerField)
     """ Minimum Cardinality.
         Type `int`. """
-
-    minValueAddress = Column(Address)
+    
+    minValueAddress = Column(primitives.StringField, ForeignKey('Address.id'))
     """ Minimum Allowed Value (for some types).
         Type `Address` (represented as `dict` in JSON). """
-
-    minValueAnnotation = Column(Annotation)
+    
+    minValueAnnotation = Column(primitives.StringField, ForeignKey('Annotation.id'))
     """ Minimum Allowed Value (for some types).
         Type `Annotation` (represented as `dict` in JSON). """
-
-    minValueAttachment = Column(Attachment)
+    
+    minValueAttachment = Column(primitives.StringField, ForeignKey('Attachment.id'))
     """ Minimum Allowed Value (for some types).
         Type `Attachment` (represented as `dict` in JSON). """
-
+    
     minValueBase64Binary = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `str`. """
-
-    minValueBoolean = Column(bool)
+    
+    minValueBoolean = Column(primitives.BooleanField)
     """ Minimum Allowed Value (for some types).
         Type `bool`. """
-
+    
     minValueCode = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `str`. """
-
-    minValueCodeableConcept = Column(CodeableConcept)
+    
+    minValueCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Minimum Allowed Value (for some types).
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    minValueCoding = Column(Coding)
+    
+    minValueCoding = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Minimum Allowed Value (for some types).
         Type `Coding` (represented as `dict` in JSON). """
-
-    minValueContactPoint = Column(ContactPoint)
+    
+    minValueContactPoint = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Minimum Allowed Value (for some types).
         Type `ContactPoint` (represented as `dict` in JSON). """
-
-    minValueDate = Column(FHIRDate)
+    
+    minValueDate = Column(primitives.DateTimeField)
     """ Minimum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    minValueDateTime = Column(FHIRDate)
+    
+    minValueDateTime = Column(primitives.DateTimeField)
     """ Minimum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    minValueDecimal = Column(float)
+    
+    minValueDecimal = Column(primitives.DecimalField)
     """ Minimum Allowed Value (for some types).
         Type `float`. """
-
-    minValueHumanName = Column(HumanName)
+    
+    minValueHumanName = Column(primitives.StringField, ForeignKey('HumanName.id'))
     """ Minimum Allowed Value (for some types).
         Type `HumanName` (represented as `dict` in JSON). """
-
+    
     minValueId = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `str`. """
-
-    minValueIdentifier = Column(Identifier)
+    
+    minValueIdentifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ Minimum Allowed Value (for some types).
         Type `Identifier` (represented as `dict` in JSON). """
-
-    minValueInstant = Column(FHIRDate)
+    
+    minValueInstant = Column(primitives.DateTimeField)
     """ Minimum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    minValueInteger = Column(Integer)
+    
+    minValueInteger = Column(primitives.IntegerField)
     """ Minimum Allowed Value (for some types).
         Type `int`. """
-
+    
     minValueMarkdown = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `str`. """
-
-    minValueMeta = Column(Meta)
+    
+    minValueMeta = Column(primitives.StringField, ForeignKey('Meta.id'))
     """ Minimum Allowed Value (for some types).
         Type `Meta` (represented as `dict` in JSON). """
-
+    
     minValueOid = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `str`. """
-
-    minValuePeriod = Column(Period)
+    
+    minValuePeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ Minimum Allowed Value (for some types).
         Type `Period` (represented as `dict` in JSON). """
-
-    minValuePositiveInt = Column(Integer)
+    
+    minValuePositiveInt = Column(primitives.IntegerField)
     """ Minimum Allowed Value (for some types).
         Type `int`. """
-
-    minValueQuantity = Column(Quantity)
+    
+    minValueQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Minimum Allowed Value (for some types).
         Type `Quantity` (represented as `dict` in JSON). """
-
-    minValueRange = Column(Range)
+    
+    minValueRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Minimum Allowed Value (for some types).
         Type `Range` (represented as `dict` in JSON). """
-
-    minValueRatio = Column(Ratio)
+    
+    minValueRatio = Column(primitives.StringField, ForeignKey('Ratio.id'))
     """ Minimum Allowed Value (for some types).
         Type `Ratio` (represented as `dict` in JSON). """
-
-    minValueReference = Column(FHIRReference)
+    
+    # todo minValueReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    minValueReference = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `FHIRReference` (represented as `dict` in JSON). """
-
-    minValueSampledData = Column(SampledData)
+    
+    minValueSampledData = Column(primitives.StringField, ForeignKey('SampledData.id'))
     """ Minimum Allowed Value (for some types).
         Type `SampledData` (represented as `dict` in JSON). """
-
-    minValueSignature = Column(Signature)
+    
+    minValueSignature = Column(primitives.StringField, ForeignKey('Signature.id'))
     """ Minimum Allowed Value (for some types).
         Type `Signature` (represented as `dict` in JSON). """
-
+    
     minValueString = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `str`. """
-
-    minValueTime = Column(FHIRDate)
+    
+    minValueTime = Column(primitives.DateTimeField)
     """ Minimum Allowed Value (for some types).
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    minValueTiming = Column(Timing)
+    
+    minValueTiming = Column(primitives.StringField, ForeignKey('Timing.id'))
     """ Minimum Allowed Value (for some types).
         Type `Timing` (represented as `dict` in JSON). """
-
-    minValueUnsignedInt = Column(Integer)
+    
+    minValueUnsignedInt = Column(primitives.IntegerField)
     """ Minimum Allowed Value (for some types).
         Type `int`. """
-
+    
     minValueUri = Column(primitives.StringField)
     """ Minimum Allowed Value (for some types).
         Type `str`. """
-
-    mustSupport = Column(bool)
+    
+    mustSupport = Column(primitives.BooleanField)
     """ If the element must supported.
         Type `bool`. """
-
+    
     name = Column(primitives.StringField)
     """ Name for this particular element definition (reference target).
         Type `str`. """
-
+    
     nameReference = Column(primitives.StringField)
     """ To another element constraint (by element.name).
         Type `str`. """
-
+    
     path = Column(primitives.StringField)
     """ The path of the element (see the Detailed Descriptions).
         Type `str`. """
-
-    patternAddress = Column(Address)
+    
+    patternAddress = Column(primitives.StringField, ForeignKey('Address.id'))
     """ Value must have at least these property values.
         Type `Address` (represented as `dict` in JSON). """
-
-    patternAnnotation = Column(Annotation)
+    
+    patternAnnotation = Column(primitives.StringField, ForeignKey('Annotation.id'))
     """ Value must have at least these property values.
         Type `Annotation` (represented as `dict` in JSON). """
-
-    patternAttachment = Column(Attachment)
+    
+    patternAttachment = Column(primitives.StringField, ForeignKey('Attachment.id'))
     """ Value must have at least these property values.
         Type `Attachment` (represented as `dict` in JSON). """
-
+    
     patternBase64Binary = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `str`. """
-
-    patternBoolean = Column(bool)
+    
+    patternBoolean = Column(primitives.BooleanField)
     """ Value must have at least these property values.
         Type `bool`. """
-
+    
     patternCode = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `str`. """
-
-    patternCodeableConcept = Column(CodeableConcept)
+    
+    patternCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Value must have at least these property values.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    patternCoding = Column(Coding)
+    
+    patternCoding = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Value must have at least these property values.
         Type `Coding` (represented as `dict` in JSON). """
-
-    patternContactPoint = Column(ContactPoint)
+    
+    patternContactPoint = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Value must have at least these property values.
         Type `ContactPoint` (represented as `dict` in JSON). """
-
-    patternDate = Column(FHIRDate)
+    
+    patternDate = Column(primitives.DateTimeField)
     """ Value must have at least these property values.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    patternDateTime = Column(FHIRDate)
+    
+    patternDateTime = Column(primitives.DateTimeField)
     """ Value must have at least these property values.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    patternDecimal = Column(float)
+    
+    patternDecimal = Column(primitives.DecimalField)
     """ Value must have at least these property values.
         Type `float`. """
-
-    patternHumanName = Column(HumanName)
+    
+    patternHumanName = Column(primitives.StringField, ForeignKey('HumanName.id'))
     """ Value must have at least these property values.
         Type `HumanName` (represented as `dict` in JSON). """
-
+    
     patternId = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `str`. """
-
-    patternIdentifier = Column(Identifier)
+    
+    patternIdentifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ Value must have at least these property values.
         Type `Identifier` (represented as `dict` in JSON). """
-
-    patternInstant = Column(FHIRDate)
+    
+    patternInstant = Column(primitives.DateTimeField)
     """ Value must have at least these property values.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    patternInteger = Column(Integer)
+    
+    patternInteger = Column(primitives.IntegerField)
     """ Value must have at least these property values.
         Type `int`. """
-
+    
     patternMarkdown = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `str`. """
-
-    patternMeta = Column(Meta)
+    
+    patternMeta = Column(primitives.StringField, ForeignKey('Meta.id'))
     """ Value must have at least these property values.
         Type `Meta` (represented as `dict` in JSON). """
-
+    
     patternOid = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `str`. """
-
-    patternPeriod = Column(Period)
+    
+    patternPeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ Value must have at least these property values.
         Type `Period` (represented as `dict` in JSON). """
-
-    patternPositiveInt = Column(Integer)
+    
+    patternPositiveInt = Column(primitives.IntegerField)
     """ Value must have at least these property values.
         Type `int`. """
-
-    patternQuantity = Column(Quantity)
+    
+    patternQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Value must have at least these property values.
         Type `Quantity` (represented as `dict` in JSON). """
-
-    patternRange = Column(Range)
+    
+    patternRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Value must have at least these property values.
         Type `Range` (represented as `dict` in JSON). """
-
-    patternRatio = Column(Ratio)
+    
+    patternRatio = Column(primitives.StringField, ForeignKey('Ratio.id'))
     """ Value must have at least these property values.
         Type `Ratio` (represented as `dict` in JSON). """
-
-    patternReference = Column(FHIRReference)
+    
+    # todo patternReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    patternReference = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `FHIRReference` (represented as `dict` in JSON). """
-
-    patternSampledData = Column(SampledData)
+    
+    patternSampledData = Column(primitives.StringField, ForeignKey('SampledData.id'))
     """ Value must have at least these property values.
         Type `SampledData` (represented as `dict` in JSON). """
-
-    patternSignature = Column(Signature)
+    
+    patternSignature = Column(primitives.StringField, ForeignKey('Signature.id'))
     """ Value must have at least these property values.
         Type `Signature` (represented as `dict` in JSON). """
-
+    
     patternString = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `str`. """
-
-    patternTime = Column(FHIRDate)
+    
+    patternTime = Column(primitives.DateTimeField)
     """ Value must have at least these property values.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    patternTiming = Column(Timing)
+    
+    patternTiming = Column(primitives.StringField, ForeignKey('Timing.id'))
     """ Value must have at least these property values.
         Type `Timing` (represented as `dict` in JSON). """
-
-    patternUnsignedInt = Column(Integer)
+    
+    patternUnsignedInt = Column(primitives.IntegerField)
     """ Value must have at least these property values.
         Type `int`. """
-
+    
     patternUri = Column(primitives.StringField)
     """ Value must have at least these property values.
         Type `str`. """
-
+    
     representation = Column(primitives.StringField)
     """ How this element is represented in instances.
         List of `str` items. """
-
+    
     requirements = Column(primitives.StringField)
     """ Why is this needed?.
         Type `str`. """
-
+    
     short = Column(primitives.StringField)
     """ Concise definition for xml presentation.
         Type `str`. """
-
-    slicing = Column(ElementDefinitionSlicing)
+    
+    slicing = Column(primitives.StringField,
+                     ForeignKey('ElementDefinitionSlicing.id'))
     """ This element is sliced - slices follow.
         Type `ElementDefinitionSlicing` (represented as `dict` in JSON). """
-
-    type = Column(ElementDefinitionType)
+    
+    type = Column(primitives.StringField,
+                  ForeignKey('ElementDefinitionType.id'))
     """ Data type and Profile for this element.
         List of `ElementDefinitionType` items (represented as `dict` in JSON). """
 
-    def __init__(self, alias, base, binding, code, comments, condition, constraint, defaultValueAddress, defaultValueAnnotation, defaultValueAttachment, defaultValueBase64Binary, defaultValueBoolean, defaultValueCode, defaultValueCodeableConcept, defaultValueCoding, defaultValueContactPoint, defaultValueDate, defaultValueDateTime, defaultValueDecimal, defaultValueHumanName, defaultValueId, defaultValueIdentifier, defaultValueInstant, defaultValueInteger, defaultValueMarkdown, defaultValueMeta, defaultValueOid, defaultValuePeriod, defaultValuePositiveInt, defaultValueQuantity, defaultValueRange, defaultValueRatio, defaultValueReference, defaultValueSampledData, defaultValueSignature, defaultValueString, defaultValueTime, defaultValueTiming, defaultValueUnsignedInt, defaultValueUri, definition, exampleAddress, exampleAnnotation, exampleAttachment, exampleBase64Binary, exampleBoolean, exampleCode, exampleCodeableConcept, exampleCoding, exampleContactPoint, exampleDate, exampleDateTime, exampleDecimal, exampleHumanName, exampleId, exampleIdentifier, exampleInstant, exampleInteger, exampleMarkdown, exampleMeta, exampleOid, examplePeriod, examplePositiveInt, exampleQuantity, exampleRange, exampleRatio, exampleReference, exampleSampledData, exampleSignature, exampleString, exampleTime, exampleTiming, exampleUnsignedInt, exampleUri, fixedAddress, fixedAnnotation, fixedAttachment, fixedBase64Binary, fixedBoolean, fixedCode, fixedCodeableConcept, fixedCoding, fixedContactPoint, fixedDate, fixedDateTime, fixedDecimal, fixedHumanName, fixedId, fixedIdentifier, fixedInstant, fixedInteger, fixedMarkdown, fixedMeta, fixedOid, fixedPeriod, fixedPositiveInt, fixedQuantity, fixedRange, fixedRatio, fixedReference, fixedSampledData, fixedSignature, fixedString, fixedTime, fixedTiming, fixedUnsignedInt, fixedUri, isModifier, isSummary, label, mapping, max, maxLength, maxValueAddress, maxValueAnnotation, maxValueAttachment, maxValueBase64Binary, maxValueBoolean, maxValueCode, maxValueCodeableConcept, maxValueCoding, maxValueContactPoint, maxValueDate, maxValueDateTime, maxValueDecimal, maxValueHumanName, maxValueId, maxValueIdentifier, maxValueInstant, maxValueInteger, maxValueMarkdown, maxValueMeta, maxValueOid, maxValuePeriod, maxValuePositiveInt, maxValueQuantity, maxValueRange, maxValueRatio, maxValueReference, maxValueSampledData, maxValueSignature, maxValueString, maxValueTime, maxValueTiming, maxValueUnsignedInt, maxValueUri, meaningWhenMissing, min, minValueAddress, minValueAnnotation, minValueAttachment, minValueBase64Binary, minValueBoolean, minValueCode, minValueCodeableConcept, minValueCoding, minValueContactPoint, minValueDate, minValueDateTime, minValueDecimal, minValueHumanName, minValueId, minValueIdentifier, minValueInstant, minValueInteger, minValueMarkdown, minValueMeta, minValueOid, minValuePeriod, minValuePositiveInt, minValueQuantity, minValueRange, minValueRatio, minValueReference, minValueSampledData, minValueSignature, minValueString, minValueTime, minValueTiming, minValueUnsignedInt, minValueUri, mustSupport, name, nameReference, path, patternAddress, patternAnnotation, patternAttachment, patternBase64Binary, patternBoolean, patternCode, patternCodeableConcept, patternCoding, patternContactPoint, patternDate, patternDateTime, patternDecimal, patternHumanName, patternId, patternIdentifier, patternInstant, patternInteger, patternMarkdown, patternMeta, patternOid, patternPeriod, patternPositiveInt, patternQuantity, patternRange, patternRatio, patternReference, patternSampledData, patternSignature, patternString, patternTime, patternTiming, patternUnsignedInt, patternUri, representation, requirements, short, slicing, type,):
+    def __init__(self, alias, base, binding, code, comments, condition,
+                 constraint, defaultValueAddress, defaultValueAnnotation,
+                 defaultValueAttachment, defaultValueBase64Binary, defaultValueBoolean,
+                 defaultValueCode, defaultValueCodeableConcept, defaultValueCoding,
+                 defaultValueContactPoint, defaultValueDate, defaultValueDateTime,
+                 defaultValueDecimal, defaultValueHumanName, defaultValueId,
+                 defaultValueIdentifier, defaultValueInstant, defaultValueInteger,
+                 defaultValueMarkdown, defaultValueMeta, defaultValueOid,
+                 defaultValuePeriod, defaultValuePositiveInt, defaultValueQuantity,
+                 defaultValueRange, defaultValueRatio, defaultValueReference,
+                 defaultValueSampledData, defaultValueSignature, defaultValueString,
+                 defaultValueTime, defaultValueTiming, defaultValueUnsignedInt,
+                 defaultValueUri, definition, exampleAddress, exampleAnnotation,
+                 exampleAttachment, exampleBase64Binary, exampleBoolean, exampleCode,
+                 exampleCodeableConcept, exampleCoding, exampleContactPoint,
+                 exampleDate, exampleDateTime, exampleDecimal, exampleHumanName,
+                 exampleId, exampleIdentifier, exampleInstant, exampleInteger,
+                 exampleMarkdown, exampleMeta, exampleOid, examplePeriod,
+                 examplePositiveInt, exampleQuantity, exampleRange, exampleRatio,
+                 exampleReference, exampleSampledData, exampleSignature, exampleString,
+                 exampleTime, exampleTiming, exampleUnsignedInt, exampleUri,
+                 fixedAddress, fixedAnnotation, fixedAttachment, fixedBase64Binary,
+                 fixedBoolean, fixedCode, fixedCodeableConcept, fixedCoding,
+                 fixedContactPoint, fixedDate, fixedDateTime, fixedDecimal,
+                 fixedHumanName, fixedId, fixedIdentifier, fixedInstant, fixedInteger,
+                 fixedMarkdown, fixedMeta, fixedOid, fixedPeriod, fixedPositiveInt,
+                 fixedQuantity, fixedRange, fixedRatio, fixedReference, fixedSampledData,
+                 fixedSignature, fixedString, fixedTime, fixedTiming, fixedUnsignedInt,
+                 fixedUri, isModifier, isSummary, label, mapping, max, maxLength,
+                 maxValueAddress, maxValueAnnotation, maxValueAttachment,
+                 maxValueBase64Binary, maxValueBoolean, maxValueCode,
+                 maxValueCodeableConcept, maxValueCoding, maxValueContactPoint,
+                 maxValueDate, maxValueDateTime, maxValueDecimal, maxValueHumanName,
+                 maxValueId, maxValueIdentifier, maxValueInstant, maxValueInteger,
+                 maxValueMarkdown, maxValueMeta, maxValueOid, maxValuePeriod,
+                 maxValuePositiveInt, maxValueQuantity, maxValueRange, maxValueRatio,
+                 maxValueReference, maxValueSampledData, maxValueSignature,
+                 maxValueString, maxValueTime, maxValueTiming, maxValueUnsignedInt,
+                 maxValueUri, meaningWhenMissing, min, minValueAddress,
+                 minValueAnnotation, minValueAttachment, minValueBase64Binary,
+                 minValueBoolean, minValueCode, minValueCodeableConcept,
+                 minValueCoding, minValueContactPoint, minValueDate,
+                 minValueDateTime, minValueDecimal, minValueHumanName,
+                 minValueId, minValueIdentifier, minValueInstant, minValueInteger,
+                 minValueMarkdown, minValueMeta, minValueOid, minValuePeriod,
+                 minValuePositiveInt, minValueQuantity, minValueRange, minValueRatio,
+                 minValueReference, minValueSampledData, minValueSignature, minValueString,
+                 minValueTime, minValueTiming, minValueUnsignedInt, minValueUri, mustSupport,
+                 name, nameReference, path, patternAddress, patternAnnotation,
+                 patternAttachment, patternBase64Binary, patternBoolean,
+                 patternCode, patternCodeableConcept, patternCoding, patternContactPoint,
+                 patternDate, patternDateTime, patternDecimal, patternHumanName, patternId,
+                 patternIdentifier, patternInstant, patternInteger, patternMarkdown,
+                 patternMeta, patternOid, patternPeriod, patternPositiveInt, patternQuantity,
+                 patternRange, patternRatio, patternReference, patternSampledData,
+                 patternSignature, patternString, patternTime, patternTiming,
+                 patternUnsignedInt, patternUri, representation, requirements,
+                 short, slicing, type,):
         """ Initialize all valid properties.
         """
         self.alias = alias
@@ -1138,249 +1447,3 @@ class ElementDefinition(element.Element):
 
     def __repr__(self):
         return '<ElementDefinition %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class ElementDefinitionBase(element.Element):
-    """ Base definition information for tools.
-
-    Information about the base definition of the element, provided to make it
-    unncessary for tools to trace the deviation of the element through the
-    derived and related profiles. This information is only provided where the
-    element definition represents a constraint on another element definition,
-    and must be present if there is a base element definition.
-    """
-
-    __tablename__ = "ElementDefinitionBase"
-
-    max = Column(primitives.StringField)
-    """ Max cardinality of the base element.
-        Type `str`. """
-
-    min = Column(Integer)
-    """ Min cardinality of the base element.
-        Type `int`. """
-
-    path = Column(primitives.StringField)
-    """ Path that identifies the base element.
-        Type `str`. """
-
-    def __init__(self, max, min, path,):
-        """ Initialize all valid properties.
-        """
-        self.max = max
-        self.min = min
-        self.path = path
-
-    def __repr__(self):
-        return '<ElementDefinitionBase %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class ElementDefinitionBinding(element.Element):
-    """ ValueSet details if this is coded.
-
-    Binds to a value set if this element is coded (code, Coding,
-    CodeableConcept).
-    """
-
-    __tablename__ = "ElementDefinitionBinding"
-
-    description = Column(primitives.StringField)
-    """ Human explanation of the value set.
-        Type `str`. """
-
-    strength = Column(primitives.StringField)
-    """ required | extensible | preferred | example.
-        Type `str`. """
-
-    valueSetReference = Column(FHIRReference)
-    """ Source of value set.
-        Type `FHIRReference` referencing `ValueSet` (represented as `dict` in JSON). """
-
-    valueSetUri = Column(primitives.StringField)
-    """ Source of value set.
-        Type `str`. """
-
-    def __init__(self, description, strength, valueSetReference, valueSetUri,):
-        """ Initialize all valid properties.
-        """
-        self.description = description
-        self.strength = strength
-        self.valueSetReference = valueSetReference
-        self.valueSetUri = valueSetUri
-
-    def __repr__(self):
-        return '<ElementDefinitionBinding %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class ElementDefinitionConstraint(element.Element):
-    """ Condition that must evaluate to true.
-
-    Formal constraints such as co-occurrence and other constraints that can be
-    computationally evaluated within the context of the instance.
-    """
-
-    __tablename__ = "ElementDefinitionConstraint"
-
-    human = Column(primitives.StringField)
-    """ Human description of constraint.
-        Type `str`. """
-
-    key = Column(primitives.StringField)
-    """ Target of 'condition' reference above.
-        Type `str`. """
-
-    requirements = Column(primitives.StringField)
-    """ Why this constraint necessary or appropriate.
-        Type `str`. """
-
-    severity = Column(primitives.StringField)
-    """ error | warning.
-        Type `str`. """
-
-    xpath = Column(primitives.StringField)
-    """ XPath expression of constraint.
-        Type `str`. """
-
-    def __init__(self, human, key, requirements, severity, xpath,):
-        """ Initialize all valid properties.
-        """
-        self.human = human
-        self.key = key
-        self.requirements = requirements
-        self.severity = severity
-        self.xpath = xpath
-
-    def __repr__(self):
-        return '<ElementDefinitionConstraint %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class ElementDefinitionMapping(element.Element):
-    """ Map element to another set of definitions.
-
-    Identifies a concept from an external specification that roughly
-    corresponds to this element.
-    """
-
-    __tablename__ = "ElementDefinitionMapping"
-
-    identity = Column(primitives.StringField)
-    """ Reference to mapping declaration.
-        Type `str`. """
-
-    language = Column(primitives.StringField)
-    """ Computable language of mapping.
-        Type `str`. """
-
-    map = Column(primitives.StringField)
-    """ Details of the mapping.
-        Type `str`. """
-
-    def __init__(self, identity, language, map,):
-        """ Initialize all valid properties.
-        """
-        self.identity = identity
-        self.language = language
-        self.map = map
-
-    def __repr__(self):
-        return '<ElementDefinitionMapping %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class ElementDefinitionSlicing(element.Element):
-    """ This element is sliced - slices follow.
-
-    Indicates that the element is sliced into a set of alternative definitions
-    (i.e. in a structure definition, there are multiple different constraints
-    on a single element in the base resource). Slicing can be used in any
-    resource that has cardinality ..* on the base resource, or any resource
-    with a choice of types. The set of slices is any elements that come after
-    this in the element sequence that have the same path, until a shorter path
-    occurs (the shorter path terminates the set).
-    """
-
-    __tablename__ = "ElementDefinitionSlicing"
-
-    description = Column(primitives.StringField)
-    """ Text description of how slicing works (or not).
-        Type `str`. """
-
-    discriminator = Column(primitives.StringField)
-    """ Element values that used to distinguish the slices.
-        List of `str` items. """
-
-    ordered = Column(bool)
-    """ If elements must be in same order as slices.
-        Type `bool`. """
-
-    rules = Column(primitives.StringField)
-    """ closed | open | openAtEnd.
-        Type `str`. """
-
-    def __init__(self, description, discriminator, ordered, rules,):
-        """ Initialize all valid properties.
-        """
-        self.description = description
-        self.discriminator = discriminator
-        self.ordered = ordered
-        self.rules = rules
-
-    def __repr__(self):
-        return '<ElementDefinitionSlicing %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-class ElementDefinitionType(element.Element):
-    """ Data type and Profile for this element.
-
-    The data type or resource that the value of this element is permitted to
-    be.
-    """
-
-    __tablename__ = "ElementDefinitionType"
-
-    aggregation = Column(primitives.StringField)
-    """ contained | referenced | bundled - how aggregated.
-        List of `str` items. """
-
-    code = Column(primitives.StringField)
-    """ Name of Data type or Resource.
-        Type `str`. """
-
-    profile = Column(primitives.StringField)
-    """ Profile (StructureDefinition) to apply (or IG).
-        List of `str` items. """
-
-    def __init__(self, aggregation, code, profile,):
-        """ Initialize all valid properties.
-        """
-        self.aggregation = aggregation
-        self.code = code
-        self.profile = profile
-
-    def __repr__(self):
-        return '<ElementDefinitionType %r>' % 'self.property'  # replace self.property
-
-
-from . import address
-from . import annotation
-from . import attachment
-from . import codeableconcept
-from . import coding
-from . import contactpoint
-from . import fhirdate
-from . import fhirreference
-from . import humanname
-from . import identifier
-from . import meta
-from . import period
-from . import quantity
-from . import range
-from . import ratio
-from . import sampleddata
-from . import signature
-from . import timing

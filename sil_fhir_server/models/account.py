@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Account)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Account)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sil_fhir_server.data_types import primitives
 from . import domainresource
+
 
 class Account(domainresource.DomainResource):
     """ None.
@@ -18,52 +19,66 @@ class Account(domainresource.DomainResource):
     """
 
     __tablename__ = "Account"
-
-    activePeriod = Column(Period)
+    
+    activePeriod = Column(primitives.StringField,
+                          ForeignKey('Period.id'))
     """ Valid from..to.
         Type `Period` (represented as `dict` in JSON). """
-
-    balance = Column(Quantity)
+    
+    balance = Column(primitives.StringField,
+                     ForeignKey('Quantity.id'))
     """ How much is in account?.
-        Type `Quantity` referencing `Money` (represented as `dict` in JSON). """
-
-    coveragePeriod = Column(Period)
+        Type `Quantity` referencing `Money` (represented as `dict`
+        in JSON). """
+    
+    coveragePeriod = Column(primitives.StringField,
+                            ForeignKey('Period.id'))
     """ Transaction window.
         Type `Period` (represented as `dict` in JSON). """
-
-    currency = Column(Coding)
+    
+    currency = Column(primitives.StringField,
+                      ForeignKey('Coding.id'))
     """ Base currency in which balance is tracked.
         Type `Coding` (represented as `dict` in JSON). """
-
+    
     description = Column(primitives.StringField)
     """ Explanation of purpose/use.
         Type `str`. """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Account number.
-        List of `Identifier` items (represented as `dict` in JSON). """
-
+        List of `Identifier` items (represented as `dict` in JSON).
+        """
+    
     name = Column(primitives.StringField)
     """ Human-readable label.
         Type `str`. """
 
-    owner = Column(FHIRReference)
+    # TODO add owner field
+    # owner = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Who is responsible?.
-        Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
+        Type `FHIRReference` referencing `Organization` (represented
+        as `dict` in JSON). """
+    
     status = Column(primitives.StringField)
     """ active | inactive.
         Type `str`. """
-
-    subject = Column(FHIRReference)
+    
+    # subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ What is account tied to?.
-        Type `FHIRReference` referencing `Patient, Device, Practitioner, Location, HealthcareService, Organization` (represented as `dict` in JSON). """
-
-    type = Column(CodeableConcept)
+        Type `FHIRReference` referencing `Patient, Device,
+        Practitioner, Location, HealthcareService, Organization`
+        (represented as `dict` in JSON). """
+    
+    type = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
     """ E.g. patient, expense, depreciation.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
-    def __init__(self, activePeriod, balance, coveragePeriod, currency, description, identifier, name, owner, status, subject, type,):
+    def __init__(self, activePeriod, balance, coveragePeriod,
+                 currency, description, identifier, name, owner,
+                 status, subject, type):
         """ Initialize all valid properties.
         """
         self.activePeriod = activePeriod
@@ -80,11 +95,3 @@ class Account(domainresource.DomainResource):
 
     def __repr__(self):
         return '<Account %r>' % 'self.property'  # replace self.property
-
-
-from . import codeableconcept
-from . import coding
-from . import fhirreference
-from . import identifier
-from . import period
-from . import quantity

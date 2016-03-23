@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class QuestionnaireResponse(domainresource.DomainResource):
@@ -17,40 +18,40 @@ class QuestionnaireResponse(domainresource.DomainResource):
     """
 
     __tablename__ = "QuestionnaireResponse"
-
-    author = Column(FHIRReference)
+    
+    author = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Person who received and recorded the answers.
         Type `FHIRReference` referencing `Device, Practitioner, Patient, RelatedPerson` (represented as `dict` in JSON). """
-
-    authored = Column(FHIRDate)
+    
+    authored = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Date this version was authored.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    encounter = Column(FHIRReference)
+    
+    encounter = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Primary encounter during which the answers were collected.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
-
-    group = Column(QuestionnaireResponseGroup)
+    
+    group = Column(primitives.StringField, ForeignKey('QuestionnaireResponseGroup.id'))
     """ Grouped questions.
         Type `QuestionnaireResponseGroup` (represented as `dict` in JSON). """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ Unique id for this set of answers.
         Type `Identifier` (represented as `dict` in JSON). """
-
-    questionnaire = Column(FHIRReference)
+    
+    questionnaire = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Form being answered.
         Type `FHIRReference` referencing `Questionnaire` (represented as `dict` in JSON). """
-
-    source = Column(FHIRReference)
+    
+    source = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ The person who answered the questions.
         Type `FHIRReference` referencing `Patient, Practitioner, RelatedPerson` (represented as `dict` in JSON). """
-
+    
     status = Column(primitives.StringField)
     """ in-progress | completed | amended.
         Type `str`. """
-
-    subject = Column(FHIRReference)
+    
+    subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ The subject of the questions.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
@@ -71,7 +72,8 @@ class QuestionnaireResponse(domainresource.DomainResource):
         return '<QuestionnaireResponse %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import backboneelement
 
 class QuestionnaireResponseGroup(backboneelement.BackboneElement):
@@ -82,27 +84,27 @@ class QuestionnaireResponseGroup(backboneelement.BackboneElement):
     """
 
     __tablename__ = "QuestionnaireResponseGroup"
-
-    group = Column(QuestionnaireResponseGroup)
+    
+    group = Column(primitives.StringField, ForeignKey('QuestionnaireResponseGroup.id'))
     """ Nested questionnaire response group.
         List of `QuestionnaireResponseGroup` items (represented as `dict` in JSON). """
-
+    
     linkId = Column(primitives.StringField)
     """ Corresponding group within Questionnaire.
         Type `str`. """
-
-    question = Column(QuestionnaireResponseGroupQuestion)
+    
+    question = Column(primitives.StringField, ForeignKey('QuestionnaireResponseGroupQuestion.id'))
     """ Questions in this group.
         List of `QuestionnaireResponseGroupQuestion` items (represented as `dict` in JSON). """
-
-    subject = Column(FHIRReference)
+    
+    subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ The subject this group's answers are about.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
+    
     text = Column(primitives.StringField)
     """ Additional text for the group.
         Type `str`. """
-
+    
     title = Column(primitives.StringField)
     """ Name for this group.
         Type `str`. """
@@ -121,7 +123,8 @@ class QuestionnaireResponseGroup(backboneelement.BackboneElement):
         return '<QuestionnaireResponseGroup %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class QuestionnaireResponseGroupQuestion(backboneelement.BackboneElement):
     """ Questions in this group.
 
@@ -130,15 +133,15 @@ class QuestionnaireResponseGroupQuestion(backboneelement.BackboneElement):
     """
 
     __tablename__ = "QuestionnaireResponseGroupQuestion"
-
-    answer = Column(QuestionnaireResponseGroupQuestionAnswer)
+    
+    answer = Column(primitives.StringField, ForeignKey('QuestionnaireResponseGroupQuestionAnswer.id'))
     """ The response(s) to the question.
         List of `QuestionnaireResponseGroupQuestionAnswer` items (represented as `dict` in JSON). """
-
+    
     linkId = Column(primitives.StringField)
     """ Corresponding question within Questionnaire.
         Type `str`. """
-
+    
     text = Column(primitives.StringField)
     """ Text of the question as it is shown to the user.
         Type `str`. """
@@ -154,7 +157,8 @@ class QuestionnaireResponseGroupQuestion(backboneelement.BackboneElement):
         return '<QuestionnaireResponseGroupQuestion %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class QuestionnaireResponseGroupQuestionAnswer(backboneelement.BackboneElement):
     """ The response(s) to the question.
 
@@ -162,59 +166,59 @@ class QuestionnaireResponseGroupQuestionAnswer(backboneelement.BackboneElement):
     """
 
     __tablename__ = "QuestionnaireResponseGroupQuestionAnswer"
-
-    group = Column(QuestionnaireResponseGroup)
+    
+    group = Column(primitives.StringField, ForeignKey('QuestionnaireResponseGroup.id'))
     """ Nested questionnaire group.
         List of `QuestionnaireResponseGroup` items (represented as `dict` in JSON). """
-
-    valueAttachment = Column(Attachment)
+    
+    valueAttachment = Column(primitives.StringField, ForeignKey('Attachment.id'))
     """ Single-valued answer to the question.
         Type `Attachment` (represented as `dict` in JSON). """
-
-    valueBoolean = Column(bool)
+    
+    valueBoolean = Column(primitives.BooleanField)
     """ Single-valued answer to the question.
         Type `bool`. """
-
-    valueCoding = Column(Coding)
+    
+    valueCoding = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ Single-valued answer to the question.
         Type `Coding` (represented as `dict` in JSON). """
-
-    valueDate = Column(FHIRDate)
+    
+    valueDate = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Single-valued answer to the question.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    valueDateTime = Column(FHIRDate)
+    
+    valueDateTime = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Single-valued answer to the question.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    valueDecimal = Column(float)
+    
+    valueDecimal = Column(primitives.DecimalField)
     """ Single-valued answer to the question.
         Type `float`. """
-
-    valueInstant = Column(FHIRDate)
+    
+    valueInstant = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Single-valued answer to the question.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    valueInteger = Column(Integer)
+    
+    valueInteger = Column(primitives.IntegerField)
     """ Single-valued answer to the question.
         Type `int`. """
-
-    valueQuantity = Column(Quantity)
+    
+    valueQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Single-valued answer to the question.
         Type `Quantity` (represented as `dict` in JSON). """
-
-    valueReference = Column(FHIRReference)
+    
+    valueReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Single-valued answer to the question.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
+    
     valueString = Column(primitives.StringField)
     """ Single-valued answer to the question.
         Type `str`. """
-
-    valueTime = Column(FHIRDate)
+    
+    valueTime = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Single-valued answer to the question.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     valueUri = Column(primitives.StringField)
     """ Single-valued answer to the question.
         Type `str`. """
@@ -239,11 +243,3 @@ class QuestionnaireResponseGroupQuestionAnswer(backboneelement.BackboneElement):
 
     def __repr__(self):
         return '<QuestionnaireResponseGroupQuestionAnswer %r>' % 'self.property'  # replace self.property
-
-
-from . import attachment
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import quantity

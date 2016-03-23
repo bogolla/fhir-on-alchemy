@@ -1,53 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/AuditEvent)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/AuditEvent)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, ForeignKey
 from sil_fhir_server.data_types import primitives
 from . import domainresource
-
-class AuditEvent(domainresource.DomainResource):
-    """ Event record kept for security purposes.
-
-    A record of an event made for purposes of maintaining a security log.
-    Typical uses include detection of intrusion attempts and monitoring for
-    inappropriate usage.
-    """
-
-    __tablename__ = "AuditEvent"
-
-    event = Column(AuditEventEvent)
-    """ What was done.
-        Type `AuditEventEvent` (represented as `dict` in JSON). """
-
-    object = Column(AuditEventObject)
-    """ Specific instances of data or objects that have been accessed.
-        List of `AuditEventObject` items (represented as `dict` in JSON). """
-
-    participant = Column(AuditEventParticipant)
-    """ A person, a hardware device or software process.
-        List of `AuditEventParticipant` items (represented as `dict` in JSON). """
-
-    source = Column(AuditEventSource)
-    """ Application systems and processes.
-        Type `AuditEventSource` (represented as `dict` in JSON). """
-
-    def __init__(self, event, object, participant, source,):
-        """ Initialize all valid properties.
-        """
-        self.event = event
-        self.object = object
-        self.participant = participant
-        self.source = source
-
-    def __repr__(self):
-        return '<AuditEvent %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class AuditEventEvent(backboneelement.BackboneElement):
@@ -63,7 +23,7 @@ class AuditEventEvent(backboneelement.BackboneElement):
     """ Type of action performed during the event.
         Type `str`. """
 
-    dateTime = Column(FHIRDate)
+    dateTime = Column(primitives.DateTimeField)
     """ Time when the event occurred on source.
         Type `FHIRDate` (represented as `str` in JSON). """
 
@@ -75,19 +35,23 @@ class AuditEventEvent(backboneelement.BackboneElement):
     """ Description of the event outcome.
         Type `str`. """
 
-    purposeOfEvent = Column(Coding)
+    purposeOfEvent = Column(primitives.StringField,
+                            ForeignKey('Coding.id'))
     """ The purposeOfUse of the event.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    subtype = Column(Coding)
+    subtype = Column(primitives.StringField,
+                     ForeignKey('Coding.id'))
     """ More specific type/id for the event.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    type = Column(Coding)
+    type = Column(primitives.StringField,
+                  ForeignKey('Coding.id'))
     """ Type/identifier of event.
         Type `Coding` (represented as `dict` in JSON). """
 
-    def __init__(self, action, dateTime, outcome, outcomeDesc, purposeOfEvent, subtype, type,):
+    def __init__(self, action, dateTime, outcome, outcomeDesc,
+                 purposeOfEvent, subtype, type):
         """ Initialize all valid properties.
         """
         self.action = action
@@ -102,72 +66,6 @@ class AuditEventEvent(backboneelement.BackboneElement):
         return '<AuditEventEvent %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
-class AuditEventObject(backboneelement.BackboneElement):
-    """ Specific instances of data or objects that have been accessed.
-    """
-
-    __tablename__ = "AuditEventObject"
-
-    description = Column(primitives.StringField)
-    """ Descriptive text.
-        Type `str`. """
-
-    detail = Column(AuditEventObjectDetail)
-    """ Additional Information about the Object.
-        List of `AuditEventObjectDetail` items (represented as `dict` in JSON). """
-
-    identifier = Column(Identifier)
-    """ Specific instance of object (e.g. versioned).
-        Type `Identifier` (represented as `dict` in JSON). """
-
-    lifecycle = Column(Coding)
-    """ Life-cycle stage for the object.
-        Type `Coding` (represented as `dict` in JSON). """
-
-    name = Column(primitives.StringField)
-    """ Instance-specific descriptor for Object.
-        Type `str`. """
-
-    query = Column(primitives.StringField)
-    """ Actual query for object.
-        Type `str`. """
-
-    reference = Column(FHIRReference)
-    """ Specific instance of resource (e.g. versioned).
-        Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    role = Column(Coding)
-    """ What role the Object played.
-        Type `Coding` (represented as `dict` in JSON). """
-
-    securityLabel = Column(Coding)
-    """ Security labels applied to the object.
-        List of `Coding` items (represented as `dict` in JSON). """
-
-    type = Column(Coding)
-    """ Type of object involved.
-        Type `Coding` (represented as `dict` in JSON). """
-
-    def __init__(self, description, detail, identifier, lifecycle, name, query, reference, role, securityLabel, type,):
-        """ Initialize all valid properties.
-        """
-        self.description = description
-        self.detail = detail
-        self.identifier = identifier
-        self.lifecycle = lifecycle
-        self.name = name
-        self.query = query
-        self.reference = reference
-        self.role = role
-        self.securityLabel = securityLabel
-        self.type = type
-
-    def __repr__(self):
-        return '<AuditEventObject %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
 class AuditEventObjectDetail(backboneelement.BackboneElement):
     """ Additional Information about the Object.
     """
@@ -192,77 +90,76 @@ class AuditEventObjectDetail(backboneelement.BackboneElement):
         return '<AuditEventObjectDetail %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
-class AuditEventParticipant(backboneelement.BackboneElement):
-    """ A person, a hardware device or software process.
+class AuditEventObject(backboneelement.BackboneElement):
+    """ Specific instances of data or objects that have been accessed.
     """
 
-    __tablename__ = "AuditEventParticipant"
+    __tablename__ = "AuditEventObject"
 
-    altId = Column(primitives.StringField)
-    """ Alternative User id e.g. authentication.
+    description = Column(primitives.StringField)
+    """ Descriptive text.
         Type `str`. """
 
-    location = Column(FHIRReference)
-    """ Where.
-        Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
+    detail = Column(primitives.StringField,
+                    ForeignKey('AuditEventObjectDetail.id'))
+    """ Additional Information about the Object.
+        List of `AuditEventObjectDetail` items (represented as `dict` in JSON). """
 
-    media = Column(Coding)
-    """ Type of media.
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
+    """ Specific instance of object (e.g. versioned).
+        Type `Identifier` (represented as `dict` in JSON). """
+
+    lifecycle = Column(primitives.StringField,
+                       ForeignKey('Coding.id'))
+    """ Life-cycle stage for the object.
         Type `Coding` (represented as `dict` in JSON). """
 
     name = Column(primitives.StringField)
-    """ Human-meaningful name for the user.
+    """ Instance-specific descriptor for Object.
         Type `str`. """
 
-    network = Column(AuditEventParticipantNetwork)
-    """ Logical network location for application activity.
-        Type `AuditEventParticipantNetwork` (represented as `dict` in JSON). """
+    query = Column(primitives.StringField)
+    """ Actual query for object.
+        Type `str`. """
 
-    policy = Column(primitives.StringField)
-    """ Policy that authorized event.
-        List of `str` items. """
+    # todo
+    # reference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    """ Specific instance of resource (e.g. versioned).
+        Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
 
-    purposeOfUse = Column(Coding)
-    """ Reason given for this user.
+    role = Column(primitives.StringField, ForeignKey('Coding.id'))
+    """ What role the Object played.
+        Type `Coding` (represented as `dict` in JSON). """
+
+    securityLabel = Column(primitives.StringField,
+                           ForeignKey('Coding.id'))
+    """ Security labels applied to the object.
         List of `Coding` items (represented as `dict` in JSON). """
 
-    reference = Column(FHIRReference)
-    """ Direct reference to resource.
-        Type `FHIRReference` referencing `Practitioner, Organization, Device, Patient, RelatedPerson` (represented as `dict` in JSON). """
+    type = Column(primitives.StringField, ForeignKey('Coding.id'))
+    """ Type of object involved.
+        Type `Coding` (represented as `dict` in JSON). """
 
-    requestor = Column(bool)
-    """ Whether user is initiator.
-        Type `bool`. """
-
-    role = Column(CodeableConcept)
-    """ User roles (e.g. local RBAC codes).
-        List of `CodeableConcept` items (represented as `dict` in JSON). """
-
-    userId = Column(Identifier)
-    """ Unique identifier for the user.
-        Type `Identifier` (represented as `dict` in JSON). """
-
-    def __init__(self, altId, location, media, name, network, policy, purposeOfUse, reference, requestor, role, userId,):
+    def __init__(self, description, detail, identifier, lifecycle,
+                 name, query, reference, role, securityLabel, type,):
         """ Initialize all valid properties.
         """
-        self.altId = altId
-        self.location = location
-        self.media = media
+        self.description = description
+        self.detail = detail
+        self.identifier = identifier
+        self.lifecycle = lifecycle
         self.name = name
-        self.network = network
-        self.policy = policy
-        self.purposeOfUse = purposeOfUse
+        self.query = query
         self.reference = reference
-        self.requestor = requestor
         self.role = role
-        self.userId = userId
+        self.securityLabel = securityLabel
+        self.type = type
 
     def __repr__(self):
-        return '<AuditEventParticipant %r>' % 'self.property'  # replace self.property
+        return '<AuditEventObject %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class AuditEventParticipantNetwork(backboneelement.BackboneElement):
     """ Logical network location for application activity.
 
@@ -290,14 +187,91 @@ class AuditEventParticipantNetwork(backboneelement.BackboneElement):
         return '<AuditEventParticipantNetwork %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+class AuditEventParticipant(backboneelement.BackboneElement):
+    """ A person, a hardware device or software process.
+    """
+
+    __tablename__ = "AuditEventParticipant"
+
+    altId = Column(primitives.StringField)
+    """ Alternative User id e.g. authentication.
+        Type `str`. """
+
+    # todo
+    # location = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    """ Where.
+        Type `FHIRReference` referencing `Location` (represented as `dict` in JSON). """
+
+    media = Column(primitives.StringField, ForeignKey('Coding.id'))
+    """ Type of media.
+        Type `Coding` (represented as `dict` in JSON). """
+
+    name = Column(primitives.StringField)
+    """ Human-meaningful name for the user.
+        Type `str`. """
+
+    network = Column(primitives.StringField,
+                     ForeignKey('AuditEventParticipantNetwork.id'))
+    """ Logical network location for application activity.
+        Type `AuditEventParticipantNetwork` (represented as `dict` in JSON). """
+
+    policy = Column(primitives.StringField)
+    """ Policy that authorized event.
+        List of `str` items. """
+
+    purposeOfUse = Column(primitives.StringField,
+                          ForeignKey('Coding.id'))
+    """ Reason given for this user.
+        List of `Coding` items (represented as `dict` in JSON). """
+
+    # todo
+    # reference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    """ Direct reference to resource.
+        Type `FHIRReference` referencing `Practitioner, Organization,
+        Device, Patient, RelatedPerson` (represented as `dict` in JSON). """
+
+    requestor = Column(primitives.BooleanField)
+    """ Whether user is initiator.
+        Type `bool`. """
+
+    role = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
+    """ User roles (e.g. local RBAC codes).
+        List of `CodeableConcept` items (represented as `dict` in JSON). """
+
+    userId = Column(primitives.StringField,
+                    ForeignKey('Identifier.id'))
+    """ Unique identifier for the user.
+        Type `Identifier` (represented as `dict` in JSON). """
+
+    def __init__(self, altId, location, media, name, network, policy,
+                 purposeOfUse, reference, requestor, role, userId,):
+        """ Initialize all valid properties.
+        """
+        self.altId = altId
+        self.location = location
+        self.media = media
+        self.name = name
+        self.network = network
+        self.policy = policy
+        self.purposeOfUse = purposeOfUse
+        self.reference = reference
+        self.requestor = requestor
+        self.role = role
+        self.userId = userId
+
+    def __repr__(self):
+        return '<AuditEventParticipant %r>' % 'self.property'  # replace self.property
+
+
 class AuditEventSource(backboneelement.BackboneElement):
     """ Application systems and processes.
     """
 
     __tablename__ = "AuditEventSource"
 
-    identifier = Column(Identifier)
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ The identity of source detecting the event.
         Type `Identifier` (represented as `dict` in JSON). """
 
@@ -305,7 +279,7 @@ class AuditEventSource(backboneelement.BackboneElement):
     """ Logical source location within the enterprise.
         Type `str`. """
 
-    type = Column(Coding)
+    type = Column(primitives.StringField, ForeignKey('Coding.id'))
     """ The type of source where event originated.
         List of `Coding` items (represented as `dict` in JSON). """
 
@@ -320,8 +294,43 @@ class AuditEventSource(backboneelement.BackboneElement):
         return '<AuditEventSource %r>' % 'self.property'  # replace self.property
 
 
-from . import codeableconcept
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier
+class AuditEvent(domainresource.DomainResource):
+    """ Event record kept for security purposes.
+
+    A record of an event made for purposes of maintaining a security log.
+    Typical uses include detection of intrusion attempts and monitoring for
+    inappropriate usage.
+    """
+
+    __tablename__ = "AuditEvent"
+    
+    event = Column(primitives.StringField,
+                   ForeignKey('AuditEventEvent.id'))
+    """ What was done.
+        Type `AuditEventEvent` (represented as `dict` in JSON). """
+    
+    object = Column(primitives.StringField,
+                    ForeignKey('AuditEventObject.id'))
+    """ Specific instances of data or objects that have been accessed.
+        List of `AuditEventObject` items (represented as `dict` in JSON). """
+    
+    participant = Column(primitives.StringField,
+                         ForeignKey('AuditEventParticipant.id'))
+    """ A person, a hardware device or software process.
+        List of `AuditEventParticipant` items (represented as `dict` in JSON). """
+    
+    source = Column(primitives.StringField,
+                    ForeignKey('AuditEventSource.id'))
+    """ Application systems and processes.
+        Type `AuditEventSource` (represented as `dict` in JSON). """
+
+    def __init__(self, event, object, participant, source,):
+        """ Initialize all valid properties.
+        """
+        self.event = event
+        self.object = object
+        self.participant = participant
+        self.source = source
+
+    def __repr__(self):
+        return '<AuditEvent %r>' % 'self.property'  # replace self.property

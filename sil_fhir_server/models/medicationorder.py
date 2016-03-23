@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/MedicationOrder)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/MedicationOrder)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class MedicationOrder(domainresource.DomainResource):
@@ -19,72 +20,72 @@ class MedicationOrder(domainresource.DomainResource):
     """
 
     __tablename__ = "MedicationOrder"
-
-    dateEnded = Column(FHIRDate)
+    
+    dateEnded = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ When prescription was stopped.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    dateWritten = Column(FHIRDate)
+    
+    dateWritten = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ When prescription was authorized.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    dispenseRequest = Column(MedicationOrderDispenseRequest)
+    
+    dispenseRequest = Column(primitives.StringField, ForeignKey('MedicationOrderDispenseRequest.id'))
     """ Medication supply authorization.
         Type `MedicationOrderDispenseRequest` (represented as `dict` in JSON). """
-
-    dosageInstruction = Column(MedicationOrderDosageInstruction)
+    
+    dosageInstruction = Column(primitives.StringField, ForeignKey('MedicationOrderDosageInstruction.id'))
     """ How medication should be taken.
         List of `MedicationOrderDosageInstruction` items (represented as `dict` in JSON). """
-
-    encounter = Column(FHIRReference)
+    
+    encounter = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Created during encounter/admission/stay.
         Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
     """ External identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    medicationCodeableConcept = Column(CodeableConcept)
+    
+    medicationCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Medication to be taken.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    medicationReference = Column(FHIRReference)
+    
+    medicationReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Medication to be taken.
         Type `FHIRReference` referencing `Medication` (represented as `dict` in JSON). """
-
+    
     note = Column(primitives.StringField)
     """ Information about the prescription.
         Type `str`. """
-
-    patient = Column(FHIRReference)
+    
+    patient = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Who prescription is for.
         Type `FHIRReference` referencing `Patient` (represented as `dict` in JSON). """
-
-    prescriber = Column(FHIRReference)
+    
+    prescriber = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Who ordered the medication(s).
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    priorPrescription = Column(FHIRReference)
+    
+    priorPrescription = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ An order/prescription that this supersedes.
         Type `FHIRReference` referencing `MedicationOrder` (represented as `dict` in JSON). """
-
-    reasonCodeableConcept = Column(CodeableConcept)
+    
+    reasonCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Reason or indication for writing the prescription.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    reasonEnded = Column(CodeableConcept)
+    
+    reasonEnded = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Why prescription was stopped.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    reasonReference = Column(FHIRReference)
+    
+    reasonReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Reason or indication for writing the prescription.
         Type `FHIRReference` referencing `Condition` (represented as `dict` in JSON). """
-
+    
     status = Column(primitives.StringField)
     """ active | on-hold | completed | entered-in-error | stopped | draft.
         Type `str`. """
-
-    substitution = Column(MedicationOrderSubstitution)
+    
+    substitution = Column(primitives.StringField, ForeignKey('MedicationOrderSubstitution.id'))
     """ Any restrictions on medication substitution.
         Type `MedicationOrderSubstitution` (represented as `dict` in JSON). """
 
@@ -113,7 +114,8 @@ class MedicationOrder(domainresource.DomainResource):
         return '<MedicationOrder %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import backboneelement
 
 class MedicationOrderDispenseRequest(backboneelement.BackboneElement):
@@ -127,28 +129,28 @@ class MedicationOrderDispenseRequest(backboneelement.BackboneElement):
     """
 
     __tablename__ = "MedicationOrderDispenseRequest"
-
-    expectedSupplyDuration = Column(Quantity)
+    
+    expectedSupplyDuration = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Number of days supply per dispense.
         Type `Quantity` referencing `Duration` (represented as `dict` in JSON). """
-
-    medicationCodeableConcept = Column(CodeableConcept)
+    
+    medicationCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Product to be supplied.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    medicationReference = Column(FHIRReference)
+    
+    medicationReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Product to be supplied.
         Type `FHIRReference` referencing `Medication` (represented as `dict` in JSON). """
-
-    numberOfRepeatsAllowed = Column(Integer)
+    
+    numberOfRepeatsAllowed = Column(primitives.IntegerField)
     """ Number of refills authorized.
         Type `int`. """
-
-    quantity = Column(Quantity)
+    
+    quantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Amount of medication to supply per dispense.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
-
-    validityPeriod = Column(Period)
+    
+    validityPeriod = Column(primitives.StringField, ForeignKey('Period.id'))
     """ Time period supply is authorized for.
         Type `Period` (represented as `dict` in JSON). """
 
@@ -166,7 +168,8 @@ class MedicationOrderDispenseRequest(backboneelement.BackboneElement):
         return '<MedicationOrderDispenseRequest %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class MedicationOrderDosageInstruction(backboneelement.BackboneElement):
     """ How medication should be taken.
 
@@ -174,60 +177,60 @@ class MedicationOrderDosageInstruction(backboneelement.BackboneElement):
     """
 
     __tablename__ = "MedicationOrderDosageInstruction"
-
-    additionalInstructions = Column(CodeableConcept)
+    
+    additionalInstructions = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Supplemental instructions - e.g. "with meals".
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    asNeededBoolean = Column(bool)
+    
+    asNeededBoolean = Column(primitives.BooleanField)
     """ Take "as needed" (for x).
         Type `bool`. """
-
-    asNeededCodeableConcept = Column(CodeableConcept)
+    
+    asNeededCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Take "as needed" (for x).
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    doseQuantity = Column(Quantity)
+    
+    doseQuantity = Column(primitives.StringField, ForeignKey('Quantity.id'))
     """ Amount of medication per dose.
         Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
-
-    doseRange = Column(Range)
+    
+    doseRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Amount of medication per dose.
         Type `Range` (represented as `dict` in JSON). """
-
-    maxDosePerPeriod = Column(Ratio)
+    
+    maxDosePerPeriod = Column(primitives.StringField, ForeignKey('Ratio.id'))
     """ Upper limit on medication per unit of time.
         Type `Ratio` (represented as `dict` in JSON). """
-
-    method = Column(CodeableConcept)
+    
+    method = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Technique for administering medication.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    rateRange = Column(Range)
+    
+    rateRange = Column(primitives.StringField, ForeignKey('Range.id'))
     """ Amount of medication per unit of time.
         Type `Range` (represented as `dict` in JSON). """
-
-    rateRatio = Column(Ratio)
+    
+    rateRatio = Column(primitives.StringField, ForeignKey('Ratio.id'))
     """ Amount of medication per unit of time.
         Type `Ratio` (represented as `dict` in JSON). """
-
-    route = Column(CodeableConcept)
+    
+    route = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ How drug should enter body.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    siteCodeableConcept = Column(CodeableConcept)
+    
+    siteCodeableConcept = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Body site to administer to.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    siteReference = Column(FHIRReference)
+    
+    siteReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Body site to administer to.
         Type `FHIRReference` referencing `BodySite` (represented as `dict` in JSON). """
-
+    
     text = Column(primitives.StringField)
     """ Dosage instructions expressed as text.
         Type `str`. """
-
-    timing = Column(Timing)
+    
+    timing = Column(primitives.StringField, ForeignKey('Timing.id'))
     """ When medication should be administered.
         Type `Timing` (represented as `dict` in JSON). """
 
@@ -253,7 +256,8 @@ class MedicationOrderDosageInstruction(backboneelement.BackboneElement):
         return '<MedicationOrderDosageInstruction %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class MedicationOrderSubstitution(backboneelement.BackboneElement):
     """ Any restrictions on medication substitution.
 
@@ -265,12 +269,12 @@ class MedicationOrderSubstitution(backboneelement.BackboneElement):
     """
 
     __tablename__ = "MedicationOrderSubstitution"
-
-    reason = Column(CodeableConcept)
+    
+    reason = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ Why should (not) substitution be made.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    type = Column(CodeableConcept)
+    
+    type = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ generic | formulary +.
         Type `CodeableConcept` (represented as `dict` in JSON). """
 
@@ -282,14 +286,3 @@ class MedicationOrderSubstitution(backboneelement.BackboneElement):
 
     def __repr__(self):
         return '<MedicationOrderSubstitution %r>' % 'self.property'  # replace self.property
-
-
-from . import codeableconcept
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import period
-from . import quantity
-from . import range
-from . import ratio
-from . import timing

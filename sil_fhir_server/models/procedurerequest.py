@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ProcedureRequest)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ProcedureRequest)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class ProcedureRequest(domainresource.DomainResource):
@@ -15,81 +16,101 @@ class ProcedureRequest(domainresource.DomainResource):
     """
 
     __tablename__ = "ProcedureRequest"
-
-    asNeededBoolean = Column(bool)
+    
+    asNeededBoolean = Column(primitives.BooleanField)
     """ Preconditions for procedure.
         Type `bool`. """
-
-    asNeededCodeableConcept = Column(CodeableConcept)
+    
+    asNeededCodeableConcept = Column(primitives.StringField,
+                                     ForeignKey('CodeableConcept.id'))
     """ Preconditions for procedure.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    bodySite = Column(CodeableConcept)
+    
+    bodySite = Column(primitives.StringField,
+                      ForeignKey('CodeableConcept.id'))
     """ What part of body to perform on.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
-
-    code = Column(CodeableConcept)
+    
+    code = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
     """ What procedure to perform.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    encounter = Column(FHIRReference)
+    
+    # todo encounter = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    encounter = Column(primitives.StringField)
     """ Encounter request created during.
-        Type `FHIRReference` referencing `Encounter` (represented as `dict` in JSON). """
-
-    identifier = Column(Identifier)
+        Type `FHIRReference` referencing `Encounter`
+        (represented as `dict` in JSON). """
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Unique identifier for the request.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    notes = Column(Annotation)
+    
+    notes = Column(primitives.StringField,
+                   ForeignKey('Annotation.id'))
     """ Additional information about desired procedure.
         List of `Annotation` items (represented as `dict` in JSON). """
-
-    orderedOn = Column(FHIRDate)
+    
+    orderedOn = Column(primitives.DateTimeField)
     """ When request was created.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    orderer = Column(FHIRReference)
+    
+    # todo orderer = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    orderer = Column(primitives.StringField)
     """ Who made request.
-        Type `FHIRReference` referencing `Practitioner, Patient, RelatedPerson, Device` (represented as `dict` in JSON). """
-
-    performer = Column(FHIRReference)
+        Type `FHIRReference` referencing `Practitioner, Patient,
+        RelatedPerson, Device` (represented as `dict` in JSON). """
+    
+    # todo performer = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    performer = Column(primitives.StringField)
     """ Who should perform the procedure.
-        Type `FHIRReference` referencing `Practitioner, Organization, Patient, RelatedPerson` (represented as `dict` in JSON). """
-
+        Type `FHIRReference` referencing `Practitioner, Organization,
+        Patient, RelatedPerson` (represented as `dict` in JSON). """
+    
     priority = Column(primitives.StringField)
     """ routine | urgent | stat | asap.
         Type `str`. """
-
-    reasonCodeableConcept = Column(CodeableConcept)
+    
+    reasonCodeableConcept = Column(primitives.StringField,
+                                   ForeignKey('CodeableConcept.id'))
     """ Why procedure should occur.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    reasonReference = Column(FHIRReference)
+    
+    # todo reasonReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    reasonReference = Column(primitives.StringField)
     """ Why procedure should occur.
         Type `FHIRReference` referencing `Condition` (represented as `dict` in JSON). """
-
-    scheduledDateTime = Column(FHIRDate)
+    
+    scheduledDateTime = Column(primitives.DateTimeField)
     """ When procedure should occur.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    scheduledPeriod = Column(Period)
+    
+    scheduledPeriod = Column(primitives.StringField,
+                             ForeignKey('Period.id'))
     """ When procedure should occur.
         Type `Period` (represented as `dict` in JSON). """
-
-    scheduledTiming = Column(Timing)
+    
+    scheduledTiming = Column(primitives.StringField,
+                             ForeignKey('Timing.id'))
     """ When procedure should occur.
         Type `Timing` (represented as `dict` in JSON). """
-
+    
     status = Column(primitives.StringField)
     """ proposed | draft | requested | received | accepted | in-progress |
         completed | suspended | rejected | aborted.
         Type `str`. """
-
-    subject = Column(FHIRReference)
+    
+    # todo subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    subject = Column(primitives.StringField)
     """ Who the procedure should be done to.
-        Type `FHIRReference` referencing `Patient, Group` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Patient, Group`
+        (represented as `dict` in JSON). """
 
-    def __init__(self, asNeededBoolean, asNeededCodeableConcept, bodySite, code, encounter, identifier, notes, orderedOn, orderer, performer, priority, reasonCodeableConcept, reasonReference, scheduledDateTime, scheduledPeriod, scheduledTiming, status, subject,):
+    def __init__(self, asNeededBoolean, asNeededCodeableConcept, bodySite,
+                 code, encounter, identifier, notes, orderedOn, orderer,
+                 performer, priority, reasonCodeableConcept, reasonReference,
+                 scheduledDateTime, scheduledPeriod, scheduledTiming, status, subject,):
         """ Initialize all valid properties.
         """
         self.asNeededBoolean = asNeededBoolean
@@ -113,12 +134,3 @@ class ProcedureRequest(domainresource.DomainResource):
 
     def __repr__(self):
         return '<ProcedureRequest %r>' % 'self.property'  # replace self.property
-
-
-from . import annotation
-from . import codeableconcept
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import period
-from . import timing

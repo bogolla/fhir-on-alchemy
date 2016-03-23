@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/DomainResource)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/DomainResource)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.ext.declarative import declared_attr
+
+from sil_fhir_server.data_types import primitives
 from . import resource
+
 
 class DomainResource(resource.Resource):
     """ A resource with narrative, extensions, and contained resources.
@@ -15,24 +19,38 @@ class DomainResource(resource.Resource):
     """
 
     __tablename__ = "DomainResource"
-    
-    contained = Column(Resource)
+    __abstract__ = True
+
+    # contained = Column(primitives.StringField,
+    #                    ForeignKey('Resource.id'))
     """ Contained, inline Resources.
         List of `Resource` items (represented as `dict` in JSON). """
-    
-    extension = Column(Extension)
+
+    @declared_attr
+    def extension(cls):
+        return Column(primitives.StringField, ForeignKey('Extension.id'))
+    # extension = Column(primitives.StringField, ForeignKey('Extension.id'))
     """ Additional Content defined by implementations.
         List of `Extension` items (represented as `dict` in JSON). """
-    
-    modifierExtension = Column(Extension)
+
+    @declared_attr
+    def modifierExtension(cls):
+        return Column(primitives.StringField, ForeignKey('Extension.id'))
+    # modifierExtension = Column(primitives.StringField,
+    #                            ForeignKey('Extension.id'))
     """ Extensions that cannot be ignored.
         List of `Extension` items (represented as `dict` in JSON). """
-    
-    text = Column(Narrative)
+
+    @declared_attr
+    def text(cls):
+        return Column(primitives.StringField, ForeignKey('Narrative.id'))
+    # text = Column(primitives.StringField,
+    #               ForeignKey('Narrative.id'))
     """ Text summary of the resource, for human interpretation.
         Type `Narrative` (represented as `dict` in JSON). """
 
-    def __init__(self, contained, extension, modifierExtension, text,):
+    def __init__(self, contained, extension, modifierExtension,
+                 text):
         """ Initialize all valid properties.
         """
         self.contained = contained
@@ -42,7 +60,3 @@ class DomainResource(resource.Resource):
 
     def __repr__(self):
         return '<DomainResource %r>' % 'self.property'  # replace self.property
-
-
-from . import extension
-from . import narrative

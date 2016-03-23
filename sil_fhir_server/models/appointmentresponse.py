@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/AppointmentResponse)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/AppointmentResponse)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, ForeignKey
 from sil_fhir_server.data_types import primitives
 from . import domainresource
+
 
 class AppointmentResponse(domainresource.DomainResource):
     """ A reply to an appointment request for a patient and/or practitioner(s),
@@ -16,40 +17,47 @@ class AppointmentResponse(domainresource.DomainResource):
 
     __tablename__ = "AppointmentResponse"
 
-    actor = Column(FHIRReference)
+    # todo
+    # actor = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Person, Location/HealthcareService or Device.
-        Type `FHIRReference` referencing `Patient, Practitioner, RelatedPerson, Device, HealthcareService, Location` (represented as `dict` in JSON). """
+        Type `FHIRReference` referencing `Patient, Practitioner,
+        RelatedPerson, Device, HealthcareService, Location`
+        (represented as `dict` in JSON). """
 
-    appointment = Column(FHIRReference)
+    # todo
+    # appointment = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Appointment this response relates to.
         Type `FHIRReference` referencing `Appointment` (represented as `dict` in JSON). """
-
+    
     comment = Column(primitives.StringField)
     """ Additional comments.
         Type `str`. """
-
-    end = Column(FHIRDate)
+    
+    end = Column(primitives.DateTimeField)
     """ Time from appointment, or requested new end time.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ External Ids for this item.
         List of `Identifier` items (represented as `dict` in JSON). """
-
+    
     participantStatus = Column(primitives.StringField)
     """ accepted | declined | tentative | in-process | completed | needs-
         action.
         Type `str`. """
-
-    participantType = Column(CodeableConcept)
+    
+    participantType = Column(primitives.StringField,
+                             ForeignKey('CodeableConcept.id'))
     """ Role of participant in the appointment.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
-
-    start = Column(FHIRDate)
+    
+    start = Column(primitives.DateTimeField)
     """ Time from appointment, or requested new start time.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    def __init__(self, actor, appointment, comment, end, identifier, participantStatus, participantType, start,):
+    def __init__(self, actor, appointment, comment, end, identifier,
+                 participantStatus, participantType, start,):
         """ Initialize all valid properties.
         """
         self.actor = actor
@@ -63,9 +71,3 @@ class AppointmentResponse(domainresource.DomainResource):
 
     def __repr__(self):
         return '<AppointmentResponse %r>' % 'self.property'  # replace self.property
-
-
-from . import codeableconcept
-from . import fhirdate
-from . import fhirreference
-from . import identifier

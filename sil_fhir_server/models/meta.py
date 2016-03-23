@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Meta)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Meta)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import element
 
 class Meta(element.Element):
@@ -17,23 +18,25 @@ class Meta(element.Element):
     """
 
     __tablename__ = "Meta"
-
-    lastUpdated = Column(FHIRDate)
+    
+    lastUpdated = Column(primitives.DateTimeField)
     """ When the resource version last changed.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     profile = Column(primitives.StringField)
     """ Profiles this resource claims to conform to.
         List of `str` items. """
-
-    security = Column(Coding)
+    
+    security = Column(primitives.StringField,
+                      ForeignKey('Coding.id'))
     """ Security Labels applied to this resource.
         List of `Coding` items (represented as `dict` in JSON). """
-
-    tag = Column(Coding)
+    
+    tag = Column(primitives.StringField,
+                 ForeignKey('Coding.id'))
     """ Tags applied to this resource.
         List of `Coding` items (represented as `dict` in JSON). """
-
+    
     versionId = Column(primitives.StringField)
     """ Version specific identifier.
         Type `str`. """
@@ -49,7 +52,3 @@ class Meta(element.Element):
 
     def __repr__(self):
         return '<Meta %r>' % 'self.property'  # replace self.property
-
-
-from . import coding
-from . import fhirdate

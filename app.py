@@ -16,9 +16,31 @@ from sil_fhir_server.data_types.complex import (
     codeableconcept, coding, contactpoint, count, distance, duration,
     humanname, identifier, money, period, range, ratio,
     sampleddata, signature, timing
-
 )
-# from sil_fhir_server import test
+
+from sil_fhir_server.models import (
+    element, elementdefinition, meta, resource, extension, domainresource, backboneelement,
+    narrative, account, appointment, appointmentresponse, auditevent, basic,
+    binary, bodysite, bundle, careplan, claim, claimresponse,
+    clinicalimpression, communication, communicationrequest,
+    composition, conceptmap, condition, conformance, contract,
+    coverage, dataelement, detectedissue, device, devicecomponent,
+    devicemetric, deviceuserequest, deviceusestatement,
+    diagnosticorder, diagnosticreport, documentmanifest,
+    documentreference, eligibilityrequest, eligibilityresponse,
+    encounter, enrollmentrequest, enrollmentresponse, episodeofcare,
+    explanationofbenefit, flag, goal, group, healthcareservice,
+    imagingobjectselection, imagingstudy, immunization,
+    immunizationrecommendation, list, location, media, medication,
+    medicationadministration, medicationdispense, namingsystem,
+    nutritionorder, observation, operationdefinition,
+    operationoutcome, order, orderresponse, organization,
+    patient, paymentnotice, person, practitioner, procedure,
+    procedurerequest, processrequest, processresponse, provenance,
+    reference, referralrequest, relatedperson, riskassessment,
+    schedule, slot, specimen, structuredefinition, subscription, substance,
+    supplydelivery, supplyrequest, valueset, visionprescription
+)
 
 ###########
 # helpers #

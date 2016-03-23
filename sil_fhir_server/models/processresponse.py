@@ -1,12 +1,42 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ProcessResponse)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ProcessResponse)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
+from . import backboneelement
+
+class ProcessResponseNotes(backboneelement.BackboneElement):
+    """ Notes.
+
+    Suite of processing note or additional requirements is the processing has
+    been held.
+    """
+
+    __tablename__ = "ProcessResponseNotes"
+
+    text = Column(primitives.StringField)
+    """ Notes text.
+        Type `str`. """
+
+    type = Column(primitives.StringField,
+                  ForeignKey('Coding.id'))
+    """ display | print | printoper.
+        Type `Coding` (represented as `dict` in JSON). """
+
+    def __init__(self, text, type,):
+        """ Initialize all valid properties.
+        """
+        self.text = text
+        self.type = type
+
+    def __repr__(self):
+        return '<ProcessResponseNotes %r>' % 'self.property'  # replace self.property
+
 
 class ProcessResponse(domainresource.DomainResource):
     """ ProcessResponse resource.
@@ -16,60 +46,75 @@ class ProcessResponse(domainresource.DomainResource):
     """
 
     __tablename__ = "ProcessResponse"
-
-    created = Column(FHIRDate)
+    
+    created = Column(primitives.DateTimeField)
     """ Creation date.
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     disposition = Column(primitives.StringField)
     """ Disposition Message.
         Type `str`. """
-
-    error = Column(Coding)
+    
+    error = Column(primitives.StringField,
+                   ForeignKey('Coding.id'))
     """ Error code.
         List of `Coding` items (represented as `dict` in JSON). """
-
-    form = Column(Coding)
+    
+    form = Column(primitives.StringField,
+                  ForeignKey('Coding.id'))
     """ Printed Form Identifier.
         Type `Coding` (represented as `dict` in JSON). """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Business Identifier.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    notes = Column(ProcessResponseNotes)
+    
+    notes = Column(primitives.StringField,
+                   ForeignKey('ProcessResponseNotes.id'))
     """ Notes.
         List of `ProcessResponseNotes` items (represented as `dict` in JSON). """
-
-    organization = Column(FHIRReference)
+    
+    # todo organization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    organization = Column(primitives.StringField)
     """ Authoring Organization.
         Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    originalRuleset = Column(Coding)
+    
+    originalRuleset = Column(primitives.StringField,
+                             ForeignKey('Coding.id'))
     """ Original version.
         Type `Coding` (represented as `dict` in JSON). """
-
-    outcome = Column(Coding)
+    
+    outcome = Column(primitives.StringField,
+                     ForeignKey('Coding.id'))
     """ Processing outcome.
         Type `Coding` (represented as `dict` in JSON). """
-
-    request = Column(FHIRReference)
+    
+    # todo request = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    request = Column(primitives.StringField)
     """ Request reference.
-        Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
-    requestOrganization = Column(FHIRReference)
+        Type `FHIRReference` referencing `Resource`
+        (represented as `dict` in JSON). """
+    
+    # todo requestOrganization = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    requestOrganization = Column(primitives.StringField)
     """ Responsible organization.
-        Type `FHIRReference` referencing `Organization` (represented as `dict` in JSON). """
-
-    requestProvider = Column(FHIRReference)
+        Type `FHIRReference` referencing `Organization`
+        (represented as `dict` in JSON). """
+    
+    # todo requestProvider = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    requestProvider = Column(primitives.StringField)
     """ Responsible Practitioner.
         Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    ruleset = Column(Coding)
+    
+    ruleset = Column(primitives.StringField,
+                     ForeignKey('Coding.id'))
     """ Resource version.
         Type `Coding` (represented as `dict` in JSON). """
 
-    def __init__(self, created, disposition, error, form, identifier, notes, organization, originalRuleset, outcome, request, requestOrganization, requestProvider, ruleset,):
+    def __init__(self, created, disposition, error, form, identifier,
+                 notes, organization, originalRuleset, outcome, request,
+                 requestOrganization, requestProvider, ruleset,):
         """ Initialize all valid properties.
         """
         self.created = created
@@ -88,39 +133,3 @@ class ProcessResponse(domainresource.DomainResource):
 
     def __repr__(self):
         return '<ProcessResponse %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
-from . import backboneelement
-
-class ProcessResponseNotes(backboneelement.BackboneElement):
-    """ Notes.
-
-    Suite of processing note or additional requirements is the processing has
-    been held.
-    """
-
-    __tablename__ = "ProcessResponseNotes"
-
-    text = Column(primitives.StringField)
-    """ Notes text.
-        Type `str`. """
-
-    type = Column(Coding)
-    """ display | print | printoper.
-        Type `Coding` (represented as `dict` in JSON). """
-
-    def __init__(self, text, type,):
-        """ Initialize all valid properties.
-        """
-        self.text = text
-        self.type = type
-
-    def __repr__(self):
-        return '<ProcessResponseNotes %r>' % 'self.property'  # replace self.property
-
-
-from . import coding
-from . import fhirdate
-from . import fhirreference
-from . import identifier

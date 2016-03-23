@@ -10,7 +10,6 @@ from . import reference
 class FHIRReference(reference.Reference):
     """ Subclassing FHIR's `Reference` resource to add resolving capabilities.
     """
-    __abstract__ = True
     
     def resolved(self, klass):
         """ Resolves the reference and caches the result, returning instance(s)
@@ -74,3 +73,4 @@ class FHIRReference(reference.Reference):
         
         # TODO: distinguish absolute (has "://") and relative URLs
         return None
+    

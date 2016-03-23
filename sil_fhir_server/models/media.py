@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Media)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Media)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class Media(domainresource.DomainResource):
@@ -14,56 +15,66 @@ class Media(domainresource.DomainResource):
     """
 
     __tablename__ = "Media"
-
-    content = Column(Attachment)
+    
+    content = Column(primitives.StringField,
+                     ForeignKey('Attachment.id'))
     """ Actual Media - reference or data.
         Type `Attachment` (represented as `dict` in JSON). """
-
+    
     deviceName = Column(primitives.StringField)
     """ Name of the device/manufacturer.
         Type `str`. """
-
-    duration = Column(Integer)
+    
+    duration = Column(primitives.IntegerField)
     """ Length in seconds (audio / video).
         Type `int`. """
-
-    frames = Column(Integer)
+    
+    frames = Column(primitives.IntegerField)
     """ Number of frames if > 1 (photo).
         Type `int`. """
-
-    height = Column(Integer)
+    
+    height = Column(primitives.IntegerField)
     """ Height of the image in pixels (photo/video).
         Type `int`. """
-
-    identifier = Column(Identifier)
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
     """ Identifier(s) for the image.
         List of `Identifier` items (represented as `dict` in JSON). """
-
-    operator = Column(FHIRReference)
+    
+    # todo operator = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    operator = Column(primitives.StringField)
     """ The person who generated the image.
-        Type `FHIRReference` referencing `Practitioner` (represented as `dict` in JSON). """
-
-    subject = Column(FHIRReference)
+        Type `FHIRReference` referencing `Practitioner`
+        (represented as `dict` in JSON). """
+    
+    # todo subject = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    subject = Column(primitives.StringField)
     """ Who/What this Media is a record of.
-        Type `FHIRReference` referencing `Patient, Practitioner, Group, Device, Specimen` (represented as `dict` in JSON). """
-
-    subtype = Column(CodeableConcept)
+        Type `FHIRReference` referencing `Patient, Practitioner,
+        Group, Device, Specimen` (represented as `dict` in JSON). """
+    
+    subtype = Column(primitives.StringField,
+                     ForeignKey('CodeableConcept.id'))
     """ The type of acquisition equipment/process.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
+    
     type = Column(primitives.StringField)
     """ photo | video | audio.
         Type `str`. """
-
-    view = Column(CodeableConcept)
+    
+    view = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
     """ Imaging view, e.g. Lateral or Antero-posterior.
         Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    width = Column(Integer)
+    
+    width = Column(primitives.IntegerField)
     """ Width of the image in pixels (photo/video).
         Type `int`. """
 
-    def __init__(self, content, deviceName, duration, frames, height, identifier, operator, subject, subtype, type, view, width,):
+    def __init__(self, content, deviceName, duration, frames, height,
+                 identifier, operator, subject, subtype, type, view,
+                 width,):
         """ Initialize all valid properties.
         """
         self.content = content
@@ -81,9 +92,3 @@ class Media(domainresource.DomainResource):
 
     def __repr__(self):
         return '<Media %r>' % 'self.property'  # replace self.property
-
-
-from . import attachment
-from . import codeableconcept
-from . import fhirreference
-from . import identifier

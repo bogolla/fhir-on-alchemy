@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/SearchParameter)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/SearchParameter)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class SearchParameter(domainresource.DomainResource):
@@ -16,64 +17,64 @@ class SearchParameter(domainresource.DomainResource):
     """
 
     __tablename__ = "SearchParameter"
-
+    
     base = Column(primitives.StringField)
     """ The resource type this search parameter applies to.
         Type `str`. """
-
+    
     code = Column(primitives.StringField)
     """ Code used in URL.
         Type `str`. """
-
-    contact = Column(SearchParameterContact)
+    
+    contact = Column(primitives.StringField, ForeignKey('SearchParameterContact.id'))
     """ Contact details of the publisher.
         List of `SearchParameterContact` items (represented as `dict` in JSON). """
-
-    date = Column(FHIRDate)
+    
+    date = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Publication Date(/time).
         Type `FHIRDate` (represented as `str` in JSON). """
-
+    
     description = Column(primitives.StringField)
     """ Documentation for  search parameter.
         Type `str`. """
-
-    experimental = Column(bool)
+    
+    experimental = Column(primitives.BooleanField)
     """ If for testing purposes, not real usage.
         Type `bool`. """
-
+    
     name = Column(primitives.StringField)
     """ Informal name for this search parameter.
         Type `str`. """
-
+    
     publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
-
+    
     requirements = Column(primitives.StringField)
     """ Why this search parameter is defined.
         Type `str`. """
-
+    
     status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
-
+    
     target = Column(primitives.StringField)
     """ Types of resource (if a resource reference).
         List of `str` items. """
-
+    
     type = Column(primitives.StringField)
     """ number | date | string | token | reference | composite | quantity |
         uri.
         Type `str`. """
-
+    
     url = Column(primitives.StringField)
     """ Absolute URL used to reference this search parameter.
         Type `str`. """
-
+    
     xpath = Column(primitives.StringField)
     """ XPath that extracts the values.
         Type `str`. """
-
+    
     xpathUsage = Column(primitives.StringField)
     """ normal | phonetic | nearby | distance | other.
         Type `str`. """
@@ -101,7 +102,8 @@ class SearchParameter(domainresource.DomainResource):
         return '<SearchParameter %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import backboneelement
 
 class SearchParameterContact(backboneelement.BackboneElement):
@@ -111,12 +113,12 @@ class SearchParameterContact(backboneelement.BackboneElement):
     """
 
     __tablename__ = "SearchParameterContact"
-
+    
     name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
-
-    telecom = Column(ContactPoint)
+    
+    telecom = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Contact details for individual or publisher.
         List of `ContactPoint` items (represented as `dict` in JSON). """
 
@@ -128,7 +130,3 @@ class SearchParameterContact(backboneelement.BackboneElement):
 
     def __repr__(self):
         return '<SearchParameterContact %r>' % 'self.property'  # replace self.property
-
-
-from . import contactpoint
-from . import fhirdate

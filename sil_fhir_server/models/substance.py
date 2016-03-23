@@ -1,58 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Substance)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/Substance)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
-
-class Substance(domainresource.DomainResource):
-    """ A homogeneous material with a definite composition.
-    """
-
-    __tablename__ = "Substance"
-
-    category = Column(CodeableConcept)
-    """ What class/type of substance this is.
-        List of `CodeableConcept` items (represented as `dict` in JSON). """
-
-    code = Column(CodeableConcept)
-    """ What substance this is.
-        Type `CodeableConcept` (represented as `dict` in JSON). """
-
-    description = Column(primitives.StringField)
-    """ Textual description of the substance, comments.
-        Type `str`. """
-
-    identifier = Column(Identifier)
-    """ Unique identifier.
-        List of `Identifier` items (represented as `dict` in JSON). """
-
-    ingredient = Column(SubstanceIngredient)
-    """ Composition information about the substance.
-        List of `SubstanceIngredient` items (represented as `dict` in JSON). """
-
-    instance = Column(SubstanceInstance)
-    """ If this describes a specific package/container of the substance.
-        List of `SubstanceInstance` items (represented as `dict` in JSON). """
-
-    def __init__(self, category, code, description, identifier, ingredient, instance,):
-        """ Initialize all valid properties.
-        """
-        self.category = category
-        self.code = code
-        self.description = description
-        self.identifier = identifier
-        self.ingredient = ingredient
-        self.instance = instance
-
-    def __repr__(self):
-        return '<Substance %r>' % 'self.property'  # replace self.property
-
-
-from sqlalchemy import Column, Integer, String
 from . import backboneelement
 
 class SubstanceIngredient(backboneelement.BackboneElement):
@@ -63,11 +18,13 @@ class SubstanceIngredient(backboneelement.BackboneElement):
 
     __tablename__ = "SubstanceIngredient"
 
-    quantity = Column(Ratio)
+    quantity = Column(primitives.StringField,
+                      ForeignKey('Ratio.id'))
     """ Optional amount (concentration).
         Type `Ratio` (represented as `dict` in JSON). """
 
-    substance = Column(FHIRReference)
+    # todo substance = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
+    substance = Column(primitives.StringField)
     """ A component of the substance.
         Type `FHIRReference` referencing `Substance` (represented as `dict` in JSON). """
 
@@ -81,7 +38,6 @@ class SubstanceIngredient(backboneelement.BackboneElement):
         return '<SubstanceIngredient %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
 class SubstanceInstance(backboneelement.BackboneElement):
     """ If this describes a specific package/container of the substance.
 
@@ -91,17 +47,20 @@ class SubstanceInstance(backboneelement.BackboneElement):
 
     __tablename__ = "SubstanceInstance"
 
-    expiry = Column(FHIRDate)
+    expiry = Column(primitives.DateField)
     """ When no longer valid to use.
         Type `FHIRDate` (represented as `str` in JSON). """
 
-    identifier = Column(Identifier)
+    # todo identifier = Column(primitives.StringField, ForeignKey('Identifier.id'))
+    identifier = Column(primitives.StringField)
     """ Identifier of the package/container.
         Type `Identifier` (represented as `dict` in JSON). """
 
-    quantity = Column(Quantity)
+    quantity = Column(primitives.StringField,
+                      ForeignKey('Quantity.id'))
     """ Amount of substance in the package.
-        Type `Quantity` referencing `SimpleQuantity` (represented as `dict` in JSON). """
+        Type `Quantity` referencing `SimpleQuantity`
+        (represented as `dict` in JSON). """
 
     def __init__(self, expiry, identifier, quantity,):
         """ Initialize all valid properties.
@@ -114,9 +73,51 @@ class SubstanceInstance(backboneelement.BackboneElement):
         return '<SubstanceInstance %r>' % 'self.property'  # replace self.property
 
 
-from . import codeableconcept
-from . import fhirdate
-from . import fhirreference
-from . import identifier
-from . import quantity
-from . import ratio
+class Substance(domainresource.DomainResource):
+    """ A homogeneous material with a definite composition.
+    """
+
+    __tablename__ = "Substance"
+    
+    category = Column(primitives.StringField,
+                      ForeignKey('CodeableConcept.id'))
+    """ What class/type of substance this is.
+        List of `CodeableConcept` items (represented as `dict` in JSON). """
+    
+    code = Column(primitives.StringField,
+                  ForeignKey('CodeableConcept.id'))
+    """ What substance this is.
+        Type `CodeableConcept` (represented as `dict` in JSON). """
+    
+    description = Column(primitives.StringField)
+    """ Textual description of the substance, comments.
+        Type `str`. """
+    
+    identifier = Column(primitives.StringField,
+                        ForeignKey('Identifier.id'))
+    """ Unique identifier.
+        List of `Identifier` items (represented as `dict` in JSON). """
+    
+    ingredient = Column(primitives.StringField,
+                        ForeignKey('SubstanceIngredient.id'))
+    """ Composition information about the substance.
+        List of `SubstanceIngredient` items (represented as `dict` in JSON). """
+    
+    instance = Column(primitives.StringField,
+                      ForeignKey('SubstanceInstance.id'))
+    """ If this describes a specific package/container of the substance.
+        List of `SubstanceInstance` items (represented as `dict` in JSON). """
+
+    def __init__(self, category, code, description, identifier,
+                 ingredient, instance,):
+        """ Initialize all valid properties.
+        """
+        self.category = category
+        self.code = code
+        self.description = description
+        self.identifier = identifier
+        self.ingredient = ingredient
+        self.instance = instance
+
+    def __repr__(self):
+        return '<Substance %r>' % 'self.property'  # replace self.property

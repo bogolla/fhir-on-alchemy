@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Implements: FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ImplementationGuide)
-#  Date: 2016-03-18.
+#  FHIR 1.0.2.7202 (http://hl7.org/fhir/StructureDefinition/ImplementationGuide)
+#  Date: 2016-03-22.
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import domainresource
 
 class ImplementationGuide(domainresource.DomainResource):
@@ -17,71 +18,71 @@ class ImplementationGuide(domainresource.DomainResource):
     """
 
     __tablename__ = "ImplementationGuide"
-
+    
     binary = Column(primitives.StringField)
     """ Image, css, script, etc..
         List of `str` items. """
-
-    contact = Column(ImplementationGuideContact)
+    
+    contact = Column(primitives.StringField, ForeignKey('ImplementationGuideContact.id'))
     """ Contact details of the publisher.
         List of `ImplementationGuideContact` items (represented as `dict` in JSON). """
-
+    
     copyright = Column(primitives.StringField)
     """ Use and/or publishing restrictions.
         Type `str`. """
-
-    date = Column(FHIRDate)
+    
+    date = Column(primitives.StringField, ForeignKey('FHIRDate.id'))
     """ Date for this version of the Implementation Guide.
         Type `FHIRDate` (represented as `str` in JSON). """
-
-    dependency = Column(ImplementationGuideDependency)
+    
+    dependency = Column(primitives.StringField, ForeignKey('ImplementationGuideDependency.id'))
     """ Another Implementation guide this depends on.
         List of `ImplementationGuideDependency` items (represented as `dict` in JSON). """
-
+    
     description = Column(primitives.StringField)
     """ Natural language description of the Implementation Guide.
         Type `str`. """
-
-    experimental = Column(bool)
+    
+    experimental = Column(primitives.BooleanField)
     """ If for testing purposes, not real usage.
         Type `bool`. """
-
+    
     fhirVersion = Column(primitives.StringField)
     """ FHIR Version this Implementation Guide targets.
         Type `str`. """
-
-    global_fhir = Column(ImplementationGuideGlobal)
+    
+    global_fhir = Column(primitives.StringField, ForeignKey('ImplementationGuideGlobal.id'))
     """ Profiles that apply globally.
         List of `ImplementationGuideGlobal` items (represented as `dict` in JSON). """
-
+    
     name = Column(primitives.StringField)
     """ Informal name for this Implementation Guide.
         Type `str`. """
-
-    package = Column(ImplementationGuidePackage)
+    
+    package = Column(primitives.StringField, ForeignKey('ImplementationGuidePackage.id'))
     """ Group of resources as used in .page.package.
         List of `ImplementationGuidePackage` items (represented as `dict` in JSON). """
-
-    page = Column(ImplementationGuidePage)
+    
+    page = Column(primitives.StringField, ForeignKey('ImplementationGuidePage.id'))
     """ Page/Section in the Guide.
         Type `ImplementationGuidePage` (represented as `dict` in JSON). """
-
+    
     publisher = Column(primitives.StringField)
     """ Name of the publisher (Organization or individual).
         Type `str`. """
-
+    
     status = Column(primitives.StringField)
     """ draft | active | retired.
         Type `str`. """
-
+    
     url = Column(primitives.StringField)
     """ Absolute URL used to reference this Implementation Guide.
         Type `str`. """
-
-    useContext = Column(CodeableConcept)
+    
+    useContext = Column(primitives.StringField, ForeignKey('CodeableConcept.id'))
     """ The implementation guide is intended to support these contexts.
         List of `CodeableConcept` items (represented as `dict` in JSON). """
-
+    
     version = Column(primitives.StringField)
     """ Logical id for this version of the Implementation Guide.
         Type `str`. """
@@ -111,7 +112,8 @@ class ImplementationGuide(domainresource.DomainResource):
         return '<ImplementationGuide %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 from . import backboneelement
 
 class ImplementationGuideContact(backboneelement.BackboneElement):
@@ -121,12 +123,12 @@ class ImplementationGuideContact(backboneelement.BackboneElement):
     """
 
     __tablename__ = "ImplementationGuideContact"
-
+    
     name = Column(primitives.StringField)
     """ Name of a individual to contact.
         Type `str`. """
-
-    telecom = Column(ContactPoint)
+    
+    telecom = Column(primitives.StringField, ForeignKey('ContactPoint.id'))
     """ Contact details for individual or publisher.
         List of `ContactPoint` items (represented as `dict` in JSON). """
 
@@ -140,7 +142,8 @@ class ImplementationGuideContact(backboneelement.BackboneElement):
         return '<ImplementationGuideContact %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class ImplementationGuideDependency(backboneelement.BackboneElement):
     """ Another Implementation guide this depends on.
 
@@ -150,11 +153,11 @@ class ImplementationGuideDependency(backboneelement.BackboneElement):
     """
 
     __tablename__ = "ImplementationGuideDependency"
-
+    
     type = Column(primitives.StringField)
     """ reference | inclusion.
         Type `str`. """
-
+    
     uri = Column(primitives.StringField)
     """ Where to find dependency.
         Type `str`. """
@@ -169,7 +172,8 @@ class ImplementationGuideDependency(backboneelement.BackboneElement):
         return '<ImplementationGuideDependency %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class ImplementationGuideGlobal(backboneelement.BackboneElement):
     """ Profiles that apply globally.
 
@@ -178,11 +182,11 @@ class ImplementationGuideGlobal(backboneelement.BackboneElement):
     """
 
     __tablename__ = "ImplementationGuideGlobal"
-
-    profile = Column(FHIRReference)
+    
+    profile = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Profile that all resources must conform to.
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
-
+    
     type = Column(primitives.StringField)
     """ Type this profiles applies to.
         Type `str`. """
@@ -197,7 +201,8 @@ class ImplementationGuideGlobal(backboneelement.BackboneElement):
         return '<ImplementationGuideGlobal %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class ImplementationGuidePackage(backboneelement.BackboneElement):
     """ Group of resources as used in .page.package.
 
@@ -206,16 +211,16 @@ class ImplementationGuidePackage(backboneelement.BackboneElement):
     """
 
     __tablename__ = "ImplementationGuidePackage"
-
+    
     description = Column(primitives.StringField)
     """ Human readable text describing the package.
         Type `str`. """
-
+    
     name = Column(primitives.StringField)
     """ Name used .page.package.
         Type `str`. """
-
-    resource = Column(ImplementationGuidePackageResource)
+    
+    resource = Column(primitives.StringField, ForeignKey('ImplementationGuidePackageResource.id'))
     """ Resource in the implementation guide.
         List of `ImplementationGuidePackageResource` items (represented as `dict` in JSON). """
 
@@ -230,7 +235,8 @@ class ImplementationGuidePackage(backboneelement.BackboneElement):
         return '<ImplementationGuidePackage %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class ImplementationGuidePackageResource(backboneelement.BackboneElement):
     """ Resource in the implementation guide.
 
@@ -241,31 +247,31 @@ class ImplementationGuidePackageResource(backboneelement.BackboneElement):
     """
 
     __tablename__ = "ImplementationGuidePackageResource"
-
+    
     acronym = Column(primitives.StringField)
     """ Short code to identify the resource.
         Type `str`. """
-
+    
     description = Column(primitives.StringField)
     """ Reason why included in guide.
         Type `str`. """
-
-    exampleFor = Column(FHIRReference)
+    
+    exampleFor = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Resource this is an example of (if applicable).
         Type `FHIRReference` referencing `StructureDefinition` (represented as `dict` in JSON). """
-
+    
     name = Column(primitives.StringField)
     """ Human Name for the resource.
         Type `str`. """
-
+    
     purpose = Column(primitives.StringField)
     """ example | terminology | profile | extension | dictionary | logical.
         Type `str`. """
-
-    sourceReference = Column(FHIRReference)
+    
+    sourceReference = Column(primitives.StringField, ForeignKey('FHIRReference.id'))
     """ Location of the resource.
         Type `FHIRReference` referencing `Resource` (represented as `dict` in JSON). """
-
+    
     sourceUri = Column(primitives.StringField)
     """ Location of the resource.
         Type `str`. """
@@ -285,7 +291,8 @@ class ImplementationGuidePackageResource(backboneelement.BackboneElement):
         return '<ImplementationGuidePackageResource %r>' % 'self.property'  # replace self.property
 
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey
+from sil_fhir_server.data_types import primitives
 class ImplementationGuidePage(backboneelement.BackboneElement):
     """ Page/Section in the Guide.
 
@@ -294,32 +301,32 @@ class ImplementationGuidePage(backboneelement.BackboneElement):
     """
 
     __tablename__ = "ImplementationGuidePage"
-
+    
     format = Column(primitives.StringField)
     """ Format of the page (e.g. html, markdown, etc.).
         Type `str`. """
-
+    
     kind = Column(primitives.StringField)
     """ page | example | list | include | directory | dictionary | toc |
         resource.
         Type `str`. """
-
+    
     name = Column(primitives.StringField)
     """ Short name shown for navigational assistance.
         Type `str`. """
-
+    
     package = Column(primitives.StringField)
     """ Name of package to include.
         List of `str` items. """
-
-    page = Column(ImplementationGuidePage)
+    
+    page = Column(primitives.StringField, ForeignKey('ImplementationGuidePage.id'))
     """ Nested Pages / Sections.
         List of `ImplementationGuidePage` items (represented as `dict` in JSON). """
-
+    
     source = Column(primitives.StringField)
     """ Where to find that page.
         Type `str`. """
-
+    
     type = Column(primitives.StringField)
     """ Kind of resource to include in the list.
         List of `str` items. """
@@ -337,9 +344,3 @@ class ImplementationGuidePage(backboneelement.BackboneElement):
 
     def __repr__(self):
         return '<ImplementationGuidePage %r>' % 'self.property'  # replace self.property
-
-
-from . import codeableconcept
-from . import contactpoint
-from . import fhirdate
-from . import fhirreference
