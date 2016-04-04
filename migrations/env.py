@@ -4,6 +4,12 @@ from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 import logging
 
+import sil_fhir_server
+from sil_fhir_server.data_types.complex.pg_composite import CompositeType
+import sqlalchemy as sa
+sa.CompositeType = CompositeType
+
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

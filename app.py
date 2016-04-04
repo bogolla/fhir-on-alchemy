@@ -1,15 +1,25 @@
 import os
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import request
+from flask.ext.api import FlaskAPI
+from flask.ext.sqlalchemy import SQLAlchemy
 
 ##################
 # configurations #
 ##################
+from sqlalchemy import create_engine
 
-app = Flask(__name__)
+from sil_fhir_server.data_types.complex.pg_composite import register_composites
+
+app = FlaskAPI(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 db = SQLAlchemy(app)
+
+e = create_engine(os.environ['DATABASE_URL'])
+connection = e.connect()
+# api = FlaskAPI(app)
+
+from  sil_fhir_server import test
 
 from sil_fhir_server.data_types.complex import (
     complex_dt, period, quantity, address, age, annotation, attachment,
@@ -42,6 +52,7 @@ from sil_fhir_server.models import (
     supplydelivery, supplyrequest, valueset, visionprescription
 )
 
+register_composites(connection)
 ###########
 # helpers #
 ###########
@@ -54,11 +65,42 @@ from sil_fhir_server.models import (
 @app.route('/')
 def hello():
     return "Hello World!"
+#
+#
+# @app.route("/patients", methods=['GET', 'POST'])
+# def patients_list():
+#     """
+#     List or create notes.
+#     """
+#     if request.method == 'POST':
+#         note = str(request.data.get('text', ''))
+#         idx = max(notes.keys()) + 1
+#         notes[idx] = note
+#         return note_repr(idx), status.HTTP_201_CREATED
+#
+#     # request.method == 'GET'
+#     return [note_repr(idx) for idx in sorted(notes.keys())]
+#
+#
+# @app.route("/<int:key>/", methods=['GET', 'PUT', 'DELETE'])
+# def patients_detail(key):
+#     """
+#     Retrieve, update or delete note instances.
+#     """
+#     if request.method == 'PUT':
+#         note = str(request.data.get('text', ''))
+#         notes[key] = note
+#         return note_repr(key)
+#
+#     elif request.method == 'DELETE':
+#         notes.pop(key, None)
+#         return '', status.HTTP_204_NO_CONTENT
+#
+#     # request.method == 'GET'
+#     if key not in notes:
+#         raise exceptions.NotFound()
+#     return note_repr(key)
 
-
-@app.route('/<name>')
-def hello_name(name):
-    return "Hello {}!".format(name)
 
 if __name__ == '__main__':
     app.run(debug=True)

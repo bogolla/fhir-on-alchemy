@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Implementing Profiles in FHIR &mdash; fhir-server 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="fhir-server 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="Parsers (JSON and XML)" href="parsers.html"/>
+        <link rel="prev" title="Welcome to fhir-server’s documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> fhir-server
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Implementing Profiles in FHIR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#extentions">Extentions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parsers.html">Parsers (JSON and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">Validating Profiles, Extensions and Constraints</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">fhir-server</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Implementing Profiles in FHIR</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/profiling.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="implementing-profiles-in-fhir">
+<h1>Implementing Profiles in FHIR<a class="headerlink" href="#implementing-profiles-in-fhir" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>Profiling resources puts the resource / model in context through:</dt>
+<dd><ol class="first last arabic simple">
+<li>Extentions</li>
+<li>Constraints</li>
+</ol>
+</dd>
+</dl>
+<p>The suggested FHIR Profiling approach involves  the creation of helper classes
+(Mixins) that implement common functionalities shared across resources. The list
+of fuctions to be abstracted includes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Common FieldTypes / DataTypes (Primitive types and Complex types)</li>
+<li>A parser that translated python classes to ORM compliant class types.</li>
+<li>Helper classes for common API requirements such as CREATE, SEARCH, UPDATE</li>
+</ul>
+</div></blockquote>
+<div class="section" id="extentions">
+<h2>Extentions<a class="headerlink" href="#extentions" title="Permalink to this headline">¶</a></h2>
+<p>The following is a code snippet of what a developer creating a new profile extension
+is required to do.:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="o">/**</span>
+  <span class="o">*</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">example</span> <span class="n">of</span> <span class="n">a</span> <span class="n">customized</span> <span class="n">model</span> <span class="k">class</span> <span class="nc">that</span> <span class="n">takes</span> <span class="n">the</span>
+  <span class="o">*</span> <span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">Organization</span> <span class="n">resource</span> <span class="n">class</span><span class="p">,</span> <span class="ow">and</span> <span class="n">extends</span> <span class="n">it</span> <span class="k">with</span> <span class="n">a</span> <span class="n">custom</span> <span class="n">extension</span><span class="o">.</span>
+  <span class="o">*/</span>
+
+ <span class="kn">import</span> <span class="nn">resources</span> <span class="o">/</span> <span class="n">Mixins</span> <span class="n">etc</span>
+
+ <span class="nd">@ResourceDef</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Organization&quot;</span><span class="p">)</span>
+ <span class="k">class</span> <span class="nc">SilOrganization</span><span class="p">(</span><span class="n">Organization</span><span class="p">):</span>
+
+     <span class="o">/*</span> <span class="o">*****************************</span>
+      <span class="o">*</span> <span class="n">Fields</span>
+      <span class="o">*</span> <span class="o">*****************************/</span>
+     <span class="k">class</span> <span class="nc">EmergencyContact</span><span class="p">(</span><span class="n">BaseIdentifiableElement</span><span class="p">,</span> <span class="n">SilExtension</span><span class="p">):</span>
+         <span class="o">/**</span>
+          <span class="o">*</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">primitive</span> <span class="n">datatype</span> <span class="n">extension</span>
+          <span class="o">*/</span>
+         <span class="n">Fields</span><span class="o">.</span><span class="n">Description</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="o">//</span> <span class="s2">&quot;...some definition...&quot;</span>
+             <span class="n">shortDefinition</span><span class="p">:</span> <span class="s2">&quot;Should be set to true if the contact is active&quot;</span>
+         <span class="p">}</span>
+         <span class="n">Fields</span><span class="o">.</span><span class="n">Extension</span><span class="p">(</span><span class="n">url</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="n">url</span><span class="p">:</span> <span class="s2">&quot;http://foo#emergencyContactActive&quot;</span><span class="p">,</span>
+             <span class="n">isModifier</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+             <span class="n">definedLocally</span><span class="p">:</span> <span class="n">true</span>
+         <span class="p">}</span>
+         <span class="n">Fields</span><span class="o">.</span><span class="n">Child</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;active&quot;</span>
+         <span class="p">}</span>
+         <span class="n">Fields</span><span class="o">.</span><span class="n">Type</span> <span class="o">=</span> <span class="n">BooleanDt</span>
+         <span class="n">Fileds</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">silActive</span>
+
+         <span class="o">//</span> <span class="n">The</span> <span class="n">Mixins</span> <span class="n">can</span> <span class="n">be</span> <span class="n">overriden</span> <span class="k">for</span> <span class="n">custom</span> <span class="n">actions</span>
+         <span class="k">def</span> <span class="nf">setActive</span><span class="p">(</span><span class="n">BooleanDt</span><span class="p">,</span> <span class="n">silActive</span><span class="p">):</span>
+             <span class="o">...</span>
+             <span class="o">...</span>
+             <span class="o">...</span>
+             <span class="o">//</span> <span class="n">do</span> <span class="n">something</span>
+
+
+         <span class="o">/**</span>
+          <span class="o">*</span> <span class="o">**************************************</span>
+          <span class="o">*</span> <span class="o">***************</span> <span class="n">OR</span> <span class="o">*******************</span>
+          <span class="o">*</span>
+          <span class="o">*</span> <span class="n">A</span> <span class="nb">complex</span> <span class="n">datatype</span> <span class="n">extension</span>
+          <span class="o">*/</span>
+
+
+     <span class="o">/**</span>
+      <span class="o">*</span> <span class="n">Here</span> <span class="n">the</span> <span class="n">idea</span> <span class="ow">is</span> <span class="n">that</span> <span class="n">the</span> <span class="n">method</span> <span class="n">will</span> <span class="k">pass</span> <span class="n">an</span> <span class="n">instance</span> <span class="n">of</span> <span class="n">itself</span> <span class="n">to</span> <span class="n">the</span>
+      <span class="o">*</span> <span class="n">Extention</span> <span class="n">definition</span> <span class="n">Mixin</span><span class="o">.</span>
+      <span class="o">*/</span>
+     <span class="n">Extension</span><span class="p">(</span><span class="o">&lt;&lt;</span><span class="n">this</span> <span class="n">SilOrganization</span> <span class="n">instance</span><span class="o">&gt;&gt;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The code snippet above shows a simple class definition of the new resources to be
+created and the base fhir resource to be extended. In this case a  <em>SilOrganization</em>
+extends <em>Organization</em>.</p>
+<p>A decorator here (&#64;ResourceDef) is also used to show that this is a resource definition.
+We can provide more decorators for other components as need arises e.g &#64;FieldDef decorator
+would denote extending a given field.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nd">@ResourceDef</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Organization&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SilOrganization</span><span class="p">(</span><span class="n">Organization</span><span class="p">):</span>
+
+     <span class="n">new</span> <span class="n">org_field_params</span> <span class="o">=</span> <span class="p">{</span>
+         <span class="n">description</span><span class="p">:</span> <span class="p">{</span>
+             <span class="nb">long</span><span class="p">:</span> <span class="o">...</span> <span class="p">,</span>
+             <span class="n">short</span><span class="p">:</span> <span class="o">...</span> <span class="p">,</span>
+         <span class="p">},</span>
+         <span class="n">cardinality</span><span class="p">:</span> <span class="p">{</span>
+             <span class="nb">min</span><span class="p">:</span> <span class="o">...</span> <span class="p">,</span>
+             <span class="nb">max</span><span class="p">:</span> <span class="o">...</span> <span class="p">,</span>
+         <span class="p">},</span>
+         <span class="nb">type</span><span class="p">:</span> <span class="p">{},</span>
+         <span class="n">extension_url</span><span class="p">:</span> <span class="p">{</span>
+             <span class="n">url</span><span class="p">:</span> <span class="s2">&quot;http://foo#emergencyContactActive&quot;</span><span class="p">,</span>
+             <span class="n">isModifier</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+             <span class="n">definedLocally</span><span class="p">:</span> <span class="n">true</span>
+         <span class="p">}</span>
+     <span class="p">}</span>
+
+     <span class="n">new</span> <span class="n">org_field</span> <span class="o">=</span> <span class="n">Resources</span><span class="o">.</span><span class="n">Fields</span><span class="o">.</span><span class="n">addNew</span><span class="p">(</span><span class="n">org_field_params</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Each resources also requires a definition of the mothods that can be used to manipulate them.
+The example below shows the ideal case for adding some of these classes to a resource instance.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">class</span> <span class="nc">SilOrganisationProviders</span><span class="p">(</span><span class="n">ResourceProvider</span><span class="p">):</span>
+
+     <span class="nd">@Get</span>
+     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">IdParam</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+         <span class="k">return</span> <span class="n">null</span><span class="p">;</span> <span class="o">//</span> <span class="n">populate</span> <span class="n">this</span>
+
+     <span class="nd">@Create</span>
+     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">ResourceParam</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+         <span class="o">//</span> <span class="n">save</span> <span class="n">the</span> <span class="n">resource</span>
+
+     <span class="nd">@Update</span>
+     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">ResourceParam</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+         <span class="o">//</span> <span class="n">update</span> <span class="n">the</span> <span class="n">resource</span>
+
+     <span class="nd">@Search</span>
+     <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">searchParams</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+         <span class="n">searchFields</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="o">//</span> <span class="n">define</span> <span class="n">the</span> <span class="n">search</span> <span class="n">fields</span>
+         <span class="p">}</span>
+         <span class="k">return</span> <span class="n">null</span><span class="p">;</span> <span class="o">//</span> <span class="n">populate</span> <span class="n">this</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="parsers.html" class="btn btn-neutral float-right" title="Parsers (JSON and XML)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to fhir-server’s documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Brian Ogollah.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

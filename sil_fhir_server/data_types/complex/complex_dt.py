@@ -1,12 +1,7 @@
-from sqlalchemy import Column, ForeignKey
-from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy import Column
 
 from sil_fhir_server.data_types import primitives
 from app import db
-
-# from sil_fhir_server.models import (
-#     extension
-# )
 
 
 class ComplexElement(db.Model):
@@ -38,3 +33,10 @@ class ComplexElement(db.Model):
     def __repr__(self):
         # return '<Element %r>' % 'self.extension'
         pass
+
+
+class ComplexDtBase(object):
+    """ Base for all complex elements.
+
+    Base definition for all complex elements in a resource.
+    """

@@ -12,6 +12,9 @@ down_revision = ${repr(down_revision)}
 
 from alembic import op
 import sqlalchemy as sa
+import sil_fhir_server
+from sqlalchemy import Column
+from sil_fhir_server.data_types.primitives import StringField, IntegerField
 ${imports if imports else ""}
 
 def upgrade():
